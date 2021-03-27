@@ -3,14 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4bf5c69f-dada-4ed4-ad96-b11f92037ffc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Recipe.py" beforeDir="false" afterPath="$PROJECT_DIR$/Recipe.py" afterDir="false" />
-    </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="SHOW_DIALOG" value="false" />
-    <option name="HIGHLIGHT_CONFLICTS" value="true" />
-    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
-    <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
@@ -41,14 +33,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/Main.py" />
-        <option value="$PROJECT_DIR$/Recipe.py" />
-      </list>
-    </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-15" />
@@ -91,7 +75,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.register">
     <configuration name="Recipe" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="PDM_Main_Code" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -112,9 +96,9 @@
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
       <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.register" />
         <item itemvalue="Python.Recipe" />
       </list>
     </recent_temporary>
@@ -130,8 +114,6 @@
       <option name="presentableId" value="Default" />
       <updated>1616857899638</updated>
     </task>
-    <servers />
-  </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1549" height="837" extended-state="6" />
     <layout>
@@ -165,7 +147,7 @@
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
-        </state>
+        </state>g
       </provider>
     </entry>
   </component>
