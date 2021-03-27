@@ -11,6 +11,7 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 
+
 cur.execute("select * from recipe_manager.users")
 
 
