@@ -9,6 +9,7 @@ conn = psycopg2.connect(
     password="mdzpxSyGJSvn",
 )
 
+
 cur = conn.cursor()
 
 
