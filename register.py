@@ -19,11 +19,9 @@ cur.execute("select * from recipe_manager.users")
 # select *from DemoTable807 where ClientCountryName='US'
 
 
-def register():
+def register(username, password):
 
     creation_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    username = input("Enter Username: ")
-    password = input("Enter Password: ")
     cur.execute("SELECT username FROM recipe_manager.users WHERE username = %s", (username,))
     row = cur.fetchone()
     print(row)
