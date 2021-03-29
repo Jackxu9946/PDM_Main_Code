@@ -146,6 +146,7 @@ def search_recipe_by_category(category, search_mode):
     cur.execute(
         "SELECT (id) from recipe_manager.category where name = %s", (category,)
     )
+    conn.commit()
     temp = tuple(cur.fetchall())
     tuple_category_id = []
     for n in temp:
@@ -153,13 +154,15 @@ def search_recipe_by_category(category, search_mode):
     tuple_category_id = tuple(tuple_category_id)
     #Now we have a tuple of category id
     #Use it to find recipe_id
-
     cur.execute(
         "SELECT (recipe_id) from recipe_manager.recipe_to_category where category_id in %s", (tuple_category_id,)
     )
 
     recipe_id_list = tuple(cur.fetchall())
-
+    recipe_tuple = []
+    for id in recipe_id_list:
+        recipe_tuple.append(id[0])
+    recipe_id_list = tuple(recipe_tuple)
     result = None
     if (search_mode == "recent"):
         try:
@@ -192,8 +195,8 @@ def search_recipe_by_category(category, search_mode):
 
 
 #CATEGORY TEST SET UP
-#User1 have category = Chinese User_id = 0 cateogory_id for chinese = 0
-#User2 have category = Chinese User_id = 1 category_id for chinese = 1
+#User1 have category = Chinese User_id = 0 cateogory_id for chinese = 56
+#User2 have category = Chinese User_id = 1 category_id for chinese = 57
 #Recipe_id = 5289, created by user1
 #Recipe_id = 8559, created by user2
 
