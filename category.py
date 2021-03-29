@@ -35,6 +35,9 @@ def create_categories(name, username):
 
     return user_id, category_id[-1]
 
+# create_categories("Chinese", "SPBSP")
+# create_categories("Chinese", "SA4HY")
+
 
 def list_of_recipes(user_id):
     """Return a list of recipes (name and id) owned by the user_id for user to view and insert into a category."""

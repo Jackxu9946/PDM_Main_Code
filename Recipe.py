@@ -72,7 +72,7 @@ def search_recipe_by_name(name, search_mode):
     #most_recent = when it was made
     if (search_mode == "recent"):
         try:
-            cur.execute("SELECT (name, recipe_id, rating) from recipe_manager.recipe where name like '%%{name}%%' ORDER BY creation_date ".format(name=name))
+            cur.execute("SELECT (name, recipe_id, rating, description) from recipe_manager.recipe where name like '%%{name}%%' ORDER BY creation_date ".format(name=name))
             results = cur.fetchall()
             return results
         except:
@@ -80,7 +80,7 @@ def search_recipe_by_name(name, search_mode):
     elif (search_mode == "rating"):
         try:
             cur.execute(
-                "SELECT (name, recipe_id, rating) from recipe_manager.recipe where name like '%%{name}%%' ORDER BY rating ".format(
+                "SELECT (name, recipe_id, rating, description) from recipe_manager.recipe where name like '%%{name}%%' ORDER BY rating ".format(
                     name=name))
             results = cur.fetchall()
             return results
@@ -89,12 +89,13 @@ def search_recipe_by_name(name, search_mode):
     else:
         try:
             cur.execute(
-                "SELECT (name, recipe_id, rating) from recipe_manager.recipe where name like '%%{name}%%' ORDER BY name ".format(
+                "SELECT (name, recipe_id, rating, description) from recipe_manager.recipe where name like '%%{name}%%' ORDER BY name ".format(
                     name=name))
             results = cur.fetchall()
             return results
         except:
             print("Can not execute the recipe query")
+
 
 def search_recipe_by_ingredient(ingredient, search_mode):
     #Get the ingredient ID
@@ -106,13 +107,97 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     ingredient_id = ingredient_result[0]
     #Find all the recipe_id that contains this ingredient ID
     cur.execute("SELECT (recipe_id) from recipe_manager.ingredient_to_recipe where ingredient = %s", (ingredient_id))
+    #CHECK THIS VALUE MAKE SURE IT IS A TUPLE BEFORE DOING ANYTHING ELSE
     recipe_id_list = cur.fetchall()
+    #Now we have all the recipe_id we just need to choose the right value from the database
+    result = None
+    if (search_mode == "recent"):
+        try:
+            cur.execute(
+                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by creation_date", (recipe_id_list)
+            )
+            result = cur.fetchall()
+        except:
+            print("Can not retrieve recipe")
+    elif (search_mode == "rating"):
+        try:
+            cur.execute(
+                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by rating", (recipe_id_list)
+            )
+            result = cur.fetchall()
+        except:
+            print("Can not retrieve recipe")
+    else:
+        try:
+            cur.execute(
+                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by name", (recipe_id_list)
+            )
+            result = cur.fetchall()
+        except:
+            print("Can not retrieve recipe")
+    if (result != None):
+        return result
+    else:
+        Print("Can not retrieve recipe")
 
 
+def search_recipe_by_category(category, search_mode):
+    #Get all the category id with category name = category
+    cur.execute(
+        "SELECT (id) from recipe_manager.category where name = %s", (category,)
+    )
+    temp = tuple(cur.fetchall())
+    tuple_category_id = []
+    for n in temp:
+        tuple_category_id.append(n[0])
+    tuple_category_id = tuple(tuple_category_id)
+    #Now we have a tuple of category id
+    #Use it to find recipe_id
+
+    cur.execute(
+        "SELECT (recipe_id) from recipe_manager.recipe_to_category where category_id in %s", (tuple_category_id,)
+    )
+
+    recipe_id_list = tuple(cur.fetchall())
+
+    result = None
+    if (search_mode == "recent"):
+        try:
+            cur.execute(
+                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by creation_date", (recipe_id_list)
+            )
+            result = cur.fetchall()
+        except:
+            print("Can not retrieve recipe")
+    elif (search_mode == "rating"):
+        try:
+            cur.execute(
+                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by rating", (recipe_id_list)
+            )
+            result = cur.fetchall()
+        except:
+            print("Can not retrieve recipe")
+    else:
+        try:
+            cur.execute(
+                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by name", (recipe_id_list)
+            )
+            result = cur.fetchall()
+        except:
+            print("Can not retrieve recipe")
+    if (result != None):
+        return result
+    else:
+        print("Can not retrieve recipe")
 
 
+#CATEGORY TEST SET UP
+#User1 have category = Chinese User_id = 0 cateogory_id for chinese = 0
+#User2 have category = Chinese User_id = 1 category_id for chinese = 1
+#Recipe_id = 5289, created by user1
+#Recipe_id = 8559, created by user2
 
-
+print(search_recipe_by_category("Chinese", "recent"))
 
 
 
