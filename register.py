@@ -37,9 +37,9 @@ def register(username, password):
     conn.commit()
 
 
-def main():
-    register()
-    print("success")
+# def main():
+  #  register()
+  #  print("success")
 
 
-main()
+#main()
