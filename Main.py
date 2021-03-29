@@ -4,21 +4,25 @@ def main():
     i = 0
     while i != 4:
         print("\nPlease select ONLY the number to start an action!\n"
-              "1. Create_Recipe\n"
-              "2. Edit Recipe\n"
-              "3. Delete Recipe\n"
-              "4. Quit\n")
+              "1. Register"
+              "2. Login"
+              "3. Create Recipe\n"
+              "4. Edit Recipe\n"
+              "5. Delete Recipe\n"
+              "6. Quit\n")
 
         switcher = {
-            1: Create_Recipe,
-            2: Edit_Recipe,
-            3: Delete_Recipe,
-            4: 4
+            1: register,
+            2: login,
+            3: create_recipe,
+            4: edit_recipe,
+            5: delete_recipe,
+            6: 4
         }
 
         action_value = input()
 
-        if int(action_value) == 4:
+        if int(action_value) == 6:
             print("Session finished.")
             break
 
@@ -26,16 +30,24 @@ def main():
         print(func())
 
 
-def Create_Recipe():
+def register():
     return 1
 
 
-def Edit_Recipe():
+def login():
     return 2
 
 
-def Delete_Recipe():
+def create_recipe():
     return 3
+
+
+def edit_recipe():
+    return 4
+
+
+def delete_recipe():
+    return 5
 
 
 # Driver program
