@@ -1,6 +1,10 @@
 import login
 import register
 import Recipe
+from datetime import datetime
+
+global_username = ""
+user_id = ""
 
 
 def main():
@@ -72,6 +76,7 @@ def main_login():
 
     log = login.login(username, password)
 
+    leave = ""
     while not log:
         leave = input("Type 'quit' to exit or enter to retry.\n")
         if leave == "quit":
@@ -83,10 +88,23 @@ def main_login():
 
         log = login.login(username, password)
 
+    if leave == "quit":
+        return 0
+    global global_username
+    global_username = username
     return 1
 
 
 def create_recipe():
+    name = input("\nEnter recipe name: ")
+    cook_time = input("\nEnter the cook time: ")
+    description = input("\nEnter the recipes description: ")
+    difficulty = input("\nEnter the recipes difficulty: ")
+    servings = input("\nEnter the number of servings: ")
+    creation_date = datetime.today().strftime('%Y-%m-%d')
+    steps = input("\nEnter recipes steps: ")
+
+    Recipe.create_recipe(name, cook_time, description, difficulty, servings, global_username, creation_date, steps)
     return 2.1
 
 
