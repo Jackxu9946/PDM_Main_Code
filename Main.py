@@ -3,7 +3,7 @@ def main():
 
     i = 0
     while i != 4:
-        print("Please select ONLY the number to start an action!\n"
+        print("\nPlease select ONLY the number to start an action!\n"
               "1. Create_Recipe\n"
               "2. Edit Recipe\n"
               "3. Delete Recipe\n"
@@ -17,6 +17,11 @@ def main():
         }
 
         action_value = input()
+
+        if int(action_value) == 4:
+            print("Session finished.")
+            break
+
         func = switcher.get(int(action_value), lambda: "Invalid input")
         print(func())
 
