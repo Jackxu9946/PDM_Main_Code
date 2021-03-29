@@ -12,6 +12,7 @@ cur = conn.cursor()
 
 cur.execute("select * from recipe_manager.users")
 
+#comment
 
 # username: SPBSP
 # password: Y52A9

@@ -26,6 +26,7 @@ def register():
     password = input("Enter Password: ")
     cur.execute("SELECT username FROM recipe_manager.users WHERE username = %s", (username,))
     row = cur.fetchone()
+    print(row)
     if not row:
         print("Not exist in table")
         cur.execute("select * from recipe_manager.users")

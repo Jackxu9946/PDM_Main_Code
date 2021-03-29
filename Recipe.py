@@ -49,6 +49,13 @@ def edit_recipe(name, cook_time, description, difficulty, servings, steps, recip
     except:
         print("Unable to save recipe")
 
+def delete_recipe_with_error_checking(user_id, recipe_id):
+    #Check if the recipe has been made
+    cur.execute("SELECT * from recipe_manager.rating where recipe_id = %s LIMIT 1", (recipe_id))
+    if (cur.fetchall() != None):
+        delete_recipe(user_id, recipe_id)
+    else:
+        print("Can not delete receipe because another user has already made it")
 def delete_recipe(user_id, recipe_id):
     #No error checking happening here
     try:
