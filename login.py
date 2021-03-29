@@ -1,8 +1,6 @@
-import pandas as pd
 import psycopg2
-import csv
 from datetime import datetime
-from datetime import date
+
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
     database="p320_02a",
@@ -36,7 +34,9 @@ def login(username, password):
             time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             cur.execute("UPDATE recipe_manager.users SET last_access_date = %s WHERE username = %s", (time, username))
 
-            print("Successfully log in ", time)
+            print("Successfully log in on", time)
+
+            conn.commit()
 
             return True
 
