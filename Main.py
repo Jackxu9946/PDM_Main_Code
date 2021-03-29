@@ -4,7 +4,7 @@ import Recipe
 from datetime import datetime
 
 global_username = ""
-user_id = ""
+user_id = None
 
 
 def main():

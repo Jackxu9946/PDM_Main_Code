@@ -1,6 +1,7 @@
 import psycopg2
 from datetime import datetime
 
+
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
     database="p320_02a",
@@ -24,10 +25,10 @@ def login(username, password):
 
     if not check_name:
         print("Username does not exist")
-        return False
+        return [False, None]
     else:
         print("Username: ", check_name[0])
-        cur.execute("SELECT password FROM recipe_manager.users WHERE username = %s", (username,))
+        cur.execute("SELECT (password,user_id) FROM recipe_manager.users WHERE username = %s", (username,))
         check_psw = cur.fetchone()
 
         if check_psw[0] != password:
@@ -37,10 +38,11 @@ def login(username, password):
             cur.execute("UPDATE recipe_manager.users SET last_access_date = %s WHERE username = %s", (time, username))
 
             print("Successfully log in on", time)
+            user_id = check_psw[1]
 
             conn.commit()
 
-            return True
+            return [True, user_id]
 
 # def main():
 #
