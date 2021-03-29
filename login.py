@@ -12,10 +12,12 @@ cur = conn.cursor()
 
 cur.execute("select * from recipe_manager.users")
 
-#comment
+
+# comment
 
 # username: SPBSP
 # password: Y52A9
+
 def login(username, password):
     cur.execute("SELECT username FROM recipe_manager.users WHERE username = %s", (username,))
     check_name = cur.fetchone()
@@ -40,28 +42,27 @@ def login(username, password):
 
             return True
 
-
-def main():
-
-    username = input("Enter username: ")
-    password = input("Psw: ")
-
-    log = login(username, password)
-
-    while not log:
-        username = input("Enter username: ")
-        password = input("Psw: ")
-        login(username, password)
-
-    cur.execute("SELECT last_access_date FROM recipe_manager.users WHERE username = %s", (username,))
-
-    check_time = cur.fetchone()
-    print(check_time)
-
-    cur.execute("SELECT last_access_date FROM recipe_manager.users")
-    x = cur.fetchall()
-
-    for row in x:
-        print(row[0])
-
-main()
+# def main():
+#
+#     username = input("Enter username: ")
+#     password = input("Psw: ")
+#
+#     log = login(username, password)
+#
+#     while not log:
+#         username = input("Enter username: ")
+#         password = input("Psw: ")
+#         login(username, password)
+#
+#     cur.execute("SELECT last_access_date FROM recipe_manager.users WHERE username = %s", (username,))
+#
+#     check_time = cur.fetchone()
+#     print(check_time)
+#
+#     cur.execute("SELECT last_access_date FROM recipe_manager.users")
+#     x = cur.fetchall()
+#
+#     for row in x:
+#         print(row[0])
+#
+# main()
