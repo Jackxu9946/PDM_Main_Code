@@ -46,12 +46,12 @@ def list_of_recipes(user_id):
         print("Recipe name:", val[0], "(recipe id: ", val[1], ")")
 
 
-def add_recipes(name, category_id):
+def add_recipes(category_id, input_recipes):
     """Return False when the recipe_id entered by user does not exist or already exist in the category.
        Otherwise insert the recipe_id and category_id into the recipe_to_category.
     """
 
-    input_recipes = input("\nEnter a recipe id to add recipe into category named" + name + ": ")
+    # input_recipes = input("\nEnter a recipe id to add recipe into category named" + name + ": ")
 
     cur.execute("SELECT recipe_id FROM recipe_manager.recipe WHERE recipe_id = %s", (input_recipes,))
 
