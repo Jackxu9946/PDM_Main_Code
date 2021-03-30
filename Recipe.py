@@ -18,7 +18,7 @@ creation_date = datetime.today().strftime('%Y-%m-%d')
 
 def create_recipe(name, cook_time, description, difficulty, servings, created_by,creation_date, steps):
     try:
-        cur.execute("INSERT INTO recipe_manager.recipe(name, cook_time, description, created_by, creation_date,steps, difficulty, servings) VALUES (%s, %s, %s, %s, %s, %s)",
+        cur.execute("INSERT INTO public.recipe(name, cook_time, description, created_by, creation_date,steps, difficulty, servings) VALUES (%s, %s, %s, %s, %s, %s)",
                     (name, cook_time, description, created_by,creation_date, steps, difficulty, servings))
         conn.commit()
     except:
@@ -28,22 +28,22 @@ def create_recipe(name, cook_time, description, difficulty, servings, created_by
 def edit_recipe(name, cook_time, description, difficulty, servings, steps, recipe_id):
     try:
         if (name != None):
-            cur.execute("UPDATE recipe_manager.recipe SET name = %s WHERE recipe_id = %s", (name, recipe_id))
+            cur.execute("UPDATE public.recipe SET name = %s WHERE recipe_id = %s", (name, recipe_id))
 
         if (cook_time != None):
-            cur.execute("UPDATE recipe_manager.recipe SET cook_time = %s WHERE recipe_id = %s", (cook_time, recipe_id))
+            cur.execute("UPDATE public.recipe SET cook_time = %s WHERE recipe_id = %s", (cook_time, recipe_id))
 
         if (description != None):
-            cur.execute("UPDATE recipe_manager.recipe SET description = %s WHERE recipe_id = %s", (description, recipe_id))
+            cur.execute("UPDATE public.recipe SET description = %s WHERE recipe_id = %s", (description, recipe_id))
 
         if (difficulty != None):
-            cur.execute("UPDATE recipe_manager.recipe SET difficulty = %s WHERE recipe_id = %s", (difficulty, recipe_id))
+            cur.execute("UPDATE public.recipe SET difficulty = %s WHERE recipe_id = %s", (difficulty, recipe_id))
 
         if (servings != None):
-            cur.execute("UPDATE recipe_manager.recipe SET servings = %s WHERE recipe_id = %s", (servings, recipe_id))
+            cur.execute("UPDATE public.recipe SET servings = %s WHERE recipe_id = %s", (servings, recipe_id))
 
         if (steps != None):
-            cur.execute("UPDATE recipe_manager.recipe SET steps = %s WHERE recipe_id = %s", (steps, recipe_id))
+            cur.execute("UPDATE public.recipe SET steps = %s WHERE recipe_id = %s", (steps, recipe_id))
 
         conn.commit()
     except:
@@ -51,7 +51,7 @@ def edit_recipe(name, cook_time, description, difficulty, servings, steps, recip
 
 def delete_recipe_with_error_checking(user_id, recipe_id):
     #Check if the recipe has been made
-    cur.execute("SELECT * from recipe_manager.rating where recipe_id = %s LIMIT 1", (recipe_id))
+    cur.execute("SELECT * from public.rating where recipe_id = %s LIMIT 1", (recipe_id))
     if (cur.fetchall() != None):
         delete_recipe(user_id, recipe_id)
     else:
@@ -59,7 +59,7 @@ def delete_recipe_with_error_checking(user_id, recipe_id):
 def delete_recipe(user_id, recipe_id):
     #No error checking happening here
     try:
-        cur.execute("DELETE FROM recipe_manager.recipe WHERE recipe_id= %s and created_by = %s", (recipe_id, user_id))
+        cur.execute("DELETE FROM public.recipe WHERE recipe_id= %s and created_by = %s", (recipe_id, user_id))
         conn.commit()
     except:
         print("Can not delete entry in database")
@@ -72,7 +72,7 @@ def search_recipe_by_name(name, search_mode):
     #most_recent = when it was made
     if (search_mode == "recent"):
         try:
-            cur.execute("SELECT (name, recipe_id, rating, description) from recipe_manager.recipe where name like '%%{name}%%' ORDER BY creation_date ".format(name=name))
+            cur.execute("SELECT (name, recipe_id, rating, description) from public.recipe where name like '%%{name}%%' ORDER BY creation_date ".format(name=name))
             results = cur.fetchall()
             return results
         except:
@@ -80,7 +80,7 @@ def search_recipe_by_name(name, search_mode):
     elif (search_mode == "rating"):
         try:
             cur.execute(
-                "SELECT (name, recipe_id, rating, description) from recipe_manager.recipe where name like '%%{name}%%' ORDER BY rating ".format(
+                "SELECT (name, recipe_id, rating, description) from public.recipe where name like '%%{name}%%' ORDER BY rating ".format(
                     name=name))
             results = cur.fetchall()
             return results
@@ -89,7 +89,7 @@ def search_recipe_by_name(name, search_mode):
     else:
         try:
             cur.execute(
-                "SELECT (name, recipe_id, rating, description) from recipe_manager.recipe where name like '%%{name}%%' ORDER BY name ".format(
+                "SELECT (name, recipe_id, rating, description) from public.recipe where name like '%%{name}%%' ORDER BY name ".format(
                     name=name))
             results = cur.fetchall()
             return results
@@ -100,13 +100,13 @@ def search_recipe_by_name(name, search_mode):
 def search_recipe_by_ingredient(ingredient, search_mode):
     #Get the ingredient ID
     #Assuming there is only one ingredient ID per name
-    cur.execute("SELECT (id) from recipe_manager.ingredients where name = %s", (ingredient,))
+    cur.execute("SELECT (id) from public.ingredients where name = %s", (ingredient,))
     ingredient_result = cur.fetchone()
     if (ingredient_result == None):
         print("This ingredient does not exist in the database. Please check the name and try again")
     ingredient_id = ingredient_result[0]
     #Find all the recipe_id that contains this ingredient ID
-    cur.execute("SELECT (recipe_id) from recipe_manager.ingredient_to_recipe where ingredient = %s", (ingredient_id))
+    cur.execute("SELECT (recipe_id) from public.ingredient_to_recipe where ingredient = %s", (ingredient_id))
     #CHECK THIS VALUE MAKE SURE IT IS A TUPLE BEFORE DOING ANYTHING ELSE
     recipe_id_list = cur.fetchall()
     #Now we have all the recipe_id we just need to choose the right value from the database
@@ -114,7 +114,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     if (search_mode == "recent"):
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by creation_date", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by creation_date", (recipe_id_list)
             )
             result = cur.fetchall()
         except:
@@ -122,7 +122,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     elif (search_mode == "rating"):
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by rating", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by rating", (recipe_id_list)
             )
             result = cur.fetchall()
         except:
@@ -130,7 +130,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     else:
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by name", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by name", (recipe_id_list)
             )
             result = cur.fetchall()
         except:
@@ -144,7 +144,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
 def search_recipe_by_category(category, search_mode):
     #Get all the category id with category name = category
     cur.execute(
-        "SELECT (id) from recipe_manager.category where name = %s", (category,)
+        "SELECT (id) from public.category where name = %s", (category,)
     )
     conn.commit()
     temp = tuple(cur.fetchall())
@@ -155,7 +155,7 @@ def search_recipe_by_category(category, search_mode):
     #Now we have a tuple of category id
     #Use it to find recipe_id
     cur.execute(
-        "SELECT (recipe_id) from recipe_manager.recipe_to_category where category_id in %s", (tuple_category_id,)
+        "SELECT (recipe_id) from public.recipe_to_category where category_id in %s", (tuple_category_id,)
     )
 
     recipe_id_list = tuple(cur.fetchall())
@@ -167,7 +167,7 @@ def search_recipe_by_category(category, search_mode):
     if (search_mode == "recent"):
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by creation_date", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by creation_date", (recipe_id_list)
             )
             result = cur.fetchall()
         except:
@@ -175,7 +175,7 @@ def search_recipe_by_category(category, search_mode):
     elif (search_mode == "rating"):
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by rating", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by rating", (recipe_id_list)
             )
             result = cur.fetchall()
         except:
@@ -183,7 +183,7 @@ def search_recipe_by_category(category, search_mode):
     else:
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from recipe_manager.recipe where recipe_id in %s order by name", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by name", (recipe_id_list)
             )
             result = cur.fetchall()
         except:
