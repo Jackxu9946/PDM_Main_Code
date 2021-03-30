@@ -4,7 +4,7 @@ import Recipe
 from datetime import datetime
 
 global_username = ""
-user_id = None
+user_id = ""
 
 
 def main():
@@ -65,7 +65,7 @@ def main_register():
     password = input("Enter password: ")
     print("\n")
 
-    reg = register.register(username, password)
+    register.register(username, password)
     return 1.1
 
 
@@ -91,7 +91,9 @@ def main_login():
     if leave == "quit":
         return 0
     global global_username
+    global user_id
     global_username = username
+    
     return 1
 
 
@@ -109,10 +111,12 @@ def create_recipe():
 
 
 def edit_recipe():
+    print("edit_recipe is not yet coded.")
     return 2.2
 
 
 def delete_recipe():
+    print("delete_recipe is not yet coded.")
     return 2.3
 
 
