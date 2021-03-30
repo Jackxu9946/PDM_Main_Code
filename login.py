@@ -1,6 +1,7 @@
 import psycopg2
 from datetime import datetime
 
+
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
     database="p320_02a",
@@ -12,20 +13,22 @@ cur = conn.cursor()
 
 cur.execute("select * from recipe_manager.users")
 
-#comment
+
+# comment
 
 # username: SPBSP
 # password: Y52A9
+
 def login(username, password):
     cur.execute("SELECT username FROM recipe_manager.users WHERE username = %s", (username,))
     check_name = cur.fetchone()
 
     if not check_name:
         print("Username does not exist")
-        return False
+        return [False, None]
     else:
         print("Username: ", check_name[0])
-        cur.execute("SELECT password FROM recipe_manager.users WHERE username = %s", (username,))
+        cur.execute("SELECT (password,user_id) FROM recipe_manager.users WHERE username = %s", (username,))
         check_psw = cur.fetchone()
 
         if check_psw[0] != password:
@@ -35,33 +38,33 @@ def login(username, password):
             cur.execute("UPDATE recipe_manager.users SET last_access_date = %s WHERE username = %s", (time, username))
 
             print("Successfully log in on", time)
+            user_id = check_psw[1]
 
             conn.commit()
 
-            return True
+            return [True, user_id]
 
-
-def main():
-
-    username = input("Enter username: ")
-    password = input("Psw: ")
-
-    log = login(username, password)
-
-    while not log:
-        username = input("Enter username: ")
-        password = input("Psw: ")
-        login(username, password)
-
-    cur.execute("SELECT last_access_date FROM recipe_manager.users WHERE username = %s", (username,))
-
-    check_time = cur.fetchone()
-    print(check_time)
-
-    cur.execute("SELECT last_access_date FROM recipe_manager.users")
-    x = cur.fetchall()
-
-    for row in x:
-        print(row[0])
-
-main()
+# def main():
+#
+#     username = input("Enter username: ")
+#     password = input("Psw: ")
+#
+#     log = login(username, password)
+#
+#     while not log:
+#         username = input("Enter username: ")
+#         password = input("Psw: ")
+#         login(username, password)
+#
+#     cur.execute("SELECT last_access_date FROM recipe_manager.users WHERE username = %s", (username,))
+#
+#     check_time = cur.fetchone()
+#     print(check_time)
+#
+#     cur.execute("SELECT last_access_date FROM recipe_manager.users")
+#     x = cur.fetchall()
+#
+#     for row in x:
+#         print(row[0])
+#
+# main()
