@@ -1,7 +1,6 @@
 import psycopg2
 from datetime import datetime
 
-
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
     database="p320_02a",
@@ -9,9 +8,7 @@ conn = psycopg2.connect(
     password="mdzpxSyGJSvn",
 )
 
-
 cur = conn.cursor()
-
 
 cur.execute("select * from public.users")
 
@@ -20,7 +17,6 @@ cur.execute("select * from public.users")
 
 
 def register(username, password):
-
     creation_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     cur.execute("SELECT username FROM public.users WHERE username = %s", (username,))
     row = cur.fetchone()
@@ -37,3 +33,10 @@ def register(username, password):
 
     conn.commit()
 
+
+def main():
+    username = "SPBSP"
+    register(username, "1111")
+
+
+main()
