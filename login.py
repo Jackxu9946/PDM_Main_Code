@@ -11,7 +11,7 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 
-cur.execute("select * from recipe_manager.users")
+cur.execute("select * from public.users")
 
 
 # comment
@@ -20,7 +20,7 @@ cur.execute("select * from recipe_manager.users")
 # password: Y52A9
 
 def login(username, password):
-    cur.execute("SELECT username FROM recipe_manager.users WHERE username = %s", (username,))
+    cur.execute("SELECT username FROM public.users WHERE username = %s", (username,))
     check_name = cur.fetchone()
 
     if not check_name:
@@ -28,14 +28,14 @@ def login(username, password):
         return [False, None]
     else:
         print("Username: ", check_name[0])
-        cur.execute("SELECT (password,user_id) FROM recipe_manager.users WHERE username = %s", (username,))
+        cur.execute("SELECT (password,user_id) FROM public.users WHERE username = %s", (username,))
         check_psw = cur.fetchone()
 
         if check_psw[0] != password:
             print("Password is wrong")
         else:
             time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            cur.execute("UPDATE recipe_manager.users SET last_access_date = %s WHERE username = %s", (time, username))
+            cur.execute("UPDATE public.users SET last_access_date = %s WHERE username = %s", (time, username))
 
             print("Successfully log in on", time)
             user_id = check_psw[1]
