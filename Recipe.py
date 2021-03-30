@@ -114,7 +114,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     if (search_mode == "recent"):
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by creation_date", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by creation_date", (recipe_id_list,)
             )
             result = cur.fetchall()
         except:
@@ -122,7 +122,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     elif (search_mode == "rating"):
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by rating", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by rating", (recipe_id_list,)
             )
             result = cur.fetchall()
         except:
@@ -130,7 +130,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     else:
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by name", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by name", (recipe_id_list,)
             )
             result = cur.fetchall()
         except:
@@ -138,7 +138,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     if (result != None):
         return result
     else:
-        Print("Can not retrieve recipe")
+        print("Can not retrieve recipe")
 
 
 def search_recipe_by_category(category, search_mode):
@@ -164,10 +164,11 @@ def search_recipe_by_category(category, search_mode):
         recipe_tuple.append(id[0])
     recipe_id_list = tuple(recipe_tuple)
     result = None
+    print(recipe_id_list)
     if (search_mode == "recent"):
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by creation_date", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by creation_date", (recipe_id_list,)
             )
             result = cur.fetchall()
         except:
@@ -175,7 +176,7 @@ def search_recipe_by_category(category, search_mode):
     elif (search_mode == "rating"):
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by rating", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by rating", (recipe_id_list,)
             )
             result = cur.fetchall()
         except:
@@ -183,7 +184,7 @@ def search_recipe_by_category(category, search_mode):
     else:
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by name", (recipe_id_list)
+                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by name", (recipe_id_list,)
             )
             result = cur.fetchall()
         except:
@@ -200,7 +201,7 @@ def search_recipe_by_category(category, search_mode):
 #Recipe_id = 5289, created by user1
 #Recipe_id = 8559, created by user2
 
-print(search_recipe_by_category("Chinese", "recent"))
+print(search_recipe_by_category("Chinese", ""))
 
 
 
