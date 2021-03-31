@@ -30,10 +30,10 @@ def main():
 
         elif int(action_value) == 3:
             print("Sign in before moving on.")
-
-        func = reg_switcher.get(int(action_value), lambda: "Invalid input")
-        if func() == 1:
-            break
+        else:
+            func = reg_switcher.get(int(action_value), lambda: "Invalid input")
+            if func() == 1:
+                break
 
     i = 0
     while i != 4:
@@ -70,11 +70,14 @@ def main_register():
 
 
 def main_login():
+    global global_username
+    global user_id
+
     username = input("\nEnter username: ")
     password = input("Enter password: ")
     print("\n")
 
-    log = login.login(username, password)
+    a, log = login.login(username, password)
 
     leave = ""
     while not log:
@@ -86,14 +89,15 @@ def main_login():
         password = input("Enter Password: ")
         print("\n")
 
-        log = login.login(username, password)
+        a, log = login.login(username, password)
 
     if leave == "quit":
         return 0
-    global global_username
-    global user_id
     global_username = username
-    
+
+    if log is not None:
+        user_id = log
+
     return 1
 
 

@@ -36,6 +36,7 @@ def login(username, password):
         user_id = cur.fetchone()[0]
         if check_psw[0]!= password:
             print("Password is wrong")
+            return [False, None]
         else:
             time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             cur.execute("UPDATE public.users SET last_access_date = %s WHERE username = %s", (time, username))
