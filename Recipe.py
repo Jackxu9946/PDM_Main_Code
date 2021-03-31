@@ -138,7 +138,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     if (result != None):
         return result
     else:
-        Print("Can not retrieve recipe")
+        print("Can not retrieve recipe")
 
 
 def search_recipe_by_category(category, search_mode):
@@ -192,6 +192,17 @@ def search_recipe_by_category(category, search_mode):
         return result
     else:
         print("Can not retrieve recipe")
+
+
+def print_my_recipes(username):
+    try:
+        cur.execute("SELECT (name, recipe_id, description) from public.recipe where created_by = %s", username)
+    except:
+        print("Can not retrieve recipe")
+
+
+
+
 
 
 #CATEGORY TEST SET UP
