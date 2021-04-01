@@ -89,6 +89,9 @@ def update_item(user_id, ingredient_id, quantity_updated):
                 "WHERE user_id = %s AND ingredient_id = %s", (quantity_updated, user_id, ingredient_id))
     conn.commit()
 
+# def add_ingredient_to_pantry(ingredient_name, quantity):
+    #Check if ingredient is in our database
+
 
 # Only for testing
 def add_item(user_id, ingredient_id):

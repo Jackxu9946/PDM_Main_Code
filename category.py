@@ -95,15 +95,13 @@ def open_category(category_id, name):
 
 def display_category(user_id):
     cur.execute("SELECT * FROM public.category where user_id = %s", (user_id,))
-
     results = cur.fetchall()
     if (results != None and len(results) > 0):
         for result in results:
-            print(result)
             # formatted = ast.literal_eval(result)
-            # result_string = formatted[0] + "     " + formatted[2]
-            # print(result_string)
-
+            result_string = str(result[0]) + "     " + result[2]
+            print(result_string)
+display_category(7706)
 
 # username: V79QX
 # def main():
