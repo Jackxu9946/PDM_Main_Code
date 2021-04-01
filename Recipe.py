@@ -219,22 +219,29 @@ def search_recipe_by_category(category, search_mode):
 #Recipe_id = 5289, created by user1
 #Recipe_id = 8559, created by user2
 
-print(search_recipe_by_category("Chinese", ""))
+# print(search_recipe_by_category("Chinese", ""))
 
-def print_my_recipes(user_id):
+def find_my_recipes(user_id):
     try:
-        cur.execute("SELECT (name, recipe_id, description) from public.recipe where created_by = %s", user_id)
+        cur.execute("SELECT (name, recipe_id, description) from public.recipe where created_by = %s", (user_id,))
+        results = cur.fetchall()
+        return results
     except:
         print("Can not retrieve recipe")
 
+def print_my_recipe(user_id):
+    results = find_my_recipes(user_id)
+    for result in results:
+        print(result)
 
+# print_my_recipes(1)
 # CATEGORY TEST SET UP
 # User1 have category = Chinese User_id = 0 category_id for chinese = 56
 # User2 have category = Chinese User_id = 1 category_id for chinese = 57
 # Recipe_id = 5289, created by user1
 # Recipe_id = 8559, created by user2
 
-print(search_recipe_by_category("Chinese", "recent"))
+# print(search_recipe_by_category("Chinese", "recent"))
 
 # def search_recipe_by_category(name, sort_mode):
 # if (search_mode == "recent")
