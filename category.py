@@ -1,5 +1,5 @@
 import psycopg2
-
+import ast
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
     database="p320_02a",
@@ -31,8 +31,7 @@ def create_categories(name, username):
     # print(category_id[-1]) to check new category_id
 
     cur.execute("SELECT * FROM public.category WHERE user_id= %s", user_id)
-    print(cur.fetchall())
-
+    # print(cur.fetchall())
     return user_id, category_id[-1]
 
 # create_categories("Chinese", "SPBSP")
@@ -92,6 +91,18 @@ def open_category(category_id, name):
         recipe_name = cur.fetchall()
         for names in recipe_name:
             print("     Recipe name:", names[0], "(recipe id:", val[0], ")")
+
+
+def display_category(user_id):
+    cur.execute("SELECT * FROM public.category where user_id = %s", (user_id,))
+
+    results = cur.fetchall()
+    if (results != None and len(results) > 0):
+        for result in results:
+            print(result)
+            # formatted = ast.literal_eval(result)
+            # result_string = formatted[0] + "     " + formatted[2]
+            # print(result_string)
 
 
 # username: V79QX

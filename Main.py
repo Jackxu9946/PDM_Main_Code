@@ -3,7 +3,7 @@ import register
 import Recipe
 from datetime import datetime
 import mark_recipe
-
+import category
 global_username = ""
 user_id = -1
 
@@ -54,7 +54,10 @@ def main():
               "6. Cook a recipe\n"
               "7. Add to pantry\n"
               "8. Update pantry\n"
-              "9. Quit\n")
+              "9. Add category\n"
+              "10. Add recipe to a category\n"
+              "11. Display my personal categories\n"
+              "12. Quit\n")
 
         recipe_switcher = {
             1: create_recipe,
@@ -65,7 +68,10 @@ def main():
             6: cook_recipe,
             7: add_pantry,
             8: update_pantry,
-            9: 9
+            9: add_category,
+            10: add_recipe_to_category,
+            11: display_my_category,
+            12: 12
         }
 
         try:
@@ -73,7 +79,7 @@ def main():
         except ValueError:
             print("Invalid input. Try again.")
 
-        if recipe_value == 9:
+        if recipe_value == 12:
             print("Session finished.")
             break
         else:
@@ -404,7 +410,16 @@ def search_recipe_mode(search_type, search_val):
 
 
 
+def add_category():
+    # print("add category")
+    category_name = input("Category Name: ")
+    category.create_categories(category_name, global_username)
 
+def display_my_category():
+    category.display_category(user_id)
+
+def add_recipe_to_category():
+    print("add recipe to category")
 
 def cook_recipe():
     recipe_id = input("Enter the recipe id of the recipe you would like to cook: \n")
