@@ -9,7 +9,7 @@ conn = psycopg2.connect(
 )
 cur = conn.cursor()
 
-name = "Test"
+name = "Test 3"
 cook_time = "50"
 description = "This is a test"
 user_id = 1
@@ -24,8 +24,12 @@ def create_recipe(name, cook_time, description, difficulty, servings, created_by
             (name, cook_time, description, created_by, creation_date, steps, difficulty, servings,)
         )
         conn.commit()
+        print("Recipe has been added successfully")
     except:
         print("Can not create new recipe")
+
+
+# create_recipe(name, cook_time, description, "Hard", 5, user_id, creation_date, steps)
 
 
 def edit_recipe(name, cook_time, description, difficulty, servings, steps, recipe_id):
