@@ -4,6 +4,7 @@ import Recipe
 from datetime import datetime
 import mark_recipe
 import category
+
 global_username = ""
 user_id = -1
 
@@ -195,7 +196,7 @@ def edit_recipe():
 
     if int(change_recipe_val) == 1:
         while leave_loop(leave) is False:
-            recipe_name = input("\nEnter recipes name: ")
+            recipe_name = input("\nRecipes Name: ")
             if recipe_name != "":
                 try:
                     leave = Recipe.edit_recipe(recipe_name, None, None, None, None, None, recipe_id)
@@ -215,7 +216,7 @@ def edit_recipe():
 
     elif change_recipe_val == 2:
         while leave_loop(leave) is False:
-            cook_time = input("\nEnter recipes cook time: ")
+            cook_time = input("\nCook Time: ")
             if cook_time != "":
                 try:
                     leave = Recipe.edit_recipe(None, cook_time, None, None, None, None, recipe_id)
@@ -234,7 +235,7 @@ def edit_recipe():
 
     elif change_recipe_val == 3:
         while leave_loop(leave) is False:
-            description = input("\nEnter recipes description: ")
+            description = input("\nDescription: ")
             if description != "":
                 try:
                     leave = Recipe.edit_recipe(None, None, description, None, None, None, recipe_id)
@@ -253,7 +254,7 @@ def edit_recipe():
 
     elif change_recipe_val == 4:
         while leave_loop(leave) is False:
-            difficulty = input("\nEnter recipes difficulty: ")
+            difficulty = input("\nDifficulty: ")
             if difficulty != "":
                 try:
                     leave = Recipe.edit_recipe(None, None, None, difficulty, None, None, recipe_id)
@@ -272,7 +273,7 @@ def edit_recipe():
 
     elif change_recipe_val == 5:
         while leave_loop(leave) is False:
-            serving = input("\nEnter recipes serving size: ")
+            serving = input("\nServing Size: ")
             if serving != "":
                 try:
                     leave = Recipe.edit_recipe(None, None, None, None, serving, None, recipe_id)
@@ -291,7 +292,7 @@ def edit_recipe():
 
     elif change_recipe_val == 6:
         while leave_loop(leave) is False:
-            steps = input("\nEnter recipes steps: ")
+            steps = input("\nSteps: ")
             if steps != "":
                 try:
                     leave = Recipe.edit_recipe(None, None, None, None, None, steps, recipe_id)
@@ -299,10 +300,10 @@ def edit_recipe():
                         print("Recipe steps was changed to", steps)
                     else:
                         print("Invalid input. \n")
-                        leave = input("Type '-1' to exit or enter to retry.\n")
+                        leave = input("Type '-1' to exit or press enter to retry.\n")
                 except ValueError:
                     print("Invalid input. \n")
-                    leave = input("Type '-1' to exit or enter to retry.\n")
+                    leave = input("Type '-1' to exit or press enter to retry.\n")
                 if leave == -1:
                     print("Exiting change recipe steps.")
             else:
@@ -320,7 +321,7 @@ def delete_recipe():
     del_recipe = 0
     while True:
         try:
-            del_recipe = int(input("Enter the recipe's ID you would like to delete: "))
+            del_recipe = int(input("Recipe ID: "))
         except ValueError:
             print("Invalid input. Try again.")
             pass
@@ -413,10 +414,9 @@ def search_recipe_mode(search_type, search_val):
                 break
 
         else:
-            quit_val = input("Invalid sort mode, Enter quit to quit: ")
+            quit_val = input("Invalid sort mode, Enter Quit to quit: ")
             if quit_val == "Quit":
                 break
-
 
 
 def add_category():
@@ -424,15 +424,30 @@ def add_category():
     category.create_categories(category_name, global_username)
     category.display_category(user_id)
 
+
 def display_my_category():
     category.display_category(user_id)
+
 
 def add_recipe_to_category():
     print("add recipe to category")
 
+
 def cook_recipe():
-    recipe_id = input("Enter the recipe id of the recipe you would like to cook: \n")
-    scale = input("Enter the scale of the current recipe you would like to cook: \n")
+    while True:
+        try:
+            recipe_id = int(input("Enter the recipe id of the recipe you would like to cook: \n"))
+            break
+        except ValueError:
+            print("Invalid input. Try again.")
+
+    while True:
+        try:
+            scale = int(input("Enter the scale of the current recipe you would like to cook: \n"))
+            break
+        except ValueError:
+            print("Invalid input. Try again.")
+
     mark_recipe.mark_recipe(user_id, recipe_id, scale)
     return 2.5
 
