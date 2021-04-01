@@ -231,13 +231,31 @@ def find_my_recipes(user_id):
     except:
         print("Can not retrieve recipe")
 
-
-def print_my_recipe(user_id):
-    results = find_my_recipes(user_id)
+def print_my_recipe(results):
+    # results = find_my_recipes(user_id)
+    recipe_name_header = "Name                             |"
+    recipe_ID_header = "ID        |"
+    recipe_description = "Description"
+    recipe_header = recipe_name_header + recipe_ID_header + recipe_description
+    print(recipe_header)
     for result in results:
-        print(result)
+        result_string = ""
+        cur_recipe = ast.literal_eval(result[0])
+        cur_recipe_name = cur_recipe[0]
+        cur_recipe_ID = str(cur_recipe[1])
+        cur_recipe_description = cur_recipe[2]
+        #Format the result string
+        if (len(cur_recipe_name) < len(recipe_name_header)):
+            cur_recipe_name += (" " * (len(recipe_name_header) - len(cur_recipe_name)))
+            result_string += cur_recipe_name
+        if (len(cur_recipe_ID) < len(recipe_ID_header)):
+            cur_recipe_ID += (" " * (len(recipe_ID_header) - len(cur_recipe_ID)))
+            result_string += cur_recipe_ID
+        result_string += cur_recipe_description
+        print(result_string)
 
-# print_my_recipes(1)
+
+# print_my_recipe(1)
 # CATEGORY TEST SET UP
 # User1 have category = Chinese User_id = 0 category_id for chinese = 56
 # User2 have category = Chinese User_id = 1 category_id for chinese = 57
