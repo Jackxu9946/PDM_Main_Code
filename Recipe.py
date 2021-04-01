@@ -175,10 +175,6 @@ def search_recipe_by_category(category, search_mode):
     recipe_id_list = tuple(recipe_tuple)
     result = None
     print(recipe_id_list)
-    if (search_mode == "recent"):
-        try:
-            cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by creation_date", (recipe_id_list,)
     if search_mode == "recent":
         try:
             cur.execute(
