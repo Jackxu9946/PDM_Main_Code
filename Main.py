@@ -125,7 +125,7 @@ def main_login():
 
 # CREATE RECIPE
 def create_recipe():
-    name = input("\nEnter recipe name: ")
+    name = str(input("\nEnter recipe name: "))
     cook_time = input("Enter the cook time(minutes): ")
     description = input("Enter the recipes description: ")
     difficulty = input("Enter the recipes difficulty: ")

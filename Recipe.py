@@ -1,6 +1,7 @@
 import psycopg2
 from datetime import datetime
 import ast
+import json
 
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
@@ -10,7 +11,7 @@ conn = psycopg2.connect(
 )
 cur = conn.cursor()
 
-name = "Test 3"
+name = "davagagfa 12"
 cook_time = "50"
 description = "This is a test"
 user_id = 1
@@ -241,10 +242,13 @@ def print_my_recipe(results):
         print(recipe_header)
         for result in results:
             result_string = ""
-            cur_recipe = ast.literal_eval(result[0])
+            cur_recipe = result[0].split(",")
             cur_recipe_name = cur_recipe[0]
+            cur_recipe_name = cur_recipe_name[1:]
+            cur_recipe_name = cur_recipe_name.replace('"', '')
             cur_recipe_ID = str(cur_recipe[1])
             cur_recipe_description = cur_recipe[2]
+            cur_recipe_description = cur_recipe_description[:-1]
             #Format the result string
             if (len(cur_recipe_name) < len(recipe_name_header)):
                 cur_recipe_name += (" " * (len(recipe_name_header) - len(cur_recipe_name)))
@@ -257,8 +261,9 @@ def print_my_recipe(results):
     else:
         print("No results found")
 
-
-
+# create_recipe(name, cook_time, description, "Hard", 5, 7706, creation_date, steps)
+result = find_my_recipes(7706)
+print_my_recipe(result)
 # print_my_recipe(1)
 # CATEGORY TEST SET UP
 # User1 have category = Chinese User_id = 0 category_id for chinese = 56
