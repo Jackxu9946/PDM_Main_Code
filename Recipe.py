@@ -1,6 +1,5 @@
 import psycopg2
 from datetime import datetime
-import ast
 
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
@@ -54,8 +53,10 @@ def edit_recipe(name, cook_time, description, difficulty, servings, steps, recip
             cur.execute("UPDATE public.recipe SET steps = %s WHERE recipe_id = %s", (steps, recipe_id))
 
         conn.commit()
+        return -1
     except:
         print("Unable to save recipe")
+        return 1
 
 
 def delete_recipe_with_error_checking(user_id, recipe_id):

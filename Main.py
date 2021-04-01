@@ -4,7 +4,7 @@ import Recipe
 from datetime import datetime
 
 global_username = ""
-user_id = ""
+user_id = -1
 
 
 def main():
@@ -120,7 +120,7 @@ def create_recipe():
     creation_date = datetime.today().strftime('%Y-%m-%d')
     steps = input("Enter recipes steps: ")
 
-    Recipe.create_recipe(name, cook_time, description, difficulty, servings, global_username, creation_date, steps)
+    Recipe.create_recipe(name, cook_time, description, difficulty, servings, int(user_id), creation_date, steps)
     return 2.1
 
 
@@ -172,11 +172,17 @@ def edit_recipe():
         while leave_loop(leave) is False:
             recipe_name = input("\nEnter recipes name: ")
             try:
-                Recipe.edit_recipe(recipe_name, None, None, None, None, None, recipe_id)
-                return 1
+                leave = Recipe.edit_recipe(recipe_name, None, None, None, None, None, recipe_id)
+                if leave == -1:
+                    print("Recipe name was changed to ", recipe_name)
+                else:
+                    print("Invalid input. \n")
+                    leave = input("Type '-1' to exit or enter to retry.\n")
             except ValueError:
                 print("Invalid input. \n")
                 leave = input("Type '-1' to exit or enter to retry.\n")
+            if leave == -1:
+                print("Exiting change recipe.")
 
     elif change_recipe_val == 2:
         while leave_loop(leave) is False:
@@ -192,7 +198,7 @@ def edit_recipe():
         while leave_loop(leave) is False:
             description = input("\nEnter recipes description: ")
             try:
-                Recipe.edit_recipe(None, None, None, description, None, None, recipe_id)
+                Recipe.edit_recipe(None, None, description, None, None, None, recipe_id)
                 return 1
             finally:
                 print("Invalid input. \n")
@@ -237,12 +243,13 @@ def edit_recipe():
 
 
 def delete_recipe():
-    print("delete_recipe is not yet coded.")
+    del_recipe = input("Enter the recipe's ID you would like to delete: \n")
+    Recipe.delete_recipe(int(user_id), int(del_recipe))
     return 2.3
 
 
 def print_my_recipes():
-    Recipe.print_my_recipes(global_username)
+    Recipe.print_my_recipe(int(user_id))
     return 2.4
 
 
