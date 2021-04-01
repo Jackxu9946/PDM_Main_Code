@@ -65,8 +65,23 @@ def rate_recipe(user_id, recipe_id):
     creation_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     cur.execute("INSERT INTO public.rating(user_id, recipe_id, rating, rating_date, review_text ) "
                 "VALUES(%s, %s, %s, %s, %s)", (user_id, recipe_id, rating, creation_datetime, review_text))
-    conn.commit()
+    #Update the current rating average after inserting new rating for recipe
+    #Get the current average rating
+    cur.execute("select (rating) from public.recipe where recipe_id = %s", (recipe_id,))
+    current_average_rating = cur.fetchone()[0]
+    if (current_average_rating == None):
+        current_average_rating = 0
+    # print(current_average_rating)
+    #Get the current rating count
+    cur.execute("select count(*) from public.rating where recipe_id = %s", (recipe_id,))
+    current_rating_count = cur.fetchone()[0]
+    # print(current_rating_count)
+    #New average rating
+    new_average_rating = ((current_average_rating * current_rating_count ) + rating) / (current_average_rating + 1)
 
+    #Update the recipe table
+    cur.execute("UPDATE public.recipe SET rating = %s where recipe_id = %s", (new_average_rating, recipe_id,))
+    conn.commit()
 
 # Tested
 def update_item(user_id, ingredient_id, quantity_updated):
