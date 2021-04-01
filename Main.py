@@ -2,6 +2,7 @@ import login
 import register
 import Recipe
 from datetime import datetime
+import mark_recipe
 
 global_username = ""
 user_id = -1
@@ -331,12 +332,93 @@ def print_my_recipes():
 
 
 def search_recipe():
-    print("search_recipe is not yet coded")
+    # print("search_recipe is not yet coded")
+    # search_recipe_type = input("")
+    # search_recipe_loop_val = True
+    while (True):
+        search_recipe_type = input("Search by either (Ingredient, Name, Category): ")
+        if (search_recipe_type == "Ingredient"):
+            ingredient_name = input("Ingredient Name: \n")
+            search_recipe_mode(search_recipe_type,ingredient_name)
+            break
+        elif (search_recipe_type == "Name"):
+            recipe_name = input("Recipe Name: \n")
+            search_recipe_mode(search_recipe_type, recipe_name)
+            break
+        elif (search_recipe_type == "Category"):
+            category_name = input("Cateogry Name: \n")
+            search_recipe_mode(search_recipe_type,category_name)
+            break
+        else:
+            quit_val = input("Invalid search type. Enter Quit to quit: ")
+            if (quit_val == "Quit"):
+                break
     return 2.5
 
 
+def search_recipe_mode(search_type, search_val):
+    while (True):
+        search_recipe_mode = input("Result sorted by(Rating, Recent, Default): \n")
+        if (search_recipe_mode == "Rating"):
+            if (search_type == "Ingredient"):
+                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
+                Recipe.print_my_recipe(result)
+                break
+            elif (search_type == "Name"):
+                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
+                Recipe.print_my_recipe(result)
+                break
+
+            else:
+                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
+                Recipe.print_my_recipe(result)
+                break
+
+        elif(search_recipe_mode == "Recent"):
+            if (search_type == "Ingredient"):
+                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
+                Recipe.print_my_recipe(result)
+                break
+
+            elif (search_type == "Name"):
+                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
+                Recipe.print_my_recipe(result)
+                break
+
+            else:
+                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
+                Recipe.print_my_recipe(result)
+                break
+
+        elif(search_recipe_mode == "Default"):
+            if (search_type == "Ingredient"):
+                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
+                Recipe.print_my_recipe(result)
+                break
+
+            elif (search_type == "Name"):
+                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
+                Recipe.print_my_recipe(result)
+                break
+
+            else:
+                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
+                Recipe.print_my_recipe(result)
+                break
+
+        else:
+            quit_val = input("Invalid sort mode, Enter quit to quit: ")
+            if (quit_val == "Quit"):
+                break
+
+
+
+
+
 def cook_recipe():
-    print("cook_recipe is not yet coded")
+    recipe_id = input("Enter the recipe id of the recipe you would like to cook: \n")
+    scale = input("Enter the scale of the current recipe you would like to cook: \n")
+    mark_recipe.mark_recipe(user_id, recipe_id, scale)
     return 2.5
 
 
@@ -359,3 +441,4 @@ def leave_loop(leave):
 # Driver program
 if __name__ == "__main__":
     main()
+    # search_recipe()
