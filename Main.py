@@ -8,9 +8,11 @@ user_id = ""
 
 
 def main():
+    action_value = 0
+    recipe_value = 0
     signed_in = 0
-    i = 0
-    while i != 4:
+
+    while True:
         print("\nSign up or sign in if you already have an account.\n"
               "Please select ONLY the number to start an action!\n"
               "1. Sign up\n"
@@ -23,20 +25,23 @@ def main():
             3: 3
         }
 
-        action_value = input(": ")
+        # User input test clause
+        try:
+            action_value = int(input(": "))
+        except ValueError:
+            print("Invalid input. Try again.")
 
-        if int(action_value) == 3 & signed_in == 1:
+        # Valid user input - Checking to exit loop or calling function
+        if action_value == 3 & signed_in == 1:
             break
-
-        elif int(action_value) == 3:
+        elif action_value == 3:
             print("Sign in before moving on.")
         else:
-            func = reg_switcher.get(int(action_value), lambda: "Invalid input")
+            func = reg_switcher.get(action_value, lambda: "Invalid input")
             if func() == 1:
                 break
 
-    i = 0
-    while i != 4:
+    while True:
         print("\nPlease select ONLY the number to start an action!\n"
               "1. Create Recipe\n"
               "2. Edit Recipe\n"
@@ -44,7 +49,7 @@ def main():
               "4. View my recipes\n"
               "5. Quit\n")
 
-        action_switcher = {
+        recipe_switcher = {
             1: create_recipe,
             2: edit_recipe,
             3: delete_recipe,
@@ -52,14 +57,17 @@ def main():
             5: 5
         }
 
-        action_value = input()
+        try:
+            recipe_value = int(input(": "))
+        except ValueError:
+            print("Invalid input. Try again.")
 
-        if int(action_value) == 5:
+        if recipe_value == 5:
             print("Session finished.")
             break
-
-        func = action_switcher.get(int(action_value), lambda: "Invalid input")
-        func()
+        else:
+            func = recipe_switcher.get(recipe_value, lambda: "Invalid input")
+            func()
 
 
 def main_register():
@@ -118,15 +126,25 @@ def create_recipe():
 
 def edit_recipe():
     leave = 0
+    recipe_id = 0
+    change_recipe_val = 0
+    change_recipe_val_input = 0
+
     print("\nIf you don't know the recipe's id you can look up your recipes on the home screen.")
-    recipe_id = input("Enter recipe's id(or 'quit' to quit): ")
-    if recipe_id == 'quit':
+
+    try:
+        recipe_id = int(input("Enter recipe's id(or '-1' to quit): "))
+    except ValueError:
+        print("Invalid input. Try again.")
+        return -1
+
+    if recipe_id == -1:
         return -1
 
     print("\nPlease select ONLY the number of the element you'd like to change\n"
           "1. Recipes name\n"
           "2. Cook time\n"
-          "3. Description"
+          "3. Description\n"
           "4. Difficulty\n"
           "5. Serving size\n"
           "6. Steps\n"
@@ -141,8 +159,14 @@ def edit_recipe():
         6: 6,
         7: 7
     }
-    change_recipe_val_input = input(": ")
-    change_recipe_val = recipe_switcher.get(int(change_recipe_val_input), lambda: "Invalid input")
+
+    try:
+        change_recipe_val_input = int(input(": "))
+    except ValueError:
+        print("Invalid input. Try again.")
+        return -1
+
+    change_recipe_val = recipe_switcher.get(change_recipe_val_input, lambda: "Invalid input")
 
     if int(change_recipe_val) == 1:
         while leave_loop(leave) is False:
@@ -150,9 +174,9 @@ def edit_recipe():
             try:
                 Recipe.edit_recipe(recipe_name, None, None, None, None, None, recipe_id)
                 return 1
-            finally:
+            except ValueError:
                 print("Invalid input. \n")
-                leave = input("Type 'quit' to exit or enter to retry.\n")
+                leave = input("Type '-1' to exit or enter to retry.\n")
 
     elif change_recipe_val == 2:
         while leave_loop(leave) is False:
@@ -162,7 +186,7 @@ def edit_recipe():
                 return 1
             finally:
                 print("Invalid input. \n")
-                leave = input("Type 'quit' to exit or enter to retry.\n")
+                leave = input("Type '-1' to exit or enter to retry.\n")
 
     elif change_recipe_val == 3:
         while leave_loop(leave) is False:
@@ -172,7 +196,7 @@ def edit_recipe():
                 return 1
             finally:
                 print("Invalid input. \n")
-                leave = input("Type 'quit' to exit or enter to retry.\n")
+                leave = input("Type '-1' to exit or enter to retry.\n")
 
     elif change_recipe_val == 4:
         while leave_loop(leave) is False:
@@ -182,7 +206,7 @@ def edit_recipe():
                 return 1
             finally:
                 print("Invalid input. \n")
-                leave = input("Type 'quit' to exit or enter to retry.\n")
+                leave = input("Type '-1' to exit or enter to retry.\n")
 
     elif change_recipe_val == 5:
         while leave_loop(leave) is False:
@@ -192,7 +216,7 @@ def edit_recipe():
                 return 1
             finally:
                 print("Invalid input. \n")
-                leave = input("Type 'quit' to exit or enter to retry.\n")
+                leave = input("Type '-1' to exit or enter to retry.\n")
 
     elif change_recipe_val == 6:
         while leave_loop(leave) is False:
@@ -202,7 +226,7 @@ def edit_recipe():
                 return 1
             finally:
                 print("Invalid input. \n")
-                leave = input("Type 'quit' to exit or enter to retry.\n")
+                leave = input("Type '-1' to exit or enter to retry.\n")
 
     elif change_recipe_val == 7:
         return -1
@@ -223,7 +247,7 @@ def print_my_recipes():
 
 
 def leave_loop(leave):
-    if leave == "quit":
+    if leave == -1:
         return True
     return False
 
