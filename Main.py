@@ -420,9 +420,9 @@ def search_recipe_mode(search_type, search_val):
 
 
 def add_category():
-    # print("add category")
     category_name = input("Category Name: ")
     category.create_categories(category_name, global_username)
+    category.display_category(user_id)
 
 def display_my_category():
     category.display_category(user_id)

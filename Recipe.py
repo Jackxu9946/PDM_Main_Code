@@ -19,7 +19,7 @@ steps = "123123131"
 creation_date = datetime.today().strftime('%Y-%m-%d')
 
 
-def create_recipe(name, cook_time, description, difficulty, servings, created_by, creation_date, steps):
+def create_recipe(name, cook_time, description, difficulty, servings, created_by, creation_date, steps, ingredients):
     try:
         cur.execute(
             "INSERT INTO public.recipe(name, cook_time, description, created_by, creation_date,steps, difficulty, servings) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",

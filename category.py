@@ -98,10 +98,11 @@ def display_category(user_id):
     results = cur.fetchall()
     if (results != None and len(results) > 0):
         for result in results:
-            # formatted = ast.literal_eval(result)
             result_string = str(result[0]) + "     " + result[2]
             print(result_string)
-display_category(7706)
+    else:
+        print("No personal categories yet")
+# display_category(7706)
 
 # username: V79QX
 # def main():
