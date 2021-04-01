@@ -335,36 +335,36 @@ def search_recipe():
     # print("search_recipe is not yet coded")
     # search_recipe_type = input("")
     # search_recipe_loop_val = True
-    while (True):
+    while True:
         search_recipe_type = input("Search by either (Ingredient, Name, Category): ")
-        if (search_recipe_type == "Ingredient"):
+        if search_recipe_type == "Ingredient":
             ingredient_name = input("Ingredient Name: \n")
-            search_recipe_mode(search_recipe_type,ingredient_name)
+            search_recipe_mode(search_recipe_type, ingredient_name)
             break
-        elif (search_recipe_type == "Name"):
+        elif search_recipe_type == "Name":
             recipe_name = input("Recipe Name: \n")
             search_recipe_mode(search_recipe_type, recipe_name)
             break
-        elif (search_recipe_type == "Category"):
-            category_name = input("Cateogry Name: \n")
-            search_recipe_mode(search_recipe_type,category_name)
+        elif search_recipe_type == "Category":
+            category_name = input("Category Name: \n")
+            search_recipe_mode(search_recipe_type, category_name)
             break
         else:
             quit_val = input("Invalid search type. Enter Quit to quit: ")
-            if (quit_val == "Quit"):
+            if quit_val == "Quit":
                 break
     return 2.5
 
 
 def search_recipe_mode(search_type, search_val):
-    while (True):
-        search_recipe_mode = input("Result sorted by(Rating, Recent, Default): \n")
-        if (search_recipe_mode == "Rating"):
-            if (search_type == "Ingredient"):
+    while True:
+        search_recipe_mode_input = input("Result sorted by(Rating, Recent, Default): \n")
+        if search_recipe_mode_input == "Rating":
+            if search_type == "Ingredient":
                 result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
                 break
-            elif (search_type == "Name"):
+            elif search_type == "Name":
                 result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
                 break
@@ -374,13 +374,13 @@ def search_recipe_mode(search_type, search_val):
                 Recipe.print_my_recipe(result)
                 break
 
-        elif(search_recipe_mode == "Recent"):
-            if (search_type == "Ingredient"):
+        elif search_recipe_mode_input == "Recent":
+            if search_type == "Ingredient":
                 result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
                 break
 
-            elif (search_type == "Name"):
+            elif search_type == "Name":
                 result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
                 break
@@ -390,13 +390,13 @@ def search_recipe_mode(search_type, search_val):
                 Recipe.print_my_recipe(result)
                 break
 
-        elif(search_recipe_mode == "Default"):
-            if (search_type == "Ingredient"):
+        elif search_recipe_mode_input == "Default":
+            if search_type == "Ingredient":
                 result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
                 break
 
-            elif (search_type == "Name"):
+            elif search_type == "Name":
                 result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
                 break
@@ -408,11 +408,8 @@ def search_recipe_mode(search_type, search_val):
 
         else:
             quit_val = input("Invalid sort mode, Enter quit to quit: ")
-            if (quit_val == "Quit"):
+            if quit_val == "Quit":
                 break
-
-
-
 
 
 def cook_recipe():
