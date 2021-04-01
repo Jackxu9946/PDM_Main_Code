@@ -26,9 +26,17 @@ def create_recipe(name, cook_time, description, difficulty, servings, created_by
             (name, cook_time, description, created_by, creation_date, steps, difficulty, servings,)
         )
         conn.commit()
+        #Get the recipe_id and send it into an underlying function
+        cur.execute(
+            "Select (recipe_id) from public.recipe where created_by = %s and name = %s", (created_by, name)
+        )
+        recipe_id = int(cur.fetchone()[0])
+        recipe_to_ingredient(recipe_id, ingredients)
         print("Recipe has been added successfully")
     except:
         print("Can not create new recipe")
+
+# create_recipe(name,cook_time,description, "Hard", 5, 7706, creation_date,steps, None)
 
 
 # create_recipe(name, cook_time, description, "Hard", 5, user_id, creation_date, steps)
