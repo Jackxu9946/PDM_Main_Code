@@ -231,7 +231,6 @@ def find_my_recipes(user_id):
         print("Can not retrieve recipe")
 
 def print_my_recipe(results):
-    # results = find_my_recipes(user_id)
     recipe_name_header = "Name                             |"
     recipe_ID_header = "ID        |"
     recipe_description = "Description"
