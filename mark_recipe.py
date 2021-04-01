@@ -11,7 +11,7 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 
-def mark_recipe(user_id, recipe_id):
+def mark_recipe(user_id, recipe_id, scale):
     cur.execute("SELECT * FROM public.recipes WHERE recipe_id = %d")
     exist = cur.fetchone()
     if not exist:
@@ -22,44 +22,37 @@ def mark_recipe(user_id, recipe_id):
         cur.execute("SELECT ingredient FROM public.ingredient_to_recipe WHERE recipe_id = %s", (recipe_id,))
         # get the results of the recipe (probably)
         ingredients = cur.fetchall()
+
         for i in ingredients:
-            """
-            
             # each i is the id of individual ingredient in the ingredient list
 
             # get the quantity of this ingredient needed in recipe
-            cur.execute("SELECT current_quantity FROM public.ingredient_to_recipe WHERE recipe_id = %s"
+            cur.execute("SELECT ingredient_quantity FROM public.ingredient_to_recipe WHERE recipe_id = %s"
                         "AND ingredient_id = %s ", (recipe_id, i))
             quantity_need = cur.fetchone()
-
+            scaled_quantity = quantity_need * scale
             # get the quantity of the needed ingredient in the pantry
             cur.execute("SELECT current_quantity FROM public.pantry WHERE user_id = %s "
                         "AND ingredient_id = %s ", (recipe_id, i))
             quantity_have = cur.fetchone()
 
-            quantity_remained = quantity_need - quantity_have
+            quantity_remained = scaled_quantity - quantity_have
             # have enough quantity for this ingredient.
             if quantity_remained >= 0:
                 # update the current quantity of this ingredient after some quantity is used to make the recipe
                 cur.execute("UPDATE public.pantry SET current_quantity = %d "
                             "WHERE user_id = %d AND ingredient_id = %d", (quantity_remained, user_id, i))
             # not enough quantity for this ingredient
-            """
-            cur.execute("SELECT * FROM public.pantry WHERE user_id = %s and ingredient_id = %s ", (user_id, i))
-            result = cur.fetchall()
-            if not result:
-                print("Pantry does not have ingredient required")
-                return
-            """
             else:
-                print("Ingredients in Pantry is not enough to make this recipe.")
-                return
-            """
+                print("Not enough quantity to make recipe.")
+                return False
+
 
     # Rate recipe after successfully making it
     rate_recipe(user_id, recipe_id)
 
-    conn.commit()
+    #conn.commit()
+    return True
 
 
 # Tested as follows:
@@ -82,7 +75,7 @@ def update_item(user_id, ingredient_id, quantity_updated):
     conn.commit()
 
 
-# Tested
+# Only for testing
 def add_item(user_id, ingredient_id):
     current_quantity = 1
     cur.execute("INSERT INTO public.pantry(user_id, ingredient_id, current_quantity)"
@@ -91,7 +84,7 @@ def add_item(user_id, ingredient_id):
 
 
 def main():
-    user_id = 123
+    print(2, )
 
 
 main()

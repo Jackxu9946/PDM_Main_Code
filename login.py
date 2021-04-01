@@ -34,8 +34,9 @@ def login(username, password):
 
         cur.execute("SELECT (user_id) FROM public.users WHERE username = %s", (username,))
         user_id = cur.fetchone()[0]
-        if check_psw[0]!= password:
+        if check_psw[0] != password:
             print("Password is wrong")
+            return [False, None]
         else:
             time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             cur.execute("UPDATE public.users SET last_access_date = %s WHERE username = %s", (time, username))
@@ -46,6 +47,8 @@ def login(username, password):
 
             return [True, user_id]
 
+
+"""
 def main():
     print(login("Q149R", "MVNK6"))
 
@@ -76,3 +79,4 @@ main()
 #         print(row[0])
 #
 # main()
+"""
