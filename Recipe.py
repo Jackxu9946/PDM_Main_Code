@@ -262,8 +262,8 @@ def print_my_recipe(results):
         print("No results found")
 
 # create_recipe(name, cook_time, description, "Hard", 5, 7706, creation_date, steps)
-result = find_my_recipes(7706)
-print_my_recipe(result)
+# result = find_my_recipes(7706)
+# print_my_recipe(result)
 # print_my_recipe(1)
 # CATEGORY TEST SET UP
 # User1 have category = Chinese User_id = 0 category_id for chinese = 56
