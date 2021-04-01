@@ -310,9 +310,18 @@ def edit_recipe():
 
 
 def delete_recipe():
-    del_recipe = input("Enter the recipe's ID you would like to delete: \n")
-    Recipe.delete_recipe(int(user_id), int(del_recipe))
-    return 2.3
+    del_recipe = 0
+    while True:
+        try:
+            del_recipe = int(input("Enter the recipe's ID you would like to delete: "))
+        except ValueError:
+            print("Invalid input. Try again.")
+            pass
+
+        Recipe.delete_recipe(int(user_id), int(del_recipe))
+
+        if del_recipe == -1:
+            return -1
 
 
 def print_my_recipes():
