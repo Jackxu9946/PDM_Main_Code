@@ -4,7 +4,7 @@ import Recipe
 from datetime import datetime
 
 global_username = ""
-user_id = ""
+user_id = -1
 
 
 def main():
@@ -120,7 +120,7 @@ def create_recipe():
     creation_date = datetime.today().strftime('%Y-%m-%d')
     steps = input("Enter recipes steps: ")
 
-    Recipe.create_recipe(name, cook_time, description, difficulty, servings, global_username, creation_date, steps)
+    Recipe.create_recipe(name, cook_time, description, difficulty, servings, int(user_id), creation_date, steps)
     return 2.1
 
 
@@ -169,14 +169,14 @@ def edit_recipe():
     change_recipe_val = recipe_switcher.get(change_recipe_val_input, lambda: "Invalid input")
 
     if int(change_recipe_val) == 1:
-        while leave_loop(leave) is False:
+        while rep is not -1:
             recipe_name = input("\nEnter recipes name: ")
             try:
-                Recipe.edit_recipe(recipe_name, None, None, None, None, None, recipe_id)
-                return 1
+                rep = Recipe.edit_recipe(recipe_name, None, None, None, None, None, recipe_id)
             except ValueError:
                 print("Invalid input. \n")
                 leave = input("Type '-1' to exit or enter to retry.\n")
+
 
     elif change_recipe_val == 2:
         while leave_loop(leave) is False:
@@ -192,7 +192,7 @@ def edit_recipe():
         while leave_loop(leave) is False:
             description = input("\nEnter recipes description: ")
             try:
-                Recipe.edit_recipe(None, None, None, description, None, None, recipe_id)
+                Recipe.edit_recipe(None, None, description, None, None, None, recipe_id)
                 return 1
             finally:
                 print("Invalid input. \n")
@@ -242,7 +242,7 @@ def delete_recipe():
 
 
 def print_my_recipes():
-    Recipe.print_my_recipes(global_username)
+    Recipe.print_my_recipes(int(user_id))
     return 2.4
 
 
