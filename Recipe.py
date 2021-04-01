@@ -53,8 +53,10 @@ def edit_recipe(name, cook_time, description, difficulty, servings, steps, recip
             cur.execute("UPDATE public.recipe SET steps = %s WHERE recipe_id = %s", (steps, recipe_id))
 
         conn.commit()
+        return -1
     except:
         print("Unable to save recipe")
+        return 1
 
 
 def delete_recipe_with_error_checking(user_id, recipe_id):
@@ -228,6 +230,7 @@ def find_my_recipes(user_id):
         return results
     except:
         print("Can not retrieve recipe")
+
 
 def print_my_recipe(user_id):
     results = find_my_recipes(user_id)

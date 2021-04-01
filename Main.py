@@ -169,14 +169,20 @@ def edit_recipe():
     change_recipe_val = recipe_switcher.get(change_recipe_val_input, lambda: "Invalid input")
 
     if int(change_recipe_val) == 1:
-        while rep is not -1:
+        while leave_loop(leave) is False:
             recipe_name = input("\nEnter recipes name: ")
             try:
-                rep = Recipe.edit_recipe(recipe_name, None, None, None, None, None, recipe_id)
+                leave = Recipe.edit_recipe(recipe_name, None, None, None, None, None, recipe_id)
+                if leave == -1:
+                    print("Recipe name was changed to ", recipe_name)
+                else:
+                    print("Invalid input. \n")
+                    leave = input("Type '-1' to exit or enter to retry.\n")
             except ValueError:
                 print("Invalid input. \n")
                 leave = input("Type '-1' to exit or enter to retry.\n")
-
+            if leave == -1:
+                print("Exiting change recipe.")
 
     elif change_recipe_val == 2:
         while leave_loop(leave) is False:
@@ -237,12 +243,13 @@ def edit_recipe():
 
 
 def delete_recipe():
-    print("delete_recipe is not yet coded.")
+    del_recipe = input("Enter the recipe's ID you would like to delete: \n")
+    Recipe.delete_recipe(int(user_id), int(del_recipe))
     return 2.3
 
 
 def print_my_recipes():
-    Recipe.print_my_recipes(int(user_id))
+    Recipe.print_my_recipe(int(user_id))
     return 2.4
 
 
