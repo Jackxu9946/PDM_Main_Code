@@ -1,5 +1,6 @@
 import psycopg2
 from datetime import datetime
+import ast
 
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
