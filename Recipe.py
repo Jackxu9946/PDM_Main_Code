@@ -20,8 +20,9 @@ creation_date = datetime.today().strftime('%Y-%m-%d')
 def create_recipe(name, cook_time, description, difficulty, servings, created_by, creation_date, steps):
     try:
         cur.execute(
-            "INSERT INTO public.recipe(name, cook_time, description, created_by, creation_date,steps, difficulty, servings) VALUES (%s, %s, %s, %s, %s, %s)",
-            (name, cook_time, description, created_by, creation_date, steps, difficulty, servings))
+            "INSERT INTO public.recipe(name, cook_time, description, created_by, creation_date,steps, difficulty, servings) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+            (name, cook_time, description, created_by, creation_date, steps, difficulty, servings,)
+        )
         conn.commit()
     except:
         print("Can not create new recipe")
