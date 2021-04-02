@@ -289,16 +289,16 @@ def print_my_recipe(results):
         print("No results found")
 
 
+
+def print_additional_info_recipe(recipe_id):
+    print("More info")
 # cur.execute("INSERT INTO public.ingredients(id, name, aisle) "
 #                                            "VALUES( %s, %s, %s)", (ingredients[position], ingredient_name, "1"))v
 
-recipe_id = 26
-ingredients = [['Chicken Breast', 10]]
+# recipe_id = 26
+# ingredients = [['Chicken Breast', 10]]
 def recipe_to_ingredient(recipe_id, ingredients):
-    # print(ingredients)
     for i in ingredients:
-        # print(i[0])
-        # print(i[1])
         cur.execute("SELECT id FROM public.ingredients WHERE name = %s ", (i[0],))
         result = cur.fetchone()
         if result == None or len(result) == 0:
@@ -310,7 +310,6 @@ def recipe_to_ingredient(recipe_id, ingredients):
         cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
                     "(%s,%s,%s)", (recipe_id, ingredient_id, i[1]))
         conn.commit()
-# recipe_to_ingredient(recipe_id, ingredients)
 
 
 
