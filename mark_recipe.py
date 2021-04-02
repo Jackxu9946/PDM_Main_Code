@@ -53,7 +53,7 @@ def mark_recipe(user_id, recipe_id, scale):
     # Rate recipe after successfully making it
     rate_recipe(user_id, recipe_id)
 
-    #conn.commit()
+    conn.commit()
     return True
 
 

@@ -292,18 +292,25 @@ def print_my_recipe(results):
 # cur.execute("INSERT INTO public.ingredients(id, name, aisle) "
 #                                            "VALUES( %s, %s, %s)", (ingredients[position], ingredient_name, "1"))v
 
+recipe_id = 26
+ingredients = [['Chicken Breast', 10]]
 def recipe_to_ingredient(recipe_id, ingredients):
+    # print(ingredients)
     for i in ingredients:
-        cur.execute("SELECT id FROM public.ingredients WHERE name = %s ", (i[0]))
+        # print(i[0])
+        # print(i[1])
+        cur.execute("SELECT id FROM public.ingredients WHERE name = %s ", (i[0],))
         result = cur.fetchone()
-        if result:
-            cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
-                        "(%s,%s,%s", (recipe_id, i[0], i[1]))
-        else:
-            cur.execute("INSERT INTO public.ingredients(id, name, aisle) VALUES (%s, %s, %s)", (i[0]))
-            cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
-                        "(%s,%s,%s", (recipe_id, i[0], i[1]))
+        if result == None or len(result) == 0:
+            cur.execute("INSERT INTO public.ingredients(name) VALUES (%s)", (i[0],))
+            conn.commit()
+
+        cur.execute("SELECT id FROM public.ingredients WHERE name = %s ", (i[0],))
+        ingredient_id = int(cur.fetchone()[0])
+        cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
+                    "(%s,%s,%s)", (recipe_id, ingredient_id, i[1]))
         conn.commit()
+# recipe_to_ingredient(recipe_id, ingredients)
 
 
 
