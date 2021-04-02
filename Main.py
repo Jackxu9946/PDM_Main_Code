@@ -409,11 +409,24 @@ def print_my_recipes():
     Recipe.print_my_recipe(result)
 
     while True:
+        more_info = input("\nWould you like to see more information on a recipe?(Yes or No): ")
+        if more_info == "":
+            print("Can't be 'empty'. Try again.")
+        elif more_info == "Yes":
+            break
+        elif more_info == "No":
+            return
+        else:
+            print("Invalid input. Try again.")
+
+    while True:
         try:
-            recipe_id = int(input("Would you like to see more information on a recipe?(Yes or No): "))
+            recipe_id = int(input("Enter the recipe id of the recipe you would like see: "))
             break
         except ValueError:
             print("Invalid input. Try again.")
+
+    Recipe.print_additional_info_recipe(recipe_id)
     return 2.4
 
 
@@ -574,8 +587,10 @@ def update_pantry():
     mark_recipe.update_pantry(user_id, ingredient_name.lower(), ingredient_quantity)
     return 2.5
 
+
 def show_pantry():
     mark_recipe.show_pantry(user_id)
+
 
 def leave_loop(leave):
     if leave == -1:
