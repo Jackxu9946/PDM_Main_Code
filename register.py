@@ -25,6 +25,7 @@ def register(username, password):
         cur.execute("select * from public.users")
         cur.execute("INSERT INTO public.users(username, password,creation_date, last_access_date) "
                     "VALUES(%s, %s, %s, %s)", (username, password, creation_datetime, creation_datetime))
+        print("You have have registered your account successfully.")
         # print("Inserted")
     else:
         print("already exist")

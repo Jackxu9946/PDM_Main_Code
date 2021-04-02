@@ -312,7 +312,7 @@ def print_additional_info_recipe(recipe_id):
         return
     recipe_info = recipe_info[0]
     #Get each piece of information
-    header_list = ["Name:", "Cook Time:", "Difficulty:", "Serving Size:", "Steps:", "Rating:", "Description"]
+    header_list = ["Name:", "Cook Time:", "Difficulty:", "Serving Size:", "Steps:", "Rating:", "Description:"]
     recipe_info = recipe_info[1:-1]
     recipe_info = recipe_info.split(",")
     for i in range(len(header_list)):
