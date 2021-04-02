@@ -453,12 +453,17 @@ def cook_recipe():
 
 
 def add_pantry():
-    print("add_pantry is not yet coded")
+    ingredient_name = input("Ingredient Name:").lower()
+    ingredient_quantity = int(input("Quantity:"))
+    mark_recipe.add_ingredient_to_pantry(user_id, ingredient_name,ingredient_quantity)
     return 2.5
 
 
 def update_pantry():
-    print("update_pantry is not yet coded")
+    ingredient_name = input("Ingredient Name:").lower()
+    ingredient_quantity = int(input("Updated Quantity:"))
+    mark_recipe.update_pantry(user_id, ingredient_name, ingredient_quantity)
+    # mark_recipe.update_pantry(user_id, )
     return 2.5
 
 

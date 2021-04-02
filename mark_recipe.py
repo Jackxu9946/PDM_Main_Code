@@ -1,5 +1,6 @@
 import psycopg2
 from datetime import datetime
+from datetime import timedelta
 
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
@@ -89,14 +90,71 @@ def update_item(user_id, ingredient_id, quantity_updated):
                 "WHERE user_id = %s AND ingredient_id = %s", (quantity_updated, user_id, ingredient_id))
     conn.commit()
 
-def add_ingredient_to_pantry(ingredient_name, quantity):
+def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
     #Check if ingredient is in our database
     #Asssume ingredient_name is already in lower case
     cur.execute("SELECT COUNT(*) from public.ingredients where name = %s", (ingredient_name,))
-    result = cur.fetchone()
+    result = int(cur.fetchone()[0])
+    print(result)
     if (result == 0):
-        cur.execute("INSERT INTO public.ingredients(")
+        cur.execute("INSERT INTO public.ingredients(name) VALUES (%s)", (ingredient_name,))
+        conn.commit()
+    #Get the ingredient id
+    cur.execute("Select (id) from public.ingredients where name = %s", (ingredient_name,))
+    # return_val = cur.fetchone()
+    # print(return_val)
+    ingredient_id = int(cur.fetchone()[0])
 
+    #Use the ingredient_id to insert into pantry_bought table
+    bought_date = datetime.today().strftime('%Y-%m-%d')
+    expiration_date = (datetime.today() + timedelta(days=7)).strftime('%Y-%m-%d')
+    cur.execute(
+        "INSERT into public.pantry_bought(user_id,quantity_bought,purchase_date,expiration_date,ingredient_id) VALUES (%s, %s, %s, %s, %s)",
+        (user_id, quantity, bought_date, expiration_date, ingredient_id)
+    )
+
+    #Update the current quantity in pantry
+    cur.execute(
+        "Select (current_quantity) from public.pantry where user_id = %s and ingredient_id = %s", (user_id, ingredient_id)
+    )
+
+    current_quantity = cur.fetchone()
+    if (current_quantity == None):
+        #Doesnt exist yet
+        cur.execute("INSERT INTO public.pantry (user_id, ingredient_id, current_quantity) VALUES (%s, %s, %s)", (user_id, ingredient_id, quantity))
+    else:
+        current_quantity = int(current_quantity[0])
+        #Update the current quantity of the ingredient
+        cur.execute("UPDATE public.pantry SET current_quantity = %s where user_id = %s and ingredient_id = %s",
+                    (current_quantity + quantity, user_id, ingredient_id))
+    conn.commit()
+
+#Testing add_ingredient_to_pantry
+# add_ingredient_to_pantry(7708,"Test_ingredient",10)
+
+
+def update_pantry(user_id, ingredient_name, quantity):
+    #Get the ingredient_id given ingredient_name
+    cur.execute("select (id) from public.ingredients where name = %s", (ingredient_name,))
+
+    result = cur.fetchone()
+    if (result == None):
+        print("This ingredient does not exist")
+        return
+
+    ingredient_id = int(result[0])
+
+    #Check if the user has this item in their pantry
+    cur.execute("select count(*) from public.pantry where ingredient_id = %s and user_id = %s", (ingredient_id,user_id))
+
+    has_item = cur.fetchone()
+
+    if (has_item == None):
+        print("This item does not exist in your pantry yet. Please purchase first")
+        return
+
+    cur.execute("UPDATE public.pantry SET current_quantity = %s where ingredient_id = %s and user_id = %s", (quantity, ingredient_id, user_id))
+    conn.commit()
 
 # Only for testing
 def add_item(user_id, ingredient_id):
@@ -110,4 +168,6 @@ def main():
     print(2, )
 
 
-main()
+# main()
+# expiration_date = (datetime.today() + timedelta(days=7)).strftime('%Y-%m-%d')
+# print(expiration_date)
