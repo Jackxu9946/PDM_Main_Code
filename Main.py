@@ -133,6 +133,8 @@ def main_login():
 
 # CREATE RECIPE
 def create_recipe():
+    ingredient = []
+
     name = str(input("\nEnter recipe name: "))
     cook_time = input("Enter the cook time(minutes): ")
     description = input("Enter the recipes description: ")
@@ -141,7 +143,22 @@ def create_recipe():
     creation_date = datetime.today().strftime('%Y-%m-%d')
     steps = input("Enter recipes steps: ")
 
-    Recipe.create_recipe(name, cook_time, description, difficulty, servings, int(user_id), creation_date, steps)
+    i = int(0)
+    while True:
+        temp_list = []
+        new_ingredient = input("Enter a new ingredient: ")
+        new_quantity = int(input("Enter %s's quantity in the recipe: "))
+
+        temp_list.append(new_ingredient)
+        temp_list.append(new_quantity)
+        ingredient.append(temp_list)
+
+        exit_val = input("Type Quit to quit or Press enter to add another ingredient: ")
+        if exit_val == "Quit":
+            break
+
+    Recipe.create_recipe(name, cook_time, description, difficulty,
+                         servings, int(user_id), creation_date, steps, ingredient)
     return 2.1
 
 
