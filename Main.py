@@ -407,6 +407,13 @@ def delete_recipe():
 def print_my_recipes():
     result = Recipe.find_my_recipes(int(user_id))
     Recipe.print_my_recipe(result)
+
+    while True:
+        try:
+            recipe_id = int(input("Would you like to see more information on a recipe?(Yes or No): "))
+            break
+        except ValueError:
+            print("Invalid input. Try again.")
     return 2.4
 
 
@@ -564,7 +571,7 @@ def update_pantry():
         except ValueError:
             print("Invalid input. Try again.")
 
-    mark_recipe.update_pantry(user_id, ingredient_name, ingredient_quantity)
+    mark_recipe.update_pantry(user_id, ingredient_name.lower(), ingredient_quantity)
     return 2.5
 
 def show_pantry():
