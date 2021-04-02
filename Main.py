@@ -5,13 +5,14 @@ from datetime import datetime
 import mark_recipe
 import category
 
+# GLOBAL ATTRIBUTES
 global_username = ""
 user_id = -1
 
 
+# MAIN
 def main():
     action_value = 0
-    recipe_value = 0
     signed_in = 0
 
     # SIGN IN/REGISTER LOOP
@@ -46,6 +47,7 @@ def main():
 
     # MAIN USER ACTION LOOP
     while True:
+        recipe_value = 0
         print("\nPlease select ONLY the number to start an action!\n"
               "1. Create Recipe\n"
               "2. Edit Recipe\n"
@@ -216,6 +218,7 @@ def create_recipe():
     creation_date = datetime.today().strftime('%Y-%m-%d')
     Recipe.create_recipe(name, cook_time, description, difficulty,
                          servings, int(user_id), creation_date, steps, ingredient)
+    press_to_continue()
     return 2.1
 
 
@@ -387,10 +390,11 @@ def edit_recipe():
         return -1
     else:
         print("Invalid input.")
-
+    press_to_continue()
     return 2.2
 
 
+# DELETE RECIPE
 def delete_recipe():
     del_recipe = 0
     while True:
@@ -404,12 +408,15 @@ def delete_recipe():
             print("Invalid input. Try again.")
             pass
 
-        Recipe.delete_recipe(int(user_id), int(del_recipe))
-
         if del_recipe == -1:
             return -1
 
+    Recipe.delete_recipe(int(user_id), int(del_recipe))
+    press_to_continue()
+    return
 
+
+# PRINT MY RECIPES
 def print_my_recipes():
     result = Recipe.find_my_recipes(int(user_id))
     Recipe.print_my_recipe(result)
@@ -435,9 +442,11 @@ def print_my_recipes():
             print("Invalid input. Try again.")
 
     Recipe.print_additional_info_recipe(recipe_id)
+    press_to_continue()
     return 2.4
 
 
+# SEARCH RECIPE
 def search_recipe():
     # print("search_recipe is not yet coded")
     # search_recipe_type = input("")
@@ -485,6 +494,7 @@ def search_recipe():
     return 2.5
 
 
+# SEARCH RECIPE MODE
 def search_recipe_mode(search_type, search_val):
     while True:
         search_recipe_mode_input = input("Result sorted by(Rating, Recent, Default): ")
@@ -541,16 +551,19 @@ def search_recipe_mode(search_type, search_val):
                 break
 
 
+# ADD CATEGORY
 def add_category():
     category_name = input("Category Name: ")
     category.create_categories(category_name, global_username)
     category.display_category(user_id)
 
 
+# DISPLAY CATEGORY
 def display_my_category():
     category.display_category(user_id)
 
 
+# ADD RECIPE TO CATEGORY
 def add_recipe_to_category():
     category_id = input("Category ID:")
     recipe_id = input("Recipe ID:")
@@ -558,6 +571,7 @@ def add_recipe_to_category():
     # print("Added recipe to category ")
 
 
+# COOK RECIPE
 def cook_recipe():
     while True:
         try:
@@ -577,6 +591,7 @@ def cook_recipe():
     return 2.5
 
 
+# ADD INGREDIENT TO PANTRY
 def add_pantry():
 
     # INGREDIENT NAME
@@ -600,6 +615,7 @@ def add_pantry():
     return 2.5
 
 
+# UPDATE PANTRY
 def update_pantry():
 
     # INGREDIENT NAME
@@ -623,6 +639,7 @@ def update_pantry():
     return 2.5
 
 
+# SHOW PANTRY
 def show_pantry():
     mark_recipe.show_pantry(user_id)
 
