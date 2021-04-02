@@ -26,9 +26,17 @@ def create_recipe(name, cook_time, description, difficulty, servings, created_by
             (name, cook_time, description, created_by, creation_date, steps, difficulty, servings,)
         )
         conn.commit()
+        #Get the recipe_id and send it into an underlying function
+        cur.execute(
+            "Select (recipe_id) from public.recipe where created_by = %s and name = %s", (created_by, name)
+        )
+        recipe_id = int(cur.fetchone()[0])
+        recipe_to_ingredient(recipe_id, ingredients)
         print("Recipe has been added successfully")
     except:
         print("Can not create new recipe")
+
+# create_recipe(name,cook_time,description, "Hard", 5, 7706, creation_date,steps, None)
 
 
 # create_recipe(name, cook_time, description, "Hard", 5, user_id, creation_date, steps)
@@ -112,6 +120,7 @@ def search_recipe_by_name(name, search_mode):
         except:
             print("Can not execute the recipe query")
     return None
+
 
 def search_recipe_by_ingredient(ingredient, search_mode):
     # Get the ingredient ID
@@ -277,6 +286,25 @@ def print_my_recipe(results):
             print(result_string)
     else:
         print("No results found")
+
+
+# cur.execute("INSERT INTO public.ingredients(id, name, aisle) "
+#                                            "VALUES( %s, %s, %s)", (ingredients[position], ingredient_name, "1"))v
+
+def recipe_to_ingredient(recipe_id, ingredients):
+    for i in ingredients:
+        cur.execute("SELECT id FROM public.ingredients WHERE name = %s ", (i[0]))
+        result = cur.fetchone()
+        if result:
+            cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
+                        "(%s,%s,%s", (recipe_id, i[0], i[1]))
+        else:
+            cur.execute("INSERT INTO public.ingredients(id, name, aisle) VALUES (%s, %s, %s)", (i[0]))
+            cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
+                        "(%s,%s,%s", (recipe_id, i[0], i[1]))
+        conn.commit()
+
+
 
 # create_recipe(name, cook_time, description, "Hard", 5, 7706, creation_date, steps)
 # result = find_my_recipes(7706)
