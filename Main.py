@@ -569,6 +569,7 @@ def add_pantry():
     # INGREDIENT NAME
     while True:
         ingredient_name = input("\nEnter ingredients name: ")
+        ingredient_name.lower()
         if ingredient_name == "":
             print("Invalid name. Try again.")
         else:
@@ -591,6 +592,7 @@ def update_pantry():
     # INGREDIENT NAME
     while True:
         ingredient_name = input("\nEnter ingredients name: ")
+        ingredient_name.lower()
         if ingredient_name == "":
             print("Invalid name. Try again.")
         else:
