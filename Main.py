@@ -202,7 +202,7 @@ def create_recipe():
             print("Invalid quantity. Try again.")
             pass
 
-        temp_list.append(new_ingredient)
+        temp_list.append(new_ingredient.lower())
         temp_list.append(new_quantity)
         ingredient.append(temp_list)
 
@@ -210,7 +210,7 @@ def create_recipe():
         if exit_val == "Quit":
             break
 
-    print(ingredient)
+    # print(ingredient)
     creation_date = datetime.today().strftime('%Y-%m-%d')
     Recipe.create_recipe(name, cook_time, description, difficulty,
                          servings, int(user_id), creation_date, steps, ingredient)
@@ -438,7 +438,7 @@ def search_recipe():
         search_recipe_type = input("Search by either (Ingredient, Name, Category): ")
         if search_recipe_type == "Ingredient":
             ingredient_name = input("Ingredient Name: ")
-            search_recipe_mode(search_recipe_type, ingredient_name)
+            search_recipe_mode(search_recipe_type, ingredient_name.lower())
             break
         elif search_recipe_type == "Name":
             recipe_name = input("Recipe Name: ")
@@ -583,7 +583,7 @@ def add_pantry():
         except ValueError:
             print("Invalid input. Try again.")
 
-    mark_recipe.add_ingredient_to_pantry(user_id, ingredient_name.lower(), ingredient_quantity)
+    mark_recipe.add_ingredient_to_pantry(user_id, ingredient_name, ingredient_quantity)
     return 2.5
 
 
@@ -606,7 +606,7 @@ def update_pantry():
         except ValueError:
             print("Invalid input. Try again.")
 
-    mark_recipe.update_pantry(user_id, ingredient_name.lower(), ingredient_quantity)
+    mark_recipe.update_pantry(user_id, ingredient_name, ingredient_quantity)
     return 2.5
 
 
