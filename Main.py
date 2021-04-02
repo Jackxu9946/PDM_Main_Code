@@ -133,21 +133,72 @@ def main_login():
 
 # CREATE RECIPE
 def create_recipe():
+    new_quantity = -1
     ingredient = []
 
-    name = str(input("\nEnter recipe name: "))
-    cook_time = input("Enter the cook time(minutes): ")
-    description = input("Enter the recipes description: ")
-    difficulty = input("Enter the recipes difficulty: ")
-    servings = input("Enter the number of servings: ")
-    creation_date = datetime.today().strftime('%Y-%m-%d')
-    steps = input("Enter recipes steps: ")
-
-    i = int(0)
+    # RECIPE NAME
     while True:
+        name = str(input("\nEnter recipe name: "))
+        if name == "":
+            print("Invalid name. Try again.")
+        else:
+            break
+
+    # COOK TIME
+    while True:
+        cook_time = input("Enter the cook time(minutes): ")
+        if name == "":
+            print("Invalid name. Try again.")
+        else:
+            break
+
+    # DESCRIPTION
+    while True:
+        description = input("Enter the recipes description: ")
+        if name == "":
+            print("Invalid name. Try again.")
+        else:
+            break
+
+    # DIFFICULTY
+    while True:
+        difficulty = input("Enter the recipes difficulty: ")
+        if name == "":
+            print("Invalid name. Try again.")
+        else:
+            break
+
+    # SERVING SIZE
+    while True:
+        servings = input("Enter the number of servings: ")
+        if name == "":
+            print("Invalid name. Try again.")
+        else:
+            break
+
+    # STEPS
+    while True:
+        steps = input("Enter recipes steps: ")
+        if name == "":
+            print("Invalid name. Try again.")
+        else:
+            break
+
+    # INGREDIENTS - QUANTITY
+    while True:
+        # Get ingredient name
         temp_list = []
         new_ingredient = input("Enter a new ingredient: ")
-        new_quantity = int(input("Enter %s's quantity in the recipe: "))
+        if new_ingredient == "":
+            pass
+        new_ingredient.lower()
+
+        # Get ingredient quantity
+        try:
+            new_quantity = int(input("Enter the ingredient quantity for the recipe: "))
+        except ValueError:
+            print("Invalid quantity. Try again.")
+            pass
 
         temp_list.append(new_ingredient)
         temp_list.append(new_quantity)
@@ -157,6 +208,8 @@ def create_recipe():
         if exit_val == "Quit":
             break
 
+    print(ingredient)
+    creation_date = datetime.today().strftime('%Y-%m-%d')
     Recipe.create_recipe(name, cook_time, description, difficulty,
                          servings, int(user_id), creation_date, steps, ingredient)
     return 2.1
