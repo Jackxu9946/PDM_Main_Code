@@ -511,7 +511,14 @@ def search_recipe_mode(search_type, search_val):
 
 # ADD CATEGORY
 def add_category():
-    category_name = input("Category Name: ")
+    # CATEGORY NAME
+    while True:
+        category_name = input("\nEnter categories name: ")
+        if category_name == "":
+            print("Invalid name. Try again.")
+        else:
+            break
+
     category.create_categories(category_name, global_username)
     category.display_category(user_id)
     press_to_continue()
@@ -519,14 +526,28 @@ def add_category():
 
 # DISPLAY CATEGORY
 def display_my_category():
-    category.display_category(user_id)
+    category.display_category(int(user_id))
     press_to_continue()
 
 
 # ADD RECIPE TO CATEGORY
 def add_recipe_to_category():
-    category_id = input("Category ID:")
-    recipe_id = input("Recipe ID:")
+    # INGREDIENT QUANTITY
+    while True:
+        try:
+            category_id = int(input("Enter the category id: "))
+            break
+        except ValueError:
+            print("Invalid input. Try again.")
+
+    # INGREDIENT QUANTITY
+    while True:
+        try:
+            recipe_id = int(input("Enter the recipe id: "))
+            break
+        except ValueError:
+            print("Invalid input. Try again.")
+
     category.add_recipes(category_id, recipe_id)
     press_to_continue()
 

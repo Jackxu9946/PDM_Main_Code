@@ -140,7 +140,7 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
         # Update the current quantity of the ingredient
         cur.execute("UPDATE public.pantry SET current_quantity = %s where user_id = %s and ingredient_id = %s",
                     (current_quantity + quantity, user_id, ingredient_id))
-    print("Added to pantry successfully")
+    print("\nAdded to pantry successfully.")
     conn.commit()
 
 
