@@ -58,7 +58,8 @@ def main():
               "9. Add category\n"
               "10. Add recipe to a category\n"
               "11. Display my personal categories\n"
-              "12. Quit\n")
+              "12. Show my current pantry\n"
+              "13. Quit\n")
 
         recipe_switcher = {
             1: create_recipe,
@@ -72,7 +73,8 @@ def main():
             9: add_category,
             10: add_recipe_to_category,
             11: display_my_category,
-            12: 12
+            12: show_pantry,
+            13: 13
         }
 
         try:
@@ -80,7 +82,7 @@ def main():
         except ValueError:
             print("Invalid input. Try again.")
 
-        if recipe_value == 12:
+        if recipe_value == 13:
             print("Session finished.")
             break
         else:
@@ -466,6 +468,8 @@ def update_pantry():
     # mark_recipe.update_pantry(user_id, )
     return 2.5
 
+def show_pantry():
+    mark_recipe.show_pantry(user_id)
 
 def leave_loop(leave):
     if leave == -1:

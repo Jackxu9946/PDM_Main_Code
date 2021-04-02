@@ -1,6 +1,7 @@
 import psycopg2
 from datetime import datetime
 from datetime import timedelta
+import ast
 
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
@@ -156,7 +157,40 @@ def update_pantry(user_id, ingredient_name, quantity):
     cur.execute("UPDATE public.pantry SET current_quantity = %s where ingredient_id = %s and user_id = %s", (quantity, ingredient_id, user_id))
     conn.commit()
 
-# Only for testing
+def show_pantry(user_id):
+    cur.execute("select (ingredient_id, current_quantity) from public.pantry where user_id = %s", (user_id,))
+    results = cur.fetchall()
+
+    if (results == None or len(results) == 0 ):
+        print("No item currently in pantry")
+        return
+    # print(results)
+    print_pantry(results)
+
+def print_pantry(list_of_pantry_items):
+    pantry_header = ""
+    pantry_ingredient_quantity = "Quantity |"
+    pantry_ingredient_name= "Ingredient"
+    pantry_header += pantry_ingredient_quantity
+    pantry_header += pantry_ingredient_name
+    print(pantry_header)
+    for result in list_of_pantry_items:
+        result = ast.literal_eval(result[0])
+        ingredient_id = int(result[0])
+        #Get the ingredient name
+        cur.execute("select (name) from public.ingredients where id = %s", (ingredient_id,))
+        ingredient_name = str(cur.fetchone()[0])
+        result_string = ""
+        quantity = str(result[1])
+        if (len(quantity) < len(pantry_ingredient_quantity)):
+            quantity += (" " * (len(pantry_ingredient_quantity)- len(quantity)))
+        result_string += quantity
+        result_string += ingredient_name
+        print(result_string)
+# show_pantry(7706)
+
+
+#Only for testing
 def add_item(user_id, ingredient_id):
     current_quantity = 1
     cur.execute("INSERT INTO public.pantry(user_id, ingredient_id, current_quantity)"

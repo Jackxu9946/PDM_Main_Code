@@ -246,7 +246,7 @@ def search_recipe_by_category(category, search_mode):
 
 def find_my_recipes(user_id):
     try:
-        cur.execute("SELECT (name, recipe_id, description) from public.recipe where created_by = %s", (user_id,))
+        cur.execute("SELECT (name, recipe_id,rating, description) from public.recipe where created_by = %s", (user_id,))
         results = cur.fetchall()
         return results
     except:
@@ -261,7 +261,8 @@ def print_my_recipe(results):
         recipe_rating_header = "Rating       |"
         recipe_description = "Description"
         recipe_header = recipe_name_header + recipe_ID_header + recipe_rating_header + recipe_description
-        print(recipe_header)
+        # print(recipe_header)
+        # print(results)
         for result in results:
             result_string = ""
             cur_recipe = result[0].split(",")
