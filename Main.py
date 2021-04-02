@@ -412,6 +412,8 @@ def print_my_recipes():
     result = Recipe.find_my_recipes(int(user_id))
     Recipe.print_my_recipe(result)
 
+    press_to_continue()
+
     while True:
         more_info = input("\nWould you like to see more information on a recipe?(Yes or No): ")
         if more_info == "":
@@ -626,7 +628,12 @@ def leave_loop(leave):
     return False
 
 
+def press_to_continue():
+    user_input = input("> ")
+    if user_input is not None:
+        return
+
+
 # Driver program
 if __name__ == "__main__":
     main()
-    # search_recipe()

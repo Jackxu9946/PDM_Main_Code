@@ -32,7 +32,7 @@ def create_recipe(name, cook_time, description, difficulty, servings, created_by
         )
         recipe_id = int(cur.fetchone()[0])
         recipe_to_ingredient(recipe_id, ingredients)
-        print("Recipe has been added successfully")
+        print("\nRecipe has been added successfully")
     except:
         print("Can not create new recipe")
 
