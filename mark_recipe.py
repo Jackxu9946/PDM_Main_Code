@@ -38,6 +38,8 @@ def rate_recipe(user_id, recipe_id):
 
     #Update the recipe table
     cur.execute("UPDATE public.recipe SET rating = %s where recipe_id = %s", (new_average_rating, recipe_id,))
+
+    print("Rated and made recipe successfully")
     conn.commit()
 
 def mark_recipe(user_id, recipe_id, scale):
@@ -132,6 +134,7 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
         #Update the current quantity of the ingredient
         cur.execute("UPDATE public.pantry SET current_quantity = %s where user_id = %s and ingredient_id = %s",
                     (current_quantity + quantity, user_id, ingredient_id))
+    print("Added to pantry successfully")
     conn.commit()
 
 #Testing add_ingredient_to_pantry
@@ -159,6 +162,7 @@ def update_pantry(user_id, ingredient_name, quantity):
         return
 
     cur.execute("UPDATE public.pantry SET current_quantity = %s where ingredient_id = %s and user_id = %s", (quantity, ingredient_id, user_id))
+    print("Pantry updated successfully")
     conn.commit()
 
 def show_pantry(user_id):

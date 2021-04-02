@@ -550,7 +550,10 @@ def display_my_category():
 
 
 def add_recipe_to_category():
-    print("add recipe to category")
+    category_id = input("Category ID:")
+    recipe_id = input("Recipe ID:")
+    category.add_recipes(category_id, recipe_id)
+    # print("Added recipe to category ")
 
 
 def cook_recipe():

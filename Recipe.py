@@ -63,6 +63,7 @@ def edit_recipe(name, cook_time, description, difficulty, servings, steps, recip
             cur.execute("UPDATE public.recipe SET steps = %s WHERE recipe_id = %s", (steps, recipe_id))
 
         conn.commit()
+        print("Recipe edited successfully")
         return -1
     except:
         print("Unable to save recipe")
@@ -83,6 +84,7 @@ def delete_recipe(user_id, recipe_id):
     try:
         cur.execute("DELETE FROM public.recipe WHERE recipe_id= %s and created_by = %s", (recipe_id, user_id))
         conn.commit()
+        print("Recipe deleted successfully")
     except:
         print("Can not delete entry in database")
 
