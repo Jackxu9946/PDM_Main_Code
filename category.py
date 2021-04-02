@@ -1,5 +1,6 @@
 import psycopg2
 import ast
+
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
     database="p320_02a",
@@ -33,6 +34,7 @@ def create_categories(name, username):
     cur.execute("SELECT * FROM public.category WHERE user_id= %s", user_id)
     # print(cur.fetchall())
     return user_id, category_id[-1]
+
 
 # create_categories("Chinese", "SPBSP")
 # create_categories("Chinese", "SA4HY")
@@ -96,7 +98,7 @@ def open_category(category_id, name):
 def display_category(user_id):
     cur.execute("SELECT * FROM public.category where user_id = %s", (user_id,))
     results = cur.fetchall()
-    if (results != None and len(results) > 0):
+    if results is not None and len(results) > 0:
         for result in results:
             result_string = str(result[0]) + "     " + result[2]
             print(result_string)
@@ -106,26 +108,26 @@ def display_category(user_id):
 
 # username: V79QX
 # def main():
-    # user = "V79QX"
-    # name = input("Name your new category: ")
-    #
-    # ids = create_categories(name, user)  # ids store both user_id and category_id
-    # user_id = ids[0]
-    # category_id = ids[1]
-    # print("check category", category_id)
-    #
-    # list_of_recipes(user_id)  # show a list of recipes owned by the user_id
-    #
-    # check = add_recipes(name, category_id)
-    #
-    # while not check:
-    #     cmd1 = input("\nDo you want to enter another recipe id (N or Y): ")
-    #     if cmd1 == "N":
-    #         break
-    #     elif cmd1 == "Y":
-    #         check = add_recipes(name, category_id)
-    #     else:
-    #         print("Cannot recognize your input.")
+# user = "V79QX"
+# name = input("Name your new category: ")
+#
+# ids = create_categories(name, user)  # ids store both user_id and category_id
+# user_id = ids[0]
+# category_id = ids[1]
+# print("check category", category_id)
+#
+# list_of_recipes(user_id)  # show a list of recipes owned by the user_id
+#
+# check = add_recipes(name, category_id)
+#
+# while not check:
+#     cmd1 = input("\nDo you want to enter another recipe id (N or Y): ")
+#     if cmd1 == "N":
+#         break
+#     elif cmd1 == "Y":
+#         check = add_recipes(name, category_id)
+#     else:
+#         print("Cannot recognize your input.")
 
 #     category_id = "55"
 #     name = "chicken"

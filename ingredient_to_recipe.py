@@ -14,9 +14,8 @@ cur = conn.cursor()
 
 cur.execute("select * from public.users")
 
-
-#filename = "/Users/xinruzou/Downloads/archive/new_pp_recipe.csv"
-#filename2 = "/Users/xinruzou/Downloads/archive/new_recipe_raw.csv"
+# filename = "/Users/xinruzou/Downloads/archive/new_pp_recipe.csv"
+# filename2 = "/Users/xinruzou/Downloads/archive/new_recipe_raw.csv"
 
 
 filename = "new_pp_recipe.csv"
@@ -32,7 +31,6 @@ with open(filename, 'r', encoding="utf8") as csvfile:
         next(csvreader)
         next(csvreader2)
         for rows in csvreader:
-
 
             recipe_id = rows[0]
             # print(recipe_id)
@@ -72,7 +70,7 @@ with open(filename, 'r', encoding="utf8") as csvfile:
                     if not result:
 
                         cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id, ingredient) "
-                                "VALUES( %s, %s)", (recipe_id, ingredients[position]))
+                                    "VALUES( %s, %s)", (recipe_id, ingredients[position]))
                         # print("success")
                         conn.commit()
                     else:

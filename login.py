@@ -13,12 +13,9 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 cur.execute("select * from public.users")
-
-
-# comment
-
 # username: SPBSP
 # password: Y52A9
+
 
 def login(username, password):
     cur.execute("SELECT username FROM public.users WHERE username = %s", (username,))
@@ -28,7 +25,7 @@ def login(username, password):
         print("Username does not exist")
         return [False, None]
     else:
-        print("Username: ", check_name[0])
+        # print("Username: ", check_name[0])
         cur.execute("SELECT (password) FROM public.users WHERE username = %s", (username,))
         check_psw = cur.fetchone()
 
@@ -46,37 +43,3 @@ def login(username, password):
             conn.commit()
 
             return [True, user_id]
-
-
-"""
-def main():
-    print(login("Q149R", "MVNK6"))
-
-main()
-
-
-# def main():
-#
-#     username = input("Enter username: ")
-#     password = input("Psw: ")
-#
-#     log = login(username, password)
-#
-#     while not log:
-#         username = input("Enter username: ")
-#         password = input("Psw: ")
-#         login(username, password)
-#
-#     cur.execute("SELECT last_access_date FROM recipe_manager.users WHERE username = %s", (username,))
-#
-#     check_time = cur.fetchone()
-#     print(check_time)
-#
-#     cur.execute("SELECT last_access_date FROM recipe_manager.users")
-#     x = cur.fetchall()
-#
-#     for row in x:
-#         print(row[0])
-#
-# main()
-"""

@@ -130,6 +130,8 @@ def main_login():
     if log is not None:
         user_id = log
 
+    press_to_continue()
+
     return 1
 
 
@@ -632,7 +634,7 @@ def leave_loop(leave):
 
 
 def press_to_continue():
-    user_input = input("> ")
+    user_input = input()
     if user_input is not None:
         return
 

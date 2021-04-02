@@ -35,9 +35,11 @@ def register(username, password):
     conn.commit()
 
 
+"""
 def main():
     username = "SPBSP"
     register(username, "1111")
 
 
 main()
+"""

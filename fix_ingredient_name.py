@@ -14,8 +14,7 @@ cur = conn.cursor()
 
 aisle = '1'
 
-cur.execute("SELECT id from recipe_manager.ingredients WHERE aisle = %s" ,(aisle,))
+cur.execute("SELECT id from recipe_manager.ingredients WHERE aisle = %s", (aisle,))
 result = cur.fetchall()
 print(len(result))
 print(result)
-
