@@ -393,7 +393,11 @@ def delete_recipe():
     del_recipe = 0
     while True:
         try:
-            del_recipe = int(input("Recipe ID: "))
+            del_recipe = int(input("Enter the recipe id of the recipe you'd like to delete: "))
+            if del_recipe == "":
+                print("Can't be 'empty'. Try again.")
+            else:
+                break
         except ValueError:
             print("Invalid input. Try again.")
             pass
