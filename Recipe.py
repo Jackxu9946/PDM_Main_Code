@@ -64,7 +64,7 @@ def edit_recipe(name, cook_time, description, difficulty, servings, steps, recip
             cur.execute("UPDATE public.recipe SET steps = %s WHERE recipe_id = %s", (steps, recipe_id))
 
         conn.commit()
-        print("Recipe edited successfully")
+        print("\nRecipe edited successfully.")
         return -1
     except:
         print("Unable to save recipe")

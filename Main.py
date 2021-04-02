@@ -277,17 +277,11 @@ def edit_recipe():
             if recipe_name != "":
                 try:
                     leave = Recipe.edit_recipe(recipe_name, None, None, None, None, None, recipe_id)
-                    if leave == -1:
-                        print("Recipe name was changed to", recipe_name)
-                    else:
+                    if leave != -1:
                         print("Invalid input. \n")
                         leave = input("Type '-1' to exit or enter to retry.\n")
                 except ValueError:
-                    print("Invalid input. \n")
-                    leave = input("Type '-1' to exit or enter to retry.\n")
-
-                if leave == -1:
-                    print("Exiting change recipe.")
+                    print("Invalid input. Try again.\n")
             else:
                 print("'Empty' value is not allowed. Try again.")
 
@@ -297,16 +291,11 @@ def edit_recipe():
             if cook_time != "":
                 try:
                     leave = Recipe.edit_recipe(None, cook_time, None, None, None, None, recipe_id)
-                    if leave == -1:
-                        print("Recipe cook time was changed to", cook_time)
-                    else:
+                    if leave != -1:
                         print("Invalid input. \n")
                         leave = input("Type '-1' to exit or enter to retry.\n")
                 except ValueError:
                     print("Invalid input. \n")
-                    leave = input("Type '-1' to exit or enter to retry.\n")
-                if leave == -1:
-                    print("Exiting change recipe cook time.")
             else:
                 print("'Empty' value is not allowed. Try again.")
 
@@ -316,16 +305,11 @@ def edit_recipe():
             if description != "":
                 try:
                     leave = Recipe.edit_recipe(None, None, description, None, None, None, recipe_id)
-                    if leave == -1:
-                        print("Recipe description was changed to", description)
-                    else:
+                    if leave != -1:
                         print("Invalid input. \n")
                         leave = input("Type '-1' to exit or enter to retry.\n")
                 except ValueError:
                     print("Invalid input. \n")
-                    leave = input("Type '-1' to exit or enter to retry.\n")
-                if leave == -1:
-                    print("Exiting change recipe description.")
             else:
                 print("'Empty' value is not allowed. Try again.")
 
@@ -335,16 +319,11 @@ def edit_recipe():
             if difficulty != "":
                 try:
                     leave = Recipe.edit_recipe(None, None, None, difficulty, None, None, recipe_id)
-                    if leave == -1:
-                        print("Recipe difficulty was changed to", difficulty)
-                    else:
+                    if leave != -1:
                         print("Invalid input. \n")
                         leave = input("Type '-1' to exit or enter to retry.\n")
                 except ValueError:
                     print("Invalid input. \n")
-                    leave = input("Type '-1' to exit or enter to retry.\n")
-                if leave == -1:
-                    print("Exiting change difficulty.")
             else:
                 print("'Empty' value is not allowed. Try again.")
 
@@ -354,16 +333,11 @@ def edit_recipe():
             if serving != "":
                 try:
                     leave = Recipe.edit_recipe(None, None, None, None, serving, None, recipe_id)
-                    if leave == -1:
-                        print("Recipe serving size was changed to", serving)
-                    else:
+                    if leave != -1:
                         print("Invalid input. \n")
                         leave = input("Type '-1' to exit or enter to retry.\n")
                 except ValueError:
                     print("Invalid input. \n")
-                    leave = input("Type '-1' to exit or enter to retry.\n")
-                if leave == -1:
-                    print("Exiting change serving size.")
             else:
                 print("'Empty' value is not allowed. Try again.")
 
@@ -373,16 +347,11 @@ def edit_recipe():
             if steps != "":
                 try:
                     leave = Recipe.edit_recipe(None, None, None, None, None, steps, recipe_id)
-                    if leave == -1:
-                        print("Recipe steps was changed to", steps)
-                    else:
+                    if leave != -1:
                         print("Invalid input. \n")
                         leave = input("Type '-1' to exit or press enter to retry.\n")
                 except ValueError:
                     print("Invalid input. \n")
-                    leave = input("Type '-1' to exit or press enter to retry.\n")
-                if leave == -1:
-                    print("Exiting change recipe steps.")
             else:
                 print("'Empty' value is not allowed. Try again.")
 
