@@ -542,8 +542,7 @@ def add_pantry():
         except ValueError:
             print("Invalid input. Try again.")
 
-    mark_recipe.add_ingredient_to_pantry(ingredient_name.lower(), ingredient_quantity)
-    print("Ingredient successfully added to pantry")
+    mark_recipe.add_ingredient_to_pantry(user_id, ingredient_name.lower(), ingredient_quantity)
     return 2.5
 
 
@@ -565,8 +564,7 @@ def update_pantry():
         except ValueError:
             print("Invalid input. Try again.")
 
-    mark_recipe.update_item(user_id, ingredient_name, ingredient_quantity)
-    print("Ingredient successfully updated in pantry")
+    mark_recipe.update_pantry(user_id, ingredient_name, ingredient_quantity)
     return 2.5
 
 def show_pantry():
