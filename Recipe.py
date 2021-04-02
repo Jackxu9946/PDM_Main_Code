@@ -256,9 +256,9 @@ def find_my_recipes(user_id):
 def print_my_recipe(results):
     # print(results)
     if (results != None and len(results) > 0):
-        recipe_name_header = "Name                             |"
-        recipe_ID_header = "ID        |"
-        recipe_rating_header = "Rating       |"
+        recipe_name_header = "Name                               |"
+        recipe_ID_header = "ID      |"
+        recipe_rating_header = "Rating     |"
         recipe_description = "Description"
         recipe_header = recipe_name_header + recipe_ID_header + recipe_rating_header + recipe_description
         # print(recipe_header)
@@ -291,9 +291,57 @@ def print_my_recipe(results):
 
 
 def print_additional_info_recipe(recipe_id):
-    print("More info")
-# cur.execute("INSERT INTO public.ingredients(id, name, aisle) "
-#                                            "VALUES( %s, %s, %s)", (ingredients[position], ingredient_name, "1"))v
+    # print("More info")
+    #Get all the general information about the recipe
+    cur.execute("Select (name, cook_time, difficulty, servings, steps, rating, description) from public.recipe where recipe_id = %s", (recipe_id,))
+    recipe_info = cur.fetchone()
+    if (recipe_info == None or len(recipe_info) == 0):
+        print("Can not display more information for this recipe")
+        return
+    recipe_info = recipe_info[0]
+    #Get each piece of information
+    header_list = ["Name:", "Cook Time:", "Difficulty:", "Serving Size:", "Steps:", "Rating:", "Description"]
+    recipe_info = recipe_info[1:-1]
+    recipe_info = recipe_info.split(",")
+    for i in range(len(header_list)):
+        current_header = header_list[i]
+        current_value = recipe_info[i]
+        if (current_value == None or len(current_value) == 0):
+            continue
+        print(current_header)
+        print(current_value)
+    print_ingredient_by_recipe(recipe_id)
+
+
+# print_additional_info_recipe(20)
+#
+def print_ingredient_by_recipe(recipe_id):
+    #Display the ingredient with name and quantity in a vertical manner
+    cur.execute("select (ingredient,ingredient_quantity) from public.ingredient_to_recipe where recipe_id = %s", (recipe_id,))
+    result = cur.fetchall()
+    if (result == None or len(result) == 0):
+        print("Can not find ingredients for this recipe")
+        return
+    print("Ingredients:")
+    ingredient_name_length = 15
+    for row in result:
+        row = row[0]
+        row = row[1:-1]
+        row = row.split(",")
+        ingredient_id = int(row[0])
+        ingredient_quantity = str(row[1])
+        #Get the ingredient name
+        cur.execute("select (name) from public.ingredients where id = %s", (ingredient_id,))
+        ingredient_name = cur.fetchone()
+        if (ingredient_name != None and len(ingredient_name) > 0):
+            #Print the name and
+            ingredient_name = ingredient_name[0]
+            #Format the string and print it
+            if (len(ingredient_name) < ingredient_name_length):
+                ingredient_name += (" " * (ingredient_name_length - len(ingredient_name)))
+            ingredient_name += " |"
+            ingredient_name += ingredient_quantity
+            print(ingredient_name)
 
 # recipe_id = 26
 # ingredients = [['Chicken Breast', 10]]
