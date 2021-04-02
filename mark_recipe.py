@@ -202,8 +202,8 @@ def add_item(user_id, ingredient_id):
     conn.commit()
 
 
-def main():
-    print(2, )
+# def main():
+#    print(2, )
 
 
 # main()
