@@ -86,7 +86,7 @@ def mark_recipe(user_id, recipe_id, scale):
     rate_recipe(user_id, recipe_id)
     return True
 
-mark_recipe(7706,30,1)
+# mark_recipe(7706,30,1)
 
 
 # Tested

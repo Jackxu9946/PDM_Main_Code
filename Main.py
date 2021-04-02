@@ -438,6 +438,7 @@ def search_recipe():
         search_recipe_type = input("Search by either (Ingredient, Name, Category): ")
         if search_recipe_type == "Ingredient":
             ingredient_name = input("Ingredient Name: ")
+            ingredient_name.lower()
             search_recipe_mode(search_recipe_type, ingredient_name)
             break
         elif search_recipe_type == "Name":

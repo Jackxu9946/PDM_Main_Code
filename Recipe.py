@@ -125,8 +125,10 @@ def search_recipe_by_name(name, search_mode):
 def search_recipe_by_ingredient(ingredient, search_mode):
     # Get the ingredient ID
     # Assuming there is only one ingredient ID per name
-    cur.execute("SELECT (id) FROM public.ingredients where name = %s", ingredient)
+    cur.execute("SELECT (id) FROM public.ingredients where name = %s", (ingredient,))
+    print(ingredient)
     ingredient_result = cur.fetchone()
+    print(ingredient_result)
     if ingredient_result is None:
         print("This ingredient does not exist in the database. Please check the name and try again")
         return
@@ -135,12 +137,19 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     cur.execute("SELECT (recipe_id) from public.ingredient_to_recipe where ingredient = %s", (ingredient_id,))
     # CHECK THIS VALUE MAKE SURE IT IS A TUPLE BEFORE DOING ANYTHING ELSE
     recipe_id_list = cur.fetchall()
+    # print(recipe_id_list)
     if (len(recipe_id_list) == 0):
         # print("No recipe found with this ingredient")
         return
     # Now we have all the recipe_id we just need to choose the right value from the database
     result = None
-    if search_mode == "recent":
+    # print(recipe_id_list)
+    id_list = []
+    for recipe in recipe_id_list:
+        id_list.append(int(recipe[0]))
+        # print(id_list)
+    recipe_id_list = tuple(id_list)
+    if search_mode == "Recent":
         try:
             cur.execute(
                 "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by creation_date",
@@ -149,7 +158,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
             result = cur.fetchall()
         except:
             print("Can not retrieve recipe")
-    elif search_mode == "rating":
+    elif search_mode == "Rating":
         try:
             cur.execute(
                 "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by rating",
@@ -172,6 +181,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     else:
         print("Can not retrieve recipe")
 
+# print(search_recipe_by_ingredient("Chicken Breast", "Rating"))
 
 def search_recipe_by_category(category, search_mode):
     # Get all the category id with category name = category
