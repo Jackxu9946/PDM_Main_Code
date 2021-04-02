@@ -452,6 +452,26 @@ def search_recipe():
             quit_val = input("Invalid search type. Enter Quit to quit: ")
             if quit_val == "Quit":
                 break
+
+        while True:
+            more_info = input("\nWould you like to see more information on a recipe?(Yes or No): ")
+            if more_info == "":
+                print("Can't be 'empty'. Try again.")
+            elif more_info == "Yes":
+                break
+            elif more_info == "No":
+                return
+            else:
+                print("Invalid input. Try again.")
+
+        while True:
+            try:
+                recipe_id = int(input("Enter the recipe id of the recipe you would like see: "))
+                break
+            except ValueError:
+                print("Invalid input. Try again.")
+
+        Recipe.print_additional_info_recipe(recipe_id)
     return 2.5
 
 
