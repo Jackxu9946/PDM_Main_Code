@@ -121,6 +121,7 @@ def search_recipe_by_name(name, search_mode):
             print("Can not execute the recipe query")
     return None
 
+
 def search_recipe_by_ingredient(ingredient, search_mode):
     # Get the ingredient ID
     # Assuming there is only one ingredient ID per name
@@ -287,21 +288,22 @@ def print_my_recipe(results):
         print("No results found")
 
 
-#cur.execute("INSERT INTO public.ingredients(id, name, aisle) "
+# cur.execute("INSERT INTO public.ingredients(id, name, aisle) "
 #                                            "VALUES( %s, %s, %s)", (ingredients[position], ingredient_name, "1"))v
 
 def recipe_to_ingredient(recipe_id, ingredients):
     for i in ingredients:
-        i = i.split(",")
         cur.execute("SELECT id FROM public.ingredients WHERE name = %s ", (i[0]))
         result = cur.fetchone()
         if result:
             cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
-                        "(%s,%s,%s",(recipe_id,i[0],i[1]))
+                        "(%s,%s,%s", (recipe_id, i[0], i[1]))
         else:
             cur.execute("INSERT INTO public.ingredients(id, name, aisle) VALUES (%s, %s, %s)", (i[0]))
             cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
                         "(%s,%s,%s", (recipe_id, i[0], i[1]))
+        conn.commit()
+
 
 
 # create_recipe(name, cook_time, description, "Hard", 5, 7706, creation_date, steps)
