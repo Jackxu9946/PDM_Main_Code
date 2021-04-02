@@ -417,15 +417,15 @@ def search_recipe():
     while True:
         search_recipe_type = input("Search by either (Ingredient, Name, Category): ")
         if search_recipe_type == "Ingredient":
-            ingredient_name = input("Ingredient Name: \n")
+            ingredient_name = input("Ingredient Name: ")
             search_recipe_mode(search_recipe_type, ingredient_name)
             break
         elif search_recipe_type == "Name":
-            recipe_name = input("Recipe Name: \n")
+            recipe_name = input("Recipe Name: ")
             search_recipe_mode(search_recipe_type, recipe_name)
             break
         elif search_recipe_type == "Category":
-            category_name = input("Category Name: \n")
+            category_name = input("Category Name: ")
             search_recipe_mode(search_recipe_type, category_name)
             break
         else:
@@ -437,7 +437,7 @@ def search_recipe():
 
 def search_recipe_mode(search_type, search_val):
     while True:
-        search_recipe_mode_input = input("Result sorted by(Rating, Recent, Default): \n")
+        search_recipe_mode_input = input("Result sorted by(Rating, Recent, Default): ")
         if search_recipe_mode_input == "Rating":
             if search_type == "Ingredient":
                 result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
@@ -508,14 +508,14 @@ def add_recipe_to_category():
 def cook_recipe():
     while True:
         try:
-            recipe_id = int(input("Enter the recipe id of the recipe you would like to cook: \n"))
+            recipe_id = int(input("Enter the recipe id of the recipe you would like to cook: "))
             break
         except ValueError:
             print("Invalid input. Try again.")
 
     while True:
         try:
-            scale = int(input("Enter the scale of the current recipe you would like to cook: \n"))
+            scale = int(input("Enter the scale of the current recipe you would like to cook: "))
             break
         except ValueError:
             print("Invalid input. Try again.")
@@ -525,17 +525,46 @@ def cook_recipe():
 
 
 def add_pantry():
-    ingredient_name = input("Ingredient Name:").lower()
-    ingredient_quantity = int(input("Quantity:"))
-    mark_recipe.add_ingredient_to_pantry(user_id, ingredient_name,ingredient_quantity)
+
+    # INGREDIENT NAME
+    while True:
+        ingredient_name = input("\nEnter ingredients name: ")
+        if ingredient_name == "":
+            print("Invalid name. Try again.")
+        else:
+            break
+
+    # INGREDIENT QUANTITY
+    while True:
+        try:
+            ingredient_quantity = int(input("Enter ingredients quantity: "))
+            break
+        except ValueError:
+            print("Invalid input. Try again.")
+
+    mark_recipe.add_ingredient_to_pantry(user_id, ingredient_name.lower(), ingredient_quantity)
     return 2.5
 
 
 def update_pantry():
-    ingredient_name = input("Ingredient Name:").lower()
-    ingredient_quantity = int(input("Updated Quantity:"))
+
+    # INGREDIENT NAME
+    while True:
+        ingredient_name = input("\nEnter ingredients name: ")
+        if ingredient_name == "":
+            print("Invalid name. Try again.")
+        else:
+            break
+
+    # INGREDIENT QUANTITY
+    while True:
+        try:
+            ingredient_quantity = int(input("Enter ingredients new quantity: "))
+            break
+        except ValueError:
+            print("Invalid input. Try again.")
+
     mark_recipe.update_pantry(user_id, ingredient_name, ingredient_quantity)
-    # mark_recipe.update_pantry(user_id, )
     return 2.5
 
 def show_pantry():
