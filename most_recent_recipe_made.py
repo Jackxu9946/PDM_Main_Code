@@ -28,7 +28,8 @@ def most_recent_recipe():
     print("--------------------------------")
     print("|     50 Most Recent Recipes     |")
     print("---------------------------------\n")
-    print("  %-45s %-15s" % ("Recipe Name", "Recipe_id\n"))
+    print(" %-76s %-18s" % ("Recipe Name", "Recipe ID"))
+    print("--------------------------------------------------------------------------------------------------\n")
     for i in list1:
         cur.execute("SELECT name FROM public.recipe WHERE recipe_id = %s", (i,))
         name = cur.fetchone()
@@ -62,3 +63,20 @@ def update_rating():
         rating = int(round(sum1 / count, 0))
         cur.execute("UPDATE public.recipe SET rating = %s WHERE recipe_id = %s", (rating, i))
         conn.commit()
+        
+   
+
+def top_50_recommended_recipe():
+    print("----------------------------------------")
+    print("|     Top 50 Most Recommended Recipes     |")
+    print("-----------------------------------------\n")
+    print(" %-76s %-18s %-2s" % ("Recipe Name", "Recipe ID", "Rating"))
+    print("---------------------------------------------------------------------------------------------------"
+          "------------")
+    cur.execute("SELECT name, recipe_id,rating FROM public.recipe "
+                "GROUP BY name, recipe_id,rating ORDER BY MAX(rating) DESC LIMIT 50 ")
+    result = cur.fetchall()
+    num = 1
+    for i in result:
+        print("%-3s %-75s %-20s %-2s" % (str(num) + ".", i[0], i[1], i[2]))
+        num += 1        
