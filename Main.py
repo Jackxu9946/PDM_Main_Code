@@ -61,7 +61,9 @@ def main():
               "10. Add recipe to a category\n"
               "11. Display my personal categories\n"
               "12. Show my current pantry\n"
-              "13. Quit\n")
+              "13. Show Top 50 Most Recommended Recipes\n"
+              "14. Show 50 Most Recent Recipes\n"
+              "15. Quit\n")
 
         recipe_switcher = {
             1: create_recipe,
@@ -76,7 +78,9 @@ def main():
             10: add_recipe_to_category,
             11: display_my_category,
             12: show_pantry,
-            13: 13
+            13: show_50_most_recommended_recipe,
+            14: show_50_most_recent_recipe,
+            15: 15
         }
 
         try:
@@ -84,7 +88,7 @@ def main():
         except ValueError:
             print("Invalid input. Try again.")
 
-        if recipe_value == 13:
+        if recipe_value == 15:
             print("Session finished.")
             break
         else:
@@ -628,6 +632,18 @@ def show_pantry():
     mark_recipe.show_pantry(user_id)
     press_to_continue()
 
+    
+# DISPLAY 50 MOST RECENT RECIPES
+def show_50_most_recent_recipe():
+    most_recent_recipe_made.most_recent_recipe()
+    press_to_continue()
+
+
+# DISPLAY 50 MOST RECOMMENDED RECIPES
+def show_50_most_recommended_recipe():
+    most_recent_recipe_made.top_50_recommended_recipe()
+    press_to_continue()    
+    
 
 # HELPER METHODS
 def leave_loop(leave):
