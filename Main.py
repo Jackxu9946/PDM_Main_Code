@@ -440,26 +440,6 @@ def search_recipe():
             quit_val = input("Invalid search type. Enter Quit to quit: ")
             if quit_val == "Quit":
                 break
-
-        while True:
-            more_info = input("\nWould you like to see more information on a recipe?(Yes or No): ")
-            if more_info == "":
-                print("Can't be 'empty'. Try again.")
-            elif more_info == "Yes":
-                break
-            elif more_info == "No":
-                return
-            else:
-                print("Invalid input. Try again.")
-
-        while True:
-            try:
-                recipe_id = int(input("Enter the recipe id of the recipe you would like see: "))
-                break
-            except ValueError:
-                print("Invalid input. Try again.")
-
-        Recipe.print_additional_info_recipe(recipe_id)
     return 2.5
 
 
@@ -471,47 +451,56 @@ def search_recipe_mode(search_type, search_val):
             if search_type == "Ingredient":
                 result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
+                get_more_info()
                 break
             elif search_type == "Name":
                 result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
+                get_more_info()
                 break
 
             else:
                 result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
+                get_more_info()
                 break
 
         elif search_recipe_mode_input == "Recent":
             if search_type == "Ingredient":
                 result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
+                get_more_info()
                 break
 
             elif search_type == "Name":
                 result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
+                get_more_info()
                 break
 
             else:
                 result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
+                get_more_info()
                 break
 
         elif search_recipe_mode_input == "Default":
             if search_type == "Ingredient":
                 result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
+                get_more_info()
                 break
 
             elif search_type == "Name":
                 result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
+                get_more_info()
                 break
 
             else:
                 result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
                 Recipe.print_my_recipe(result)
+                get_more_info()
                 break
 
         else:
@@ -522,22 +511,45 @@ def search_recipe_mode(search_type, search_val):
 
 # ADD CATEGORY
 def add_category():
-    category_name = input("Category Name: ")
+    # CATEGORY NAME
+    while True:
+        category_name = input("\nEnter categories name: ")
+        if category_name == "":
+            print("Invalid name. Try again.")
+        else:
+            break
+
     category.create_categories(category_name, global_username)
     category.display_category(user_id)
+    press_to_continue()
 
 
 # DISPLAY CATEGORY
 def display_my_category():
-    category.display_category(user_id)
+    category.display_category(int(user_id))
+    press_to_continue()
 
 
 # ADD RECIPE TO CATEGORY
 def add_recipe_to_category():
-    category_id = input("Category ID:")
-    recipe_id = input("Recipe ID:")
+    # INGREDIENT QUANTITY
+    while True:
+        try:
+            category_id = int(input("Enter the category id: "))
+            break
+        except ValueError:
+            print("Invalid input. Try again.")
+
+    # INGREDIENT QUANTITY
+    while True:
+        try:
+            recipe_id = int(input("Enter the recipe id: "))
+            break
+        except ValueError:
+            print("Invalid input. Try again.")
+
     category.add_recipes(category_id, recipe_id)
-    # print("Added recipe to category ")
+    press_to_continue()
 
 
 # COOK RECIPE
@@ -557,6 +569,7 @@ def cook_recipe():
             print("Invalid input. Try again.")
 
     mark_recipe.mark_recipe(user_id, recipe_id, scale)
+    press_to_continue()
     return 2.5
 
 
@@ -581,6 +594,7 @@ def add_pantry():
             print("Invalid input. Try again.")
 
     mark_recipe.add_ingredient_to_pantry(user_id, ingredient_name, ingredient_quantity)
+    press_to_continue()
     return 2.5
 
 
@@ -605,18 +619,44 @@ def update_pantry():
             print("Invalid input. Try again.")
 
     mark_recipe.update_pantry(user_id, ingredient_name, ingredient_quantity)
+    press_to_continue()
     return 2.5
 
 
 # SHOW PANTRY
 def show_pantry():
     mark_recipe.show_pantry(user_id)
+    press_to_continue()
 
 
+# HELPER METHODS
 def leave_loop(leave):
     if leave == -1:
         return True
     return False
+
+
+def get_more_info():
+    while True:
+        more_info = input("\nWould you like to see more information on a recipe?(Yes or No): ")
+        if more_info == "":
+            print("Can't be 'empty'. Try again.")
+        elif more_info == "Yes":
+            break
+        elif more_info == "No":
+            return
+        else:
+            print("Invalid input. Try again.")
+
+    while True:
+        try:
+            recipe_id = int(input("Enter the recipe id of the recipe you would like see: "))
+            break
+        except ValueError:
+            print("Invalid input. Try again.")
+
+    Recipe.print_additional_info_recipe(recipe_id)
+    press_to_continue()
 
 
 def press_to_continue():

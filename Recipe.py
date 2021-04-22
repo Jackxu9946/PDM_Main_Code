@@ -11,7 +11,7 @@ conn = psycopg2.connect(
 )
 cur = conn.cursor()
 
-name = "dave 12"
+name = "davagagfa 12"
 cook_time = "50"
 description = "This is a test"
 user_id = 1
@@ -26,7 +26,7 @@ def create_recipe(name, cook_time, description, difficulty, servings, created_by
             (name, cook_time, description, created_by, creation_date, steps, difficulty, servings,)
         )
         conn.commit()
-        # Get the recipe_id and send it into an underlying function
+        #Get the recipe_id and send it into an underlying function
         cur.execute(
             "Select (recipe_id) from public.recipe where created_by = %s and name = %s", (created_by, name)
         )
@@ -35,7 +35,6 @@ def create_recipe(name, cook_time, description, difficulty, servings, created_by
         print("\nRecipe has been added successfully")
     except:
         print("Can not create new recipe")
-
 
 # create_recipe(name,cook_time,description, "Hard", 5, 7706, creation_date,steps, None)
 
@@ -64,7 +63,6 @@ def edit_recipe(name, cook_time, description, difficulty, servings, steps, recip
             cur.execute("UPDATE public.recipe SET steps = %s WHERE recipe_id = %s", (steps, recipe_id))
 
         conn.commit()
-        print("\nRecipe edited successfully.")
         return -1
     except:
         print("Unable to save recipe")
@@ -85,7 +83,6 @@ def delete_recipe(user_id, recipe_id):
     try:
         cur.execute("DELETE FROM public.recipe WHERE recipe_id= %s and created_by = %s", (recipe_id, user_id))
         conn.commit()
-        print("Recipe deleted successfully")
     except:
         print("Can not delete entry in database")
 
@@ -184,7 +181,6 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     else:
         print("Can not retrieve recipe")
 
-
 # print(search_recipe_by_ingredient("Chicken Breast", "Rating"))
 
 def search_recipe_by_category(category, search_mode):
@@ -251,7 +247,7 @@ def search_recipe_by_category(category, search_mode):
 
 
 # CATEGORY TEST SET UP
-# User1 have category = Chinese User_id = 0 category_id for chinese = 56
+# User1 have category = Chinese User_id = 0 cateogory_id for chinese = 56
 # User2 have category = Chinese User_id = 1 category_id for chinese = 57
 # Recipe_id = 5289, created by user1
 # Recipe_id = 8559, created by user2
@@ -303,18 +299,17 @@ def print_my_recipe(results):
         print("No results found")
 
 
+
 def print_additional_info_recipe(recipe_id):
     # print("More info")
-    # Get all the general information about the recipe
-    cur.execute(
-        "Select (name, cook_time, difficulty, servings, steps, rating, description) from public.recipe where recipe_id = %s",
-        (recipe_id,))
+    #Get all the general information about the recipe
+    cur.execute("Select (name, cook_time, difficulty, servings, steps, rating, description) from public.recipe where recipe_id = %s", (recipe_id,))
     recipe_info = cur.fetchone()
     if (recipe_info == None or len(recipe_info) == 0):
         print("Can not display more information for this recipe")
         return
     recipe_info = recipe_info[0]
-    # Get each piece of information
+    #Get each piece of information
     header_list = ["Name:", "Cook Time:", "Difficulty:", "Serving Size:", "Steps:", "Rating:", "Description:"]
     recipe_info = recipe_info[1:-1]
     recipe_info = recipe_info.split(",")
@@ -331,9 +326,8 @@ def print_additional_info_recipe(recipe_id):
 # print_additional_info_recipe(20)
 #
 def print_ingredient_by_recipe(recipe_id):
-    # Display the ingredient with name and quantity in a vertical manner
-    cur.execute("select (ingredient,ingredient_quantity) from public.ingredient_to_recipe where recipe_id = %s",
-                (recipe_id,))
+    #Display the ingredient with name and quantity in a vertical manner
+    cur.execute("select (ingredient,ingredient_quantity) from public.ingredient_to_recipe where recipe_id = %s", (recipe_id,))
     result = cur.fetchall()
     if (result == None or len(result) == 0):
         print("Can not find ingredients for this recipe")
@@ -346,19 +340,18 @@ def print_ingredient_by_recipe(recipe_id):
         row = row.split(",")
         ingredient_id = int(row[0])
         ingredient_quantity = str(row[1])
-        # Get the ingredient name
+        #Get the ingredient name
         cur.execute("select (name) from public.ingredients where id = %s", (ingredient_id,))
         ingredient_name = cur.fetchone()
         if (ingredient_name != None and len(ingredient_name) > 0):
-            # Print the name and
+            #Print the name and
             ingredient_name = ingredient_name[0]
-            # Format the string and print it
+            #Format the string and print it
             if (len(ingredient_name) < ingredient_name_length):
                 ingredient_name += (" " * (ingredient_name_length - len(ingredient_name)))
             ingredient_name += " |"
             ingredient_name += ingredient_quantity
             print(ingredient_name)
-
 
 # recipe_id = 26
 # ingredients = [['Chicken Breast', 10]]
@@ -375,6 +368,8 @@ def recipe_to_ingredient(recipe_id, ingredients):
         cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
                     "(%s,%s,%s)", (recipe_id, ingredient_id, i[1]))
         conn.commit()
+
+
 
 # create_recipe(name, cook_time, description, "Hard", 5, 7706, creation_date, steps)
 # result = find_my_recipes(7706)
