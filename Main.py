@@ -5,7 +5,7 @@ from datetime import datetime
 import mark_recipe
 import category
 import most_recent_recipe_made
-
+import recommended_recipes
 
 # GLOBAL ATTRIBUTES
 global_username = ""
@@ -65,7 +65,8 @@ def main():
               "12. Show my current pantry\n"
               "13. Show Top 50 Most Recommended Recipes\n"
               "14. Show 50 Most Recent Recipes\n"
-              "15. Quit\n")
+              "15. Show Recommended Recipes Made by Other Users Who Make the Same Recipe\n"
+              "16. Quit\n")
 
         recipe_switcher = {
             1: create_recipe,
@@ -82,7 +83,8 @@ def main():
             12: show_pantry,
             13: show_50_most_recommended_recipe,
             14: show_50_most_recent_recipe,
-            15: 15
+            15: show_recommended_to_you,
+            16: 16
         }
 
         try:
@@ -90,7 +92,7 @@ def main():
         except ValueError:
             print("Invalid input. Try again.")
 
-        if recipe_value == 15:
+        if recipe_value == 16:
             print("Session finished.")
             break
         else:
@@ -581,7 +583,6 @@ def cook_recipe():
 
 # ADD INGREDIENT TO PANTRY
 def add_pantry():
-
     # INGREDIENT NAME
     while True:
         ingredient_name = input("\nEnter ingredients name: ")
@@ -606,7 +607,6 @@ def add_pantry():
 
 # UPDATE PANTRY
 def update_pantry():
-
     # INGREDIENT NAME
     while True:
         ingredient_name = input("\nEnter ingredients name: ")
@@ -634,7 +634,7 @@ def show_pantry():
     mark_recipe.show_pantry(user_id)
     press_to_continue()
 
-    
+
 # DISPLAY 50 MOST RECENT RECIPES
 def show_50_most_recent_recipe():
     most_recent_recipe_made.most_recent_recipe()
@@ -644,8 +644,15 @@ def show_50_most_recent_recipe():
 # DISPLAY 50 MOST RECOMMENDED RECIPES
 def show_50_most_recommended_recipe():
     most_recent_recipe_made.top_50_recommended_recipe()
-    press_to_continue()    
-    
+    press_to_continue()
+
+
+# DISPLAY RECOMMENDED RECIPES MADE BY OTHER USERS WHO MAKE THE SAME RECIPE
+def show_recommended_to_you():
+    recipe_id = input("Enter a recipe ID: ")
+    recommended_recipes.recommending_recipes(recipe_id)
+    press_to_continue()
+
 
 # HELPER METHODS
 def leave_loop(leave):
