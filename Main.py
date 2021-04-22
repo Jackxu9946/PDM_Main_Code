@@ -4,6 +4,8 @@ import Recipe
 from datetime import datetime
 import mark_recipe
 import category
+import most_recent_recipe_made
+
 
 # GLOBAL ATTRIBUTES
 global_username = ""
