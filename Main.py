@@ -65,7 +65,7 @@ def main():
               "12. Show my current pantry\n"
               "13. Show Top 50 Most Recommended Recipes\n"
               "14. Show 50 Most Recent Recipes\n"
-              "15. Show Recommended Recipes Made by Other Users Who Make the Same Recipe\n"
+              "15. Show Recommended Recipes Made by Other Users Who Make the Same Recipes\n"
               "16. Quit\n")
 
         recipe_switcher = {
@@ -647,10 +647,9 @@ def show_50_most_recommended_recipe():
     press_to_continue()
 
 
-# DISPLAY RECOMMENDED RECIPES MADE BY OTHER USERS WHO MAKE THE SAME RECIPE
+# DISPLAY RECOMMENDED RECIPES MADE BY OTHER USERS WHO MAKE THE SAME RECIPES
 def show_recommended_to_you():
-    recipe_id = input("Enter a recipe ID: ")
-    recommended_recipes.recommending_recipes(recipe_id)
+    recommended_recipes.recommending_recipes(user_id)
     press_to_continue()
 
 
