@@ -98,6 +98,13 @@ def open_category(category_id, name):
 def display_category(user_id):
     cur.execute("SELECT * FROM public.category where user_id = %s", (user_id,))
     results = cur.fetchall()
+
+    print("\n---------------------")
+    print("|   My Categories   |")
+    print("---------------------\n")
+
+    print("ID     Name")
+    print("--------------------------")
     if results is not None and len(results) > 0:
         for result in results:
             result_string = str(result[0]) + "     " + result[2]
