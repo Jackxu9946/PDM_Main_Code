@@ -146,7 +146,7 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
 
 
 # Testing add_ingredient_to_pantry
-add_ingredient_to_pantry(7715,"lemon juice",5)
+# add_ingredient_to_pantry(7715,"lemon juice",5)
 
 
 def update_pantry(user_id, ingredient_name, quantity):

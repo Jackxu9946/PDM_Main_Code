@@ -56,37 +56,33 @@ def check_pantry():
     # print(cur.fetchall())
 
 
-def main():
-    recipe_id = "21132"
-    user_id = "7715"
-
-    test_make_recipe(recipe_id, user_id)
-
-    check_pantry()
-
-    # cur.execute("SELECT name FROM public.ingredients WHERE id IN (SELECT ingredient_id FROM public.pantry)")
-    # cur.execute("UPDATE public.pantry SET name IN "
-    #             "(SELECT name FROM public.ingredients WHERE id IN "
-    #             "(SELECT ingredient_id FROM public.pantry)) WHERE ingredient_id IN (SELECT id FROM public.ingredients) ")
-    #
-
-    # cur.execute("SELECT ingredient_id FROM public.pantry")
-    # res = cur.fetchall()
-    #
-    # for x in res:
-    #     cur.execute("SELECT name FROM public.ingredients WHERE id = %s", (x[0],))
-    #     name = cur.fetchone()
-    #
-    #     cur.execute("UPDATE public.pantry SET name = %s where ingredient_id = %s", (name, x[0]))
-    #
-    # cur.execute("SELECT ingredient_id, name FROM public.pantry")
-    # print(cur.fetchall())
-    #
-    #
-    # conn.commit()
-
-
-
-
-
-main()
+# def main():
+#     recipe_id = "21132"
+#     user_id = "7715"
+#
+#     test_make_recipe(recipe_id, user_id)
+#
+#     check_pantry()
+#
+#     # cur.execute("SELECT name FROM public.ingredients WHERE id IN (SELECT ingredient_id FROM public.pantry)")
+#     # cur.execute("UPDATE public.pantry SET name IN "
+#     #             "(SELECT name FROM public.ingredients WHERE id IN "
+#     #             "(SELECT ingredient_id FROM public.pantry)) WHERE ingredient_id IN (SELECT id FROM public.ingredients) ")
+#     #
+#
+#     # cur.execute("SELECT ingredient_id FROM public.pantry")
+#     # res = cur.fetchall()
+#     #
+#     # for x in res:
+#     #     cur.execute("SELECT name FROM public.ingredients WHERE id = %s", (x[0],))
+#     #     name = cur.fetchone()
+#     #
+#     #     cur.execute("UPDATE public.pantry SET name = %s where ingredient_id = %s", (name, x[0]))
+#     #
+#     # cur.execute("SELECT ingredient_id, name FROM public.pantry")
+#     # print(cur.fetchall())
+#     #
+#     #
+#     # conn.commit()
+#
+# main()

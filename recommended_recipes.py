@@ -48,34 +48,34 @@ def recommending_recipes(user_id):
         print(" No recommended recipes yet!")
 
 
-def main():
-    # recipe_id = "21132"
-    # recommending_recipes(recipe_id)
-    cur.execute("SELECT user_id FROM public.rating")
-    print(cur.fetchall())
-    cur.execute("SELECT DISTINCT recipe_id FROM public.rating WHERE user_id = 215898")
-    print("这个人全部的菜单：", cur.fetchall())
-
-    cur.execute("SELECT user_id, recipe_id FROM public.rating WHERE recipe_id IN "
-                "(SELECT DISTINCT recipe_id FROM public.rating WHERE user_id = 69066) ")
-    print("\nusers:", cur.fetchall())
-
-    cur.execute("SELECT DISTINCT recipe_id, user_id FROM public.rating WHERE user_id IN "
-                "(SELECT user_id FROM public.rating WHERE recipe_id IN "
-                "(SELECT DISTINCT recipe_id FROM public.rating WHERE user_id = 69066)) ")
-    print("\nall recipe:", cur.fetchall())
-
-    user_id = "215898"
-    cur.execute("SELECT name, recipe_id, rating FROM public.recipe WHERE recipe_id IN "
-                "(SELECT DISTINCT recipe_id FROM public.rating WHERE recipe_id NOT IN "
-                "(SELECT recipe_id FROM public.rating WHERE recipe_id IN "
-                "(SELECT DISTINCT recipe_id FROM public.rating WHERE user_id = %s)) AND user_id IN "
-                "(SELECT user_id FROM public.rating WHERE recipe_id IN "
-                "(SELECT DISTINCT recipe_id FROM public.rating WHERE user_id = %s))) "
-                "GROUP BY name, recipe_id, rating ORDER BY MAX(rating) DESC", (user_id, user_id))
-    print("\n过滤后：", cur.fetchall())
-
-    recommending_recipes(user_id)
-
-
-main()
+# def main():
+#     # recipe_id = "21132"
+#     # recommending_recipes(recipe_id)
+#     cur.execute("SELECT user_id FROM public.rating")
+#     print(cur.fetchall())
+#     cur.execute("SELECT DISTINCT recipe_id FROM public.rating WHERE user_id = 215898")
+#     print("这个人全部的菜单：", cur.fetchall())
+#
+#     cur.execute("SELECT user_id, recipe_id FROM public.rating WHERE recipe_id IN "
+#                 "(SELECT DISTINCT recipe_id FROM public.rating WHERE user_id = 69066) ")
+#     print("\nusers:", cur.fetchall())
+#
+#     cur.execute("SELECT DISTINCT recipe_id, user_id FROM public.rating WHERE user_id IN "
+#                 "(SELECT user_id FROM public.rating WHERE recipe_id IN "
+#                 "(SELECT DISTINCT recipe_id FROM public.rating WHERE user_id = 69066)) ")
+#     print("\nall recipe:", cur.fetchall())
+#
+#     user_id = "215898"
+#     cur.execute("SELECT name, recipe_id, rating FROM public.recipe WHERE recipe_id IN "
+#                 "(SELECT DISTINCT recipe_id FROM public.rating WHERE recipe_id NOT IN "
+#                 "(SELECT recipe_id FROM public.rating WHERE recipe_id IN "
+#                 "(SELECT DISTINCT recipe_id FROM public.rating WHERE user_id = %s)) AND user_id IN "
+#                 "(SELECT user_id FROM public.rating WHERE recipe_id IN "
+#                 "(SELECT DISTINCT recipe_id FROM public.rating WHERE user_id = %s))) "
+#                 "GROUP BY name, recipe_id, rating ORDER BY MAX(rating) DESC", (user_id, user_id))
+#     print("\n过滤后：", cur.fetchall())
+#
+#     recommending_recipes(user_id)
+#
+#
+# main()
