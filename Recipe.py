@@ -270,12 +270,13 @@ def find_my_recipes(user_id):
 def print_my_recipe(results):
     # print(results)
     if (results != None and len(results) > 0):
+        #print("???")
         recipe_name_header = "Name                               |"
         recipe_ID_header = "ID      |"
         recipe_rating_header = "Rating     |"
         recipe_description = "Description"
         recipe_header = recipe_name_header + recipe_ID_header + recipe_rating_header + recipe_description
-        # print(recipe_header)
+        print(recipe_header)
         # print(results)
         for result in results:
             result_string = ""
@@ -377,7 +378,8 @@ def recipe_to_ingredient(recipe_id, ingredients):
         conn.commit()
 
 # create_recipe(name, cook_time, description, "Hard", 5, 7706, creation_date, steps)
-# result = find_my_recipes(7706)
+#result = find_my_recipes(7706)
+#print(result)
 # print_my_recipe(result)
 # print_my_recipe(1)
 # CATEGORY TEST SET UP
