@@ -47,7 +47,7 @@ def rate_recipe(user_id, recipe_id):
 def mark_recipe(user_id, recipe_id, scale):
     cur.execute("SELECT * FROM public.recipe WHERE recipe_id = %s", (recipe_id,))
     exist = cur.fetchone()
-    if not exist:
+    if exist is None or len(exist) == 0:
         # recipe_id does not correspond to any recipe
         print("Recipe does not exist")
         return
@@ -60,21 +60,24 @@ def mark_recipe(user_id, recipe_id, scale):
             # each i is the id of individual ingredient in the ingredient list
             # get the quantity of this ingredient needed in recipe
             cur.execute("SELECT ingredient_quantity FROM public.ingredient_to_recipe WHERE recipe_id = %s"
-                        "AND ingredient = %s ", (recipe_id, i))
+                        "AND ingredient = %s ", (recipe_id, i[0]))
             quantity_need = cur.fetchone()[0]
+            # print("quantity_need: ", quantity_need)
             scaled_quantity = quantity_need * scale
             # get the quantity of the needed ingredient in the pantry
             cur.execute("SELECT current_quantity FROM public.pantry WHERE user_id = %s "
-                        "AND ingredient_id = %s ", (user_id, i))
+                        "AND ingredient_id = %s ", (user_id, i[0]))
             quantity_have = cur.fetchone()
+            # print("quantity_have", quantity_have)
             # print(quantity_have)
             if quantity_have is None or len(quantity_have) == 0:
                 # print("Not enough ingredients to make this recipe")
                 print("Not enough quantity to make recipe.")
                 return False
             quantity_have = int(quantity_have[0])
-            # print(quantity_have)
-            quantity_remained = scaled_quantity - quantity_have
+            # print("quantity_have", quantity_have)
+            quantity_remained = quantity_have - scaled_quantity
+            # print("quantity_remained", quantity_remained)
             # have enough quantity for this ingredient.
             if quantity_remained >= 0:
                 # update the current quantity of this ingredient after some quantity is used to make the recipe
