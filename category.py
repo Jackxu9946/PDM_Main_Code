@@ -81,18 +81,43 @@ def add_recipes(category_id, input_recipes):
         conn.commit()
 
 
-def open_category(category_id, name):
+def open_category(category_id, name, user_id):
     """Print a list of recipes in the category"""
 
-    cur.execute("SELECT recipe_id FROM public.recipe_to_category WHERE category_id = %s", (category_id,))
-    lists = cur.fetchall()
+    # cur.execute("SELECT recipe_id FROM public.recipe_to_category WHERE category_id = %s", (category_id,))
+    # lists = cur.fetchall()
+    #
+    # print("|     Category-->  %s     |", name)
+    # print("   %-64s %-15s %s-2" % ("Recipe Name", "Recipe ID", "Average Rating"))
+    #
+    # for val in lists:
+    #     cur.execute("SELECT name FROM public.recipe WHERE recipe_id = %s", val)
+    #     recipe_name = cur.fetchall()
+    #     for names in recipe_name:
+    #         print("     Recipe name:", names[0], "(recipe id:", val[0], ")")
 
-    print("Category-->", name, ":")
-    for val in lists:
-        cur.execute("SELECT name FROM public.recipe WHERE recipe_id = %s", val)
-        recipe_name = cur.fetchall()
-        for names in recipe_name:
-            print("     Recipe name:", names[0], "(recipe id:", val[0], ")")
+    cur.execute("SELECT * FROM public.category WHERE id = %s AND name = %s AND user_id = %s", (category_id, name, user_id))
+    check1 = cur.fetchall()
+
+    if check1 is not None and len(check1) > 0:
+        cur.execute("SELECT name, recipe_id, rating FROM public.recipe WHERE recipe_id IN "
+                    "(SELECT recipe_id FROM public.recipe_to_category WHERE category_id = %s)", (category_id,))
+
+        recipe_info = cur.fetchall()
+
+        print("\n|     Category-->  ", name, "     |\n")
+        print(" %-64s %-15s %-2s" % ("Recipe Name", "Recipe ID", "Average Rating"))
+
+        num = 1
+        if recipe_info is not None and len(recipe_info) > 0:
+            for info in recipe_info:
+                print(" %-1s %-65s %-20s %-5s" % (str(num) + ".", info[0], info[1], info[2]))
+                num += 1
+        else:
+            print(" No recipes yet!")
+    else:
+        print("\nInvalid category ID and/or category name!")
+        return False
 
 
 def display_category(user_id):
@@ -111,6 +136,9 @@ def display_category(user_id):
             print(result_string)
     else:
         print("No personal categories yet")
+
+# def main():
+
 # display_category(7706)
 
 # username: V79QX
