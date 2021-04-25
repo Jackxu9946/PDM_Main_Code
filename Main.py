@@ -546,6 +546,23 @@ def add_category():
 # DISPLAY CATEGORY
 def display_my_category():
     category.display_category(int(user_id))
+
+    while True:
+        response1 = input("\nDo you want to open the category? (Yes/No) ")
+
+        if response1.lower() == 'yes':
+            response2 = input("Enter category ID: ")
+            response3 = input("Enter category name: ")
+
+            if not category.open_category(response2, response3, user_id):
+                pass
+            else:
+                break
+        elif response1.lower() == 'no':
+            break
+        else:
+            print("Invalid inputs!")
+
     press_to_continue()
 
 

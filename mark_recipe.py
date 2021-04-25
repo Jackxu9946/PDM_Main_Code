@@ -109,8 +109,8 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
     # Asssume ingredient_name is already in lower case
     cur.execute("SELECT COUNT(*) from public.ingredients where name = %s", (ingredient_name,))
     result = int(cur.fetchone()[0])
-    # print(result)
-    if (result == 0):
+    print(result)
+    if result == 0:
         cur.execute("INSERT INTO public.ingredients(name) VALUES (%s)", (ingredient_name,))
         conn.commit()
     # Get the ingredient id
@@ -118,6 +118,7 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
     # return_val = cur.fetchone()
     # print(return_val)
     ingredient_id = int(cur.fetchone()[0])
+    print(ingredient_id)
 
     # Use the ingredient_id to insert into pantry_bought table
     bought_date = datetime.today().strftime('%Y-%m-%d')
@@ -129,12 +130,12 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
 
     # Update the current quantity in pantry
     cur.execute(
-        "Select (current_quantity) from public.pantry where user_id = %s and ingredient_id = %s",
+        "Select current_quantity from public.pantry where user_id = %s and ingredient_id = %s",
         (user_id, ingredient_id)
     )
 
     current_quantity = cur.fetchone()
-    if (current_quantity == None):
+    if current_quantity is None:
         # Doesnt exist yet
         cur.execute("INSERT INTO public.pantry (user_id, ingredient_id, current_quantity) VALUES (%s, %s, %s)",
                     (user_id, ingredient_id, quantity))
@@ -148,7 +149,7 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
 
 
 # Testing add_ingredient_to_pantry
-# add_ingredient_to_pantry(7708,"Test_ingredient",10)
+# add_ingredient_to_pantry(7715,"lemon juice",5)
 
 
 def update_pantry(user_id, ingredient_name, quantity):
