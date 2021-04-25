@@ -6,6 +6,7 @@ import mark_recipe
 import category
 import most_recent_recipe_made
 import recommended_recipes
+import recipe_based_on_pantry
 
 # GLOBAL ATTRIBUTES
 global_username = ""
@@ -66,7 +67,8 @@ def main():
               "13. Show Top 50 Most Recommended Recipes\n"
               "14. Show 50 Most Recent Recipes\n"
               "15. Show Recommended Recipes Made by Other Users Who Make the Same Recipes\n"
-              "16. Quit\n")
+              "16. Show Possible Recipe to Make Based on Ingredients in the Pantry\n"
+              "17. Quit\n")
 
         recipe_switcher = {
             1: create_recipe,
@@ -84,7 +86,8 @@ def main():
             13: show_50_most_recommended_recipe,
             14: show_50_most_recent_recipe,
             15: show_recommended_to_you,
-            16: 16
+            16: show_recipe_based_on_pantry,
+            17: 17
         }
 
         try:
@@ -92,7 +95,7 @@ def main():
         except ValueError:
             print("Invalid input. Try again.")
 
-        if recipe_value == 16:
+        if recipe_value == 17:
             print("Session finished.")
             break
         else:
@@ -161,40 +164,43 @@ def create_recipe():
     # COOK TIME
     while True:
         cook_time = input("Enter the cook time(minutes): ")
-        if name == "":
-            print("Invalid name. Try again.")
+        if cook_time == "" or not cook_time.isnumeric() or int(cook_time) < 1:
+            print("Invalid cook_time. Try again.")
         else:
             break
 
     # DESCRIPTION
     while True:
         description = input("Enter the recipes description: ")
-        if name == "":
-            print("Invalid name. Try again.")
+        if description == "":
+            print("Invalid description. Try again.")
         else:
             break
 
     # DIFFICULTY
     while True:
-        difficulty = input("Enter the recipes difficulty: ")
-        if name == "":
-            print("Invalid name. Try again.")
+        dic = {'1': 'Easy', '2': 'Easy-Medium', '3': 'Medium', '4': 'Medium-Hard', '5': 'Hard'}
+        difficulty = input("1. Easy \n2. Easy-Medium\n3. Medium \n4. Medium-Hard \n5. Hard\n"
+                           "Enter a number corresponding to the recipe difficulty: ")
+        if difficulty == "" or not difficulty.isnumeric() or int(difficulty) not in range(1, 6):
+            print("Invalid difficulty. Try again.")
         else:
+            difficulty = dic[difficulty]
             break
 
     # SERVING SIZE
     while True:
         servings = input("Enter the number of servings: ")
-        if name == "":
-            print("Invalid name. Try again.")
+        if servings == "" or not servings.isnumeric() or int(servings) < 1:
+            print("Invalid servings. Try again.")
         else:
             break
 
     # STEPS
     while True:
         steps = input("Enter recipes steps: ")
-        if name == "":
-            print("Invalid name. Try again.")
+        if steps == "":
+            print("Invalid steps. Try again.")
         else:
             break
 
@@ -202,17 +208,22 @@ def create_recipe():
     while True:
         # Get ingredient name
         temp_list = []
-        new_ingredient = input("Enter a new ingredient: ")
-        if new_ingredient == "":
-            pass
-        new_ingredient.lower()
+        while True:
+            new_ingredient = input("Enter a new ingredient: ")
+            if new_ingredient == "":
+                print("Invalid ingredient Name. Try again.")
+            else:
+                new_ingredient.lower()
+                break
 
         # Get ingredient quantity
-        try:
-            new_quantity = int(input("Enter the ingredient quantity for the recipe: "))
-        except ValueError:
-            print("Invalid quantity. Try again.")
-            pass
+        while True:
+            new_quantity = input("Enter the ingredient quantity for the recipe: ")
+            if new_quantity == "" or not new_quantity.isnumeric() or int(new_quantity) < 1:
+                print("Invalid quantity. Try again.")
+            else:
+                new_quantity = int(new_quantity)
+                break
 
         temp_list.append(new_ingredient.lower())
         temp_list.append(new_quantity)
@@ -223,7 +234,7 @@ def create_recipe():
             break
 
     # print(ingredient)
-    creation_date = datetime.today().strftime('%Y-%m-%d')
+    creation_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     Recipe.create_recipe(name, cook_time, description, difficulty,
                          servings, int(user_id), creation_date, steps, ingredient)
     press_to_continue()
@@ -650,6 +661,12 @@ def show_50_most_recommended_recipe():
 # DISPLAY RECOMMENDED RECIPES MADE BY OTHER USERS WHO MAKE THE SAME RECIPES
 def show_recommended_to_you():
     recommended_recipes.recommending_recipes(user_id)
+    press_to_continue()
+
+
+# DISPLAY RECIPE BASED ON INGREDIENTS IN THE PANTRY
+def show_recipe_based_on_pantry():
+    recipe_based_on_pantry.find_recipe_based_on_pantry(user_id)
     press_to_continue()
 
 

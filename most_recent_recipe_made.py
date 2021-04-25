@@ -15,29 +15,23 @@ def most_recent_recipe():
     Get the 50 most recent recipes made order by creation date.
     """
 
-    cur.execute("SELECT  recipe_id FROM public.rating "
-                "GROUP BY recipe_id ORDER BY MAX(rating_date) DESC LIMIT 50 ")
-    result = cur.fetchall()
-    list1 = []
-    for i in result:
-        i = str(i)
-        i = str(i[1:-2])
-        list1.append(i)
+    cur.execute("SELECT name, recipe_id, creation_date FROM public.recipe "
+                "GROUP BY name, recipe_id, creation_date ORDER BY MAX(creation_date) DESC LIMIT 50 ")
 
     num = 1
     print("--------------------------------")
     print("|     50 Most Recent Recipes     |")
     print("---------------------------------\n")
-    print(" %-92s %-18s" % ("Recipe Name", "Recipe ID"))
-    print("-------------------"
-          "-----------------------------------------------------------------------------------------\n")
-    for i in list1:
-        cur.execute("SELECT name FROM public.recipe WHERE recipe_id = %s", (i,))
-        name = cur.fetchone()
-        name = str(name)
-        name = name[1:-2]
-        print(" %-3s %-90s %-20s" % (str(num) + ".", name, i))
+    print(" %-92s %-18s %19s" % ("Recipe Name", "Recipe ID", "Date Created"))
+    print("----------------------------------------------------------------------"
+          "---------------------------------------------------------------------------\n")
+    for i in result:
+        print(" %-3s %-90s %-20s %-50s" % (str(num) + ".", i[0], i[1], i[2]))
+        # print(i[0], i[1], i[2])
+        list1.append(i)
         num += 1
+
+
 
 
 def update_rating():
@@ -147,7 +141,6 @@ def main():
         recipe_dic = {}
         for j in all_ingredient:
             recipe_dic[j[0]] = j[1]
-
         for k in recipe_dic.keys():
             if k not in pantry_dic.keys():
                 flag = False
@@ -190,9 +183,3 @@ def main():
     print("\ningredients needed for recipe 41")
     print(n)
 
-
-
-"""
-SELECT ingredient name from ingredient_to_recipe as t1
-UPDATE public.ingredient_to_recipe SET ingredient = (SELECT id from public.ingredient WHERE name = 
-"""

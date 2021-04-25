@@ -21,15 +21,29 @@ creation_date = datetime.today().strftime('%Y-%m-%d')
 
 def create_recipe(name, cook_time, description, difficulty, servings, created_by, creation_date, steps, ingredients):
     try:
+        print("name ",name)
+        print("cook_time ", cook_time)
+        print("description ", description)
+        print("difficulty ", difficulty)
+        print("servings ",servings)
+        print("created_by ", created_by)
+        print("creation_date ", creation_date)
+        print("steps ", steps)
+        print("ingredients",ingredients)
+        print("\n")
         cur.execute(
-            "INSERT INTO public.recipe(name, cook_time, description, created_by, creation_date,steps, difficulty, servings) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-            (name, cook_time, description, created_by, creation_date, steps, difficulty, servings,)
+            "INSERT INTO public.recipe(name, cook_time, description, created_by, creation_date,steps, difficulty, "
+            "servings) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+            (name, cook_time, description, created_by, creation_date, steps, difficulty, servings)
         )
+        print("0")
         conn.commit()
+        print("1")
         # Get the recipe_id and send it into an underlying function
         cur.execute(
             "Select (recipe_id) from public.recipe where created_by = %s and name = %s", (created_by, name)
         )
+        print("2")
         recipe_id = int(cur.fetchone()[0])
         recipe_to_ingredient(recipe_id, ingredients)
         print("\nRecipe has been added successfully")
