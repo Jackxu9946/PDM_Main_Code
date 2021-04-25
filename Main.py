@@ -613,8 +613,7 @@ def cook_recipe():
 def add_pantry():
     # INGREDIENT NAME
     while True:
-        ingredient_name = input("\nEnter ingredients name: ")
-        ingredient_name.lower()
+        ingredient_name = input("\nEnter ingredient name: ")
         if ingredient_name == "":
             print("Invalid name. Try again.")
         else:
@@ -627,7 +626,7 @@ def add_pantry():
             break
         except ValueError:
             print("Invalid input. Try again.")
-
+    ingredient_name.lower()
     mark_recipe.add_ingredient_to_pantry(user_id, ingredient_name, ingredient_quantity)
     press_to_continue()
     return 2.5

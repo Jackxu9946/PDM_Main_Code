@@ -109,7 +109,6 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
     # Asssume ingredient_name is already in lower case
     cur.execute("SELECT COUNT(*) from public.ingredients where name = %s", (ingredient_name,))
     result = int(cur.fetchone()[0])
-    print(result)
     if result == 0:
         cur.execute("INSERT INTO public.ingredients(name) VALUES (%s)", (ingredient_name,))
         conn.commit()
@@ -118,11 +117,12 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
     # return_val = cur.fetchone()
     # print(return_val)
     ingredient_id = int(cur.fetchone()[0])
-    print(ingredient_id)
 
     # Use the ingredient_id to insert into pantry_bought table
     bought_date = datetime.today().strftime('%Y-%m-%d')
     expiration_date = (datetime.today() + timedelta(days=7)).strftime('%Y-%m-%d')
+
+
     cur.execute(
         "INSERT into public.pantry_bought(user_id,quantity_bought,purchase_date,expiration_date,ingredient_id) VALUES (%s, %s, %s, %s, %s)",
         (user_id, quantity, bought_date, expiration_date, ingredient_id)
@@ -135,7 +135,7 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
     )
 
     current_quantity = cur.fetchone()
-    if current_quantity is None:
+    if current_quantity is None or len(current_quantity) == 0:
         # Doesnt exist yet
         cur.execute("INSERT INTO public.pantry (user_id, ingredient_id, current_quantity) VALUES (%s, %s, %s)",
                     (user_id, ingredient_id, quantity))
@@ -187,32 +187,44 @@ def show_pantry(user_id):
         print("No item currently in pantry")
         return
     # print(results)
+    # for i in results:
+    #     print(i)
     print_pantry(results)
 
 
+
 def print_pantry(list_of_pantry_items):
-    pantry_header = ""
-    pantry_ingredient_quantity = "Quantity |"
-    pantry_ingredient_name = "Ingredient"
-    pantry_header += pantry_ingredient_quantity
-    pantry_header += pantry_ingredient_name
-    print(pantry_header)
+    # pantry_header = ""
+    # pantry_ingredient_quantity = "Quantity |"
+    # pantry_ingredient_name = "Ingredient"
+    # pantry_header += pantry_ingredient_quantity
+    # pantry_header += pantry_ingredient_name
+    # print(pantry_header)
+    print("--------------------------------")
+    print("|           My Pantry          |")
+    print("--------------------------------\n")
+    print("  %-40s   %-20s"%("Ingredient Name", "Quantity"))
+    print("--------------------------------------------------------")
+    num = 1
     for result in list_of_pantry_items:
         result = ast.literal_eval(result[0])
         ingredient_id = int(result[0])
         # Get the ingredient name
         cur.execute("select (name) from public.ingredients where id = %s", (ingredient_id,))
         ingredient_name = str(cur.fetchone()[0])
-        result_string = ""
-        quantity = str(result[1])
-        if (len(quantity) < len(pantry_ingredient_quantity)):
-            quantity += (" " * (len(pantry_ingredient_quantity) - len(quantity)))
-        result_string += quantity
-        result_string += ingredient_name
-        print(result_string)
+
+        print("%-4s %-40s %-20s" % (str(num) + ".",ingredient_name,str(result[1])))
+        num += 1
+        # result_string = ""
+        # quantity = str(result[1])
+        # if (len(quantity) < len(pantry_ingredient_quantity)):
+        #     quantity += (" " * (len(pantry_ingredient_quantity) - len(quantity)))
+        # result_string += quantity
+        # result_string += ingredient_name
+        # print(result_string)
 
 
-# show_pantry(7706)
+show_pantry(7706)
 
 
 # Only for testing
