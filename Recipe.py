@@ -268,16 +268,11 @@ def find_my_recipes(user_id):
     try:
         cur.execute("SELECT name, recipe_id,rating, description from public.recipe where created_by = %s", (user_id,))
         results = cur.fetchall()
-        for i in results:
-            # i = i.split(",")
-            print(i)
-            # print(i[0][0] + "\t" + i[0][1] + "\t" + i[0][2] + "\t" + i[0][3])
         return results
     except:
         print("Can not retrieve recipe")
 
 
-# find_my_recipes(7706)
 
 
 def print_my_recipe(results):
@@ -339,15 +334,51 @@ def print_my_recipe(results):
     #             result_string += cur_recipe_rating
     #         result_string += cur_recipe_description
     #         print(result_string)
-    # else:
-    #     print("No results found")
+    #
 
 
-# print_my_recipe(search_recipe_by_ingredient("apple", ))
+
+
+
+#
+
+def print_ingredient_by_recipe(recipe_id):
+    # Display the ingredient with name and quantity in a vertical manner
+    cur.execute("select ingredient,ingredient_quantity from public.ingredient_to_recipe where recipe_id = %s",
+                (recipe_id,))
+    result = cur.fetchall()
+    if result == None or len(result) == 0:
+        print("Can not find ingredients for this recipe")
+        return
+    print("\n%-23s %-10s" % ("Ingredient Need", "Quantity"))
+    print("-------------------------------------")
+    # ingredient_name_length = 15
+    for row in result:
+        in_id = row[0]
+        quantity = row[1]
+        cur.execute("select name from public.ingredients where id = %s", (in_id,))
+        in_name = cur.fetchone()[0]
+        print("%-25s %-16s" % (in_name, quantity))
+    #     row = row[0]
+    #     row = row[1:-1]
+    #     row = row.split(",")
+    #     ingredient_id = int(row[0])
+    #     ingredient_quantity = str(row[1])
+    #     # Get the ingredient name
+    #     cur.execute("select name from public.ingredients where id = %s", (ingredient_id,))
+    #     ingredient_name = cur.fetchone()
+    #     if ingredient_name != None and len(ingredient_name) > 0:
+    #         # Print the name and
+    #         ingredient_name = ingredient_name[0]
+    #         # Format the string and print it
+    #         if len(ingredient_name) < ingredient_name_length:
+    #             ingredient_name += (" " * (ingredient_name_length - len(ingredient_name)))
+    #         ingredient_name += " |"
+    #         ingredient_name += ingredient_quantity
+    #         print(ingredient_name)
 
 
 def print_additional_info_recipe(recipe_id):
-    # print("More info")
     # Get all the general information about the recipe
     cur.execute(
         "Select name, cook_time, difficulty, servings, steps, rating, description from public.recipe where recipe_id "
@@ -363,20 +394,21 @@ def print_additional_info_recipe(recipe_id):
     print("\n-------------------------------------------------------------")
     print("      Addition Recipe Information-->  Recipe_id:", recipe_id, "     ")
     print("-------------------------------------------------------------\n")
+    print("Recipe Name:\t\t\t", recipe_info[0], "\n")
+    print("Cook Time (Minutes):\t", recipe_info[1], "\n")
+    print("Difficulty:\t\t\t\t", recipe_info[2],"\n")
+    print("Serving Size: \t\t\t", recipe_info[3],"\n")
+    print("Steps:\t\t\t\t\t", recipe_info[4],"\n")
+    print("Rating:\t\t\t\t\t", recipe_info[5],"\n")
+    print("Description:\t\t\t", recipe_info[6])
 
-    print("%-10s % 19s\n" % ("Name:", recipe_info[0]))
-
-    print("%-10s % 15s\n" % ("Cook Time:", recipe_info[1]))
-
-    print("%-10s % 16s\n" % ("Difficulty:", recipe_info[2]))
-
-    print("%-10s % 10s\n" % ("Serving Size: ", recipe_info[3]))
-
-    print("%-10s % 16s\n" % ("Steps:", recipe_info[4]))
-
-    print("%-10s % 14s\n" % ("Rating:", recipe_info[5]))
-
-    print("%-10s % 13s\n" % ("Description:", recipe_info[6]))
+    # print("%-10s % 19s\n" % ("Name:", recipe_info[0]))
+    # print("%-10s % 15s\n" % ("Cook Time:", recipe_info[1]))
+    # print("%-10s % 16s\n" % ("Difficulty:", recipe_info[2]))
+    # print("%-10s % 10s\n" % ("Serving Size: ", recipe_info[3]))
+    # print("%-10s % 16s\n" % ("Steps:", recipe_info[4]))
+    # print("%-10s % 14s\n" % ("Rating:", recipe_info[5]))
+    # print("%-10s % 13s\n" % ("Description:", recipe_info[6]))
 
     # header_list = ["Name:", "Cook Time:", "Difficulty:", "Serving Size:", "Steps:", "Rating:", "Description:"]
     # recipe_info = recipe_info[1:-1]
@@ -388,39 +420,7 @@ def print_additional_info_recipe(recipe_id):
     #         continue
     #     print(current_header)
     #     print(current_value)
-    # print_ingredient_by_recipe(recipe_id)
-
-
-#
-def print_ingredient_by_recipe(recipe_id):
-    # Display the ingredient with name and quantity in a vertical manner
-    cur.execute("select ingredient,ingredient_quantity from public.ingredient_to_recipe where recipe_id = %s",
-                (recipe_id,))
-    result = cur.fetchall()
-    if result == None or len(result) == 0:
-        print("Can not find ingredients for this recipe")
-        return
-    print("Ingredients:")
-    ingredient_name_length = 15
-    for row in result:
-        row = row[0]
-        row = row[1:-1]
-        row = row.split(",")
-        ingredient_id = int(row[0])
-        ingredient_quantity = str(row[1])
-        # Get the ingredient name
-        cur.execute("select name from public.ingredients where id = %s", (ingredient_id,))
-        ingredient_name = cur.fetchone()
-        if ingredient_name != None and len(ingredient_name) > 0:
-            # Print the name and
-            ingredient_name = ingredient_name[0]
-            # Format the string and print it
-            if len(ingredient_name) < ingredient_name_length:
-                ingredient_name += (" " * (ingredient_name_length - len(ingredient_name)))
-            ingredient_name += " |"
-            ingredient_name += ingredient_quantity
-            print(ingredient_name)
-
+    print_ingredient_by_recipe(recipe_id)
 
 # recipe_id = 26
 # ingredients = [['Chicken Breast', 10]]
