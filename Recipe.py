@@ -21,16 +21,6 @@ creation_date = datetime.today().strftime('%Y-%m-%d')
 
 def create_recipe(name, cook_time, description, difficulty, servings, created_by, creation_date, steps, ingredients):
     try:
-        print("name ",name)
-        print("cook_time ", cook_time)
-        print("description ", description)
-        print("difficulty ", difficulty)
-        print("servings ",servings)
-        print("created_by ", created_by)
-        print("creation_date ", creation_date)
-        print("steps ", steps)
-        print("ingredients",ingredients)
-        print("\n")
         cur.execute(
             "INSERT INTO public.recipe(name, cook_time, description, created_by, creation_date,steps, difficulty, "
             "servings) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",

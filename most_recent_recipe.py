@@ -18,6 +18,10 @@ def most_recent_recipe():
     cur.execute("SELECT name, recipe_id, creation_date FROM public.recipe "
                 "GROUP BY name, recipe_id, creation_date ORDER BY MAX(creation_date) DESC LIMIT 50 ")
 
+
+    result = cur.fetchall()
+
+    list1 = []
     num = 1
     print("--------------------------------")
     print("|     50 Most Recent Recipes     |")
@@ -27,10 +31,8 @@ def most_recent_recipe():
           "---------------------------------------------------------------------------\n")
     for i in result:
         print(" %-3s %-90s %-20s %-50s" % (str(num) + ".", i[0], i[1], i[2]))
-        # print(i[0], i[1], i[2])
         list1.append(i)
         num += 1
-
 
 
 

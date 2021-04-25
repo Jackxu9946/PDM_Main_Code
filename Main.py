@@ -4,7 +4,7 @@ import Recipe
 from datetime import datetime
 import mark_recipe
 import category
-import most_recent_recipe_made
+import most_recent_recipe
 import recommended_recipes
 import recipe_based_on_pantry
 
@@ -665,13 +665,13 @@ def show_pantry():
 
 # DISPLAY 50 MOST RECENT RECIPES
 def show_50_most_recent_recipe():
-    most_recent_recipe_made.most_recent_recipe()
+    most_recent_recipe.most_recent_recipe()
     press_to_continue()
 
 
 # DISPLAY 50 MOST RECOMMENDED RECIPES
 def show_50_most_recommended_recipe():
-    most_recent_recipe_made.top_50_recommended_recipe()
+    most_recent_recipe.top_50_recommended_recipe()
     press_to_continue()
 
 
