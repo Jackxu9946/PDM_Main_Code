@@ -102,7 +102,7 @@ def search_recipe_by_name(name, search_mode):
     if search_mode == "recent":
         try:
             cur.execute(
-                "SELECT (name, recipe_id, rating, description) FROM public.recipe "
+                "SELECT name, recipe_id, rating, description FROM public.recipe "
                 "WHERE name like '%%{name}%%' ORDER BY creation_date ".format(name=name))
             results = cur.fetchall()
             return results
@@ -111,7 +111,7 @@ def search_recipe_by_name(name, search_mode):
     elif search_mode == "rating":
         try:
             cur.execute(
-                "SELECT (name, recipe_id, rating, description) FROM public.recipe "
+                "SELECT name, recipe_id, rating, description FROM public.recipe "
                 "WHERE name like '%%{name}%%' ORDER BY rating ".format(name=name))
             results = cur.fetchall()
             return results
@@ -120,10 +120,11 @@ def search_recipe_by_name(name, search_mode):
     else:
         try:
             cur.execute(
-                "SELECT (name, recipe_id, rating, description) FROM public.recipe "
+                "SELECT name, recipe_id, rating, description FROM public.recipe "
                 "WHERE name like '%%{name}%%' ORDER BY name ".format(name=name))
             results = cur.fetchall()
             return results
+
         except:
             print("Can not execute the recipe query")
     return None
@@ -159,7 +160,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     if search_mode == "Recent":
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by creation_date",
+                "SELECT name,recipe_id, rating, description from public.recipe where recipe_id in %s order by creation_date",
                 (recipe_id_list,)
             )
             result = cur.fetchall()
@@ -168,7 +169,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     elif search_mode == "Rating":
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by rating",
+                "SELECT name,recipe_id, rating, description from public.recipe where recipe_id in %s order by rating",
                 (recipe_id_list,)
             )
             result = cur.fetchall()
@@ -177,7 +178,7 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     else:
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by name",
+                "SELECT name,recipe_id, rating, description from public.recipe where recipe_id in %s order by name",
                 (recipe_id_list,)
             )
             result = cur.fetchall()
@@ -208,7 +209,7 @@ def search_recipe_by_category(category, search_mode):
     # Now we have a tuple of category id
     # Use it to find recipe_id
     cur.execute(
-        "SELECT (recipe_id) from public.recipe_to_category where category_id in %s", (tuple_category_id,)
+        "SELECT recipe_id from public.recipe_to_category where category_id in %s", (tuple_category_id,)
     )
 
     recipe_id_list = tuple(cur.fetchall())
@@ -224,7 +225,8 @@ def search_recipe_by_category(category, search_mode):
     if search_mode == "recent":
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by creation_date",
+                "SELECT name,recipe_id, rating, description from public.recipe where recipe_id in %s order by "
+                "creation_date",
                 (recipe_id_list,)
             )
             result = cur.fetchall()
@@ -233,7 +235,7 @@ def search_recipe_by_category(category, search_mode):
     elif search_mode == "rating":
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by rating",
+                "SELECT name,recipe_id, rating, description from public.recipe where recipe_id in %s order by rating",
                 (recipe_id_list,)
             )
             result = cur.fetchall()
@@ -242,7 +244,7 @@ def search_recipe_by_category(category, search_mode):
     else:
         try:
             cur.execute(
-                "SELECT (name,recipe_id, rating, description) from public.recipe where recipe_id in %s order by name",
+                "SELECT name,recipe_id, rating, description from public.recipe where recipe_id in %s order by name",
                 (recipe_id_list,)
             )
             result = cur.fetchall()
@@ -264,83 +266,138 @@ def search_recipe_by_category(category, search_mode):
 
 def find_my_recipes(user_id):
     try:
-        cur.execute("SELECT (name, recipe_id,rating, description) from public.recipe where created_by = %s", (user_id,))
+        cur.execute("SELECT name, recipe_id,rating, description from public.recipe where created_by = %s", (user_id,))
         results = cur.fetchall()
+        for i in results:
+            # i = i.split(",")
+            print(i)
+            # print(i[0][0] + "\t" + i[0][1] + "\t" + i[0][2] + "\t" + i[0][3])
         return results
     except:
         print("Can not retrieve recipe")
 
 
+# find_my_recipes(7706)
+
+
 def print_my_recipe(results):
-    # print(results)
-    if (results != None and len(results) > 0):
-        #print("???")
-        recipe_name_header = "Name                               |"
-        recipe_ID_header = "ID      |"
-        recipe_rating_header = "Rating     |"
-        recipe_description = "Description"
-        recipe_header = recipe_name_header + recipe_ID_header + recipe_rating_header + recipe_description
-        print(recipe_header)
+    print("\n------------------------")
+    print("|    Result Recipe     |")
+    print("------------------------\n")
+    print("   %-64s %-15s %-20s %-5s" % ("Recipe Name", "Recipe ID", "Average Rating", "Description"))
+    print("------------------------------------------------------------------------------------------"
+          "----------------------------------------------------------"
+          "----------------------------------------------------------------------------------------\n")
+    if results != None and len(results) > 0:
+        # print("???")
+        # recipe_name_header = "Name                               |"
+        # recipe_ID_header = "ID      |"
+        # recipe_rating_header = "Rating     |"
+        # recipe_description = "Description"
+        # recipe_header = recipe_name_header + recipe_ID_header + recipe_rating_header + recipe_description
+        # print(recipe_header)
+        # print("\n")
         # print(results)
+        num = 1
+
         for result in results:
-            result_string = ""
-            cur_recipe = result[0].split(",")
-            cur_recipe_name = cur_recipe[0]
-            cur_recipe_name = cur_recipe_name[1:]
-            cur_recipe_name = cur_recipe_name.replace('"', '')
-            cur_recipe_ID = str(cur_recipe[1])
-            cur_recipe_rating = cur_recipe[2]
-            cur_recipe_description = cur_recipe[3]
-            cur_recipe_description = cur_recipe_description[:-1]
-            # Format the result string
-            if len(cur_recipe_name) < len(recipe_name_header):
-                cur_recipe_name += (" " * (len(recipe_name_header) - len(cur_recipe_name)))
-                result_string += cur_recipe_name
-            if len(cur_recipe_ID) < len(recipe_ID_header):
-                cur_recipe_ID += (" " * (len(recipe_ID_header) - len(cur_recipe_ID)))
-                result_string += cur_recipe_ID
-            if (len(cur_recipe_rating) < len(recipe_rating_header)):
-                cur_recipe_rating += (" " * (len(recipe_rating_header) - len(cur_recipe_rating)))
-                result_string += cur_recipe_rating
-            result_string += cur_recipe_description
-            print(result_string)
+            r = result[3].split("\n")
+
+            count = 0
+            for i in r:
+                if count == 0:
+                    print("%-4s %-65s %-20s %-14s %-5s" % (str(num) + ".", result[0], result[1], result[2], i))
+                    count += 1
+                else:
+                    print("%-4s %-65s %-20s %-14s %-5s" % ("", "", "", "", i))
+            num += 1
+
     else:
         print("No results found")
+
+        # cur_recipe = result[0].split(",")
+        # print(cur_recipe)
+        # print("\t\t\t", cur_recipe[3])
+    #         result_string = ""
+    #         cur_recipe = result[0].split(",")
+    #         cur_recipe_name = cur_recipe[0]
+    #         cur_recipe_name = cur_recipe_name[1:]
+    #         cur_recipe_name = cur_recipe_name.replace('"', '')
+    #         cur_recipe_ID = str(cur_recipe[1])
+    #         cur_recipe_rating = cur_recipe[2]
+    #         cur_recipe_description = cur_recipe[3]
+    #         cur_recipe_description = cur_recipe_description[:-1]
+    #         # Format the result string
+    #         if len(cur_recipe_name) < len(recipe_name_header):
+    #             cur_recipe_name += (" " * (len(recipe_name_header) - len(cur_recipe_name)))
+    #             result_string += cur_recipe_name
+    #         if len(cur_recipe_ID) < len(recipe_ID_header):
+    #             cur_recipe_ID += (" " * (len(recipe_ID_header) - len(cur_recipe_ID)))
+    #             result_string += cur_recipe_ID
+    #         if (len(cur_recipe_rating) < len(recipe_rating_header)):
+    #             cur_recipe_rating += (" " * (len(recipe_rating_header) - len(cur_recipe_rating)))
+    #             result_string += cur_recipe_rating
+    #         result_string += cur_recipe_description
+    #         print(result_string)
+    # else:
+    #     print("No results found")
+
+
+# print_my_recipe(search_recipe_by_ingredient("apple", ))
 
 
 def print_additional_info_recipe(recipe_id):
     # print("More info")
     # Get all the general information about the recipe
     cur.execute(
-        "Select (name, cook_time, difficulty, servings, steps, rating, description) from public.recipe where recipe_id = %s",
+        "Select name, cook_time, difficulty, servings, steps, rating, description from public.recipe where recipe_id "
+        "= %s",
         (recipe_id,))
     recipe_info = cur.fetchone()
-    if (recipe_info == None or len(recipe_info) == 0):
+    if recipe_info == None or len(recipe_info) == 0:
         print("Can not display more information for this recipe")
         return
-    recipe_info = recipe_info[0]
+    # recipe_info = recipe_info[0]
     # Get each piece of information
-    header_list = ["Name:", "Cook Time:", "Difficulty:", "Serving Size:", "Steps:", "Rating:", "Description:"]
-    recipe_info = recipe_info[1:-1]
-    recipe_info = recipe_info.split(",")
-    for i in range(len(header_list)):
-        current_header = header_list[i]
-        current_value = recipe_info[i]
-        if (current_value == None or len(current_value) == 0):
-            continue
-        print(current_header)
-        print(current_value)
-    print_ingredient_by_recipe(recipe_id)
+
+    print("\n-------------------------------------------------------------")
+    print("      Addition Recipe Information-->  Recipe_id:", recipe_id, "     ")
+    print("-------------------------------------------------------------\n")
+
+    print("%-10s % 19s\n" % ("Name:", recipe_info[0]))
+
+    print("%-10s % 15s\n" % ("Cook Time:", recipe_info[1]))
+
+    print("%-10s % 16s\n" % ("Difficulty:", recipe_info[2]))
+
+    print("%-10s % 10s\n" % ("Serving Size: ", recipe_info[3]))
+
+    print("%-10s % 16s\n" % ("Steps:", recipe_info[4]))
+
+    print("%-10s % 14s\n" % ("Rating:", recipe_info[5]))
+
+    print("%-10s % 13s\n" % ("Description:", recipe_info[6]))
+
+    # header_list = ["Name:", "Cook Time:", "Difficulty:", "Serving Size:", "Steps:", "Rating:", "Description:"]
+    # recipe_info = recipe_info[1:-1]
+    # recipe_info = recipe_info.split(",")
+    # for i in range(len(header_list)):
+    #     current_header = header_list[i]
+    #     current_value = recipe_info[i]
+    #     if current_value == None or len(current_value) == 0:
+    #         continue
+    #     print(current_header)
+    #     print(current_value)
+    # print_ingredient_by_recipe(recipe_id)
 
 
-# print_additional_info_recipe(20)
 #
 def print_ingredient_by_recipe(recipe_id):
     # Display the ingredient with name and quantity in a vertical manner
-    cur.execute("select (ingredient,ingredient_quantity) from public.ingredient_to_recipe where recipe_id = %s",
+    cur.execute("select ingredient,ingredient_quantity from public.ingredient_to_recipe where recipe_id = %s",
                 (recipe_id,))
     result = cur.fetchall()
-    if (result == None or len(result) == 0):
+    if result == None or len(result) == 0:
         print("Can not find ingredients for this recipe")
         return
     print("Ingredients:")
@@ -352,13 +409,13 @@ def print_ingredient_by_recipe(recipe_id):
         ingredient_id = int(row[0])
         ingredient_quantity = str(row[1])
         # Get the ingredient name
-        cur.execute("select (name) from public.ingredients where id = %s", (ingredient_id,))
+        cur.execute("select name from public.ingredients where id = %s", (ingredient_id,))
         ingredient_name = cur.fetchone()
-        if (ingredient_name != None and len(ingredient_name) > 0):
+        if ingredient_name != None and len(ingredient_name) > 0:
             # Print the name and
             ingredient_name = ingredient_name[0]
             # Format the string and print it
-            if (len(ingredient_name) < ingredient_name_length):
+            if len(ingredient_name) < ingredient_name_length:
                 ingredient_name += (" " * (ingredient_name_length - len(ingredient_name)))
             ingredient_name += " |"
             ingredient_name += ingredient_quantity
@@ -382,8 +439,8 @@ def recipe_to_ingredient(recipe_id, ingredients):
         conn.commit()
 
 # create_recipe(name, cook_time, description, "Hard", 5, 7706, creation_date, steps)
-#result = find_my_recipes(7706)
-#print(result)
+# result = find_my_recipes(7706)
+# print(result)
 # print_my_recipe(result)
 # print_my_recipe(1)
 # CATEGORY TEST SET UP
