@@ -26,14 +26,14 @@ def create_recipe(name, cook_time, description, difficulty, servings, created_by
             "servings) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
             (name, cook_time, description, created_by, creation_date, steps, difficulty, servings)
         )
-        print("0")
+
         conn.commit()
-        print("1")
+
         # Get the recipe_id and send it into an underlying function
         cur.execute(
             "Select (recipe_id) from public.recipe where created_by = %s and name = %s", (created_by, name)
         )
-        print("2")
+
         recipe_id = int(cur.fetchone()[0])
         recipe_to_ingredient(recipe_id, ingredients)
         print("\nRecipe has been added successfully")
@@ -279,7 +279,7 @@ def print_my_recipe(results):
     print("\n------------------------")
     print("|    Result Recipe     |")
     print("------------------------\n")
-    print("   %-64s %-15s %-20s %-5s" % ("Recipe Name", "Recipe ID", "Average Rating", "Description"))
+    print("     %-64s %-15s %-20s %-5s" % ("Recipe Name", "Recipe ID", "Average Rating", "Description"))
     print("------------------------------------------------------------------------------------------"
           "----------------------------------------------------------"
           "----------------------------------------------------------------------------------------\n")
@@ -350,15 +350,15 @@ def print_ingredient_by_recipe(recipe_id):
     if result == None or len(result) == 0:
         print("Can not find ingredients for this recipe")
         return
-    print("\n%-23s %-10s" % ("Ingredient Need", "Quantity"))
-    print("-------------------------------------")
+    print("\n%-35s %-10s" % ("Ingredient Need", "Quantity"))
+    print("---------------------------------------------")
     # ingredient_name_length = 15
     for row in result:
         in_id = row[0]
         quantity = row[1]
         cur.execute("select name from public.ingredients where id = %s", (in_id,))
         in_name = cur.fetchone()[0]
-        print("%-25s %-16s" % (in_name, quantity))
+        print("%-37s %-16s" % (in_name, quantity))
     #     row = row[0]
     #     row = row[1:-1]
     #     row = row.split(",")
@@ -390,7 +390,12 @@ def print_additional_info_recipe(recipe_id):
         return
     # recipe_info = recipe_info[0]
     # Get each piece of information
+    s = ""
+    steps = recipe_info[4].split("',")
+    step_str = s.join(steps)
+    step_str = step_str.split("'")
 
+    count = 0
     print("\n-------------------------------------------------------------")
     print("      Addition Recipe Information-->  Recipe_id:", recipe_id, "     ")
     print("-------------------------------------------------------------\n")
@@ -398,17 +403,18 @@ def print_additional_info_recipe(recipe_id):
     print("Cook Time (Minutes):\t", recipe_info[1], "\n")
     print("Difficulty:\t\t\t\t", recipe_info[2],"\n")
     print("Serving Size: \t\t\t", recipe_info[3],"\n")
-    print("Steps:\t\t\t\t\t", recipe_info[4],"\n")
-    print("Rating:\t\t\t\t\t", recipe_info[5],"\n")
-    print("Description:\t\t\t", recipe_info[6])
+    for i in step_str:
+        if count == 0 or i == ']':
+            count += 1
+            pass
+        elif count == 1:
+            print("Steps:\t\t\t\t\t", i)
+            count += 1
 
-    # print("%-10s % 19s\n" % ("Name:", recipe_info[0]))
-    # print("%-10s % 15s\n" % ("Cook Time:", recipe_info[1]))
-    # print("%-10s % 16s\n" % ("Difficulty:", recipe_info[2]))
-    # print("%-10s % 10s\n" % ("Serving Size: ", recipe_info[3]))
-    # print("%-10s % 16s\n" % ("Steps:", recipe_info[4]))
-    # print("%-10s % 14s\n" % ("Rating:", recipe_info[5]))
-    # print("%-10s % 13s\n" % ("Description:", recipe_info[6]))
+        else:
+            print("      \t\t\t\t\t", i)
+    print("\nRating:\t\t\t\t\t", recipe_info[5],"\n")
+    print("Description:\t\t\t", recipe_info[6])
 
     # header_list = ["Name:", "Cook Time:", "Difficulty:", "Serving Size:", "Steps:", "Rating:", "Description:"]
     # recipe_info = recipe_info[1:-1]
@@ -421,6 +427,7 @@ def print_additional_info_recipe(recipe_id):
     #     print(current_header)
     #     print(current_value)
     print_ingredient_by_recipe(recipe_id)
+
 
 # recipe_id = 26
 # ingredients = [['Chicken Breast', 10]]
