@@ -18,7 +18,6 @@ def most_recent_recipe():
     cur.execute("SELECT name, recipe_id, creation_date FROM public.recipe "
                 "GROUP BY name, recipe_id, creation_date ORDER BY MAX(creation_date) DESC LIMIT 50 ")
 
-
     result = cur.fetchall()
 
     list1 = []
@@ -33,7 +32,6 @@ def most_recent_recipe():
         print(" %-3s %-90s %-20s %-50s" % (str(num) + ".", i[0], i[1], i[2]))
         list1.append(i)
         num += 1
-
 
 
 def update_rating():
@@ -115,7 +113,7 @@ def add_name_to_ingredient_to_recipe():
             conn.commit()
 
 
-def main():
+def test():
     cur.execute("SELECT ingredient_id, current_quantity FROM public.pantry WHERE user_id = 7706")
     r = cur.fetchall()
     pantry_dic = {}
@@ -184,4 +182,5 @@ def main():
     n = cur.fetchall()
     print("\ningredients needed for recipe 41")
     print(n)
+
 

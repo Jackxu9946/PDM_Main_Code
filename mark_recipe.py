@@ -186,9 +186,7 @@ def show_pantry(user_id):
     if (results == None or len(results) == 0):
         print("No item currently in pantry")
         return
-    print(results)
-    # for i in results:
-    #     print(i)
+
     print_pantry(results)
 
 
