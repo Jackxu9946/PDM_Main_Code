@@ -56,7 +56,7 @@ def recommending_recipes(user_id):
         print(" No recommended recipes yet!")
 
 
-recommending_recipes(215898)
+# recommending_recipes(215898)
 
 
 # def main():

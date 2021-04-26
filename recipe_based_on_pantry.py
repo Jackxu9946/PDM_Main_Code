@@ -57,7 +57,7 @@ def find_recipe_based_on_pantry(user_id):
     if (len(valid_user_recipe) == 0):
         print("Can not find any recipe that matches your pantry")
         return
-    cur.execute("select (name, recipe_id,rating, description) from public.recipe where recipe_id in %s order by rating DESC ", (valid_user_recipe,))
+    cur.execute("select name, recipe_id,rating, description from public.recipe where recipe_id in %s order by rating DESC ", (valid_user_recipe,))
     display_recipe_values = cur.fetchall()
     if (display_recipe_values != None and len(display_recipe_values) > 0):
         print_my_recipe(display_recipe_values)

@@ -26,14 +26,14 @@ def create_recipe(name, cook_time, description, difficulty, servings, created_by
             "servings) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
             (name, cook_time, description, created_by, creation_date, steps, difficulty, servings)
         )
-        print("0")
+
         conn.commit()
-        print("1")
+
         # Get the recipe_id and send it into an underlying function
         cur.execute(
             "Select (recipe_id) from public.recipe where created_by = %s and name = %s", (created_by, name)
         )
-        print("2")
+
         recipe_id = int(cur.fetchone()[0])
         recipe_to_ingredient(recipe_id, ingredients)
         print("\nRecipe has been added successfully")
@@ -273,8 +273,6 @@ def find_my_recipes(user_id):
         print("Can not retrieve recipe")
 
 
-
-
 def print_my_recipe(results):
     print("\n------------------------")
     print("|    Result Recipe     |")
@@ -337,9 +335,6 @@ def print_my_recipe(results):
     #
 
 
-
-
-
 #
 
 def print_ingredient_by_recipe(recipe_id):
@@ -396,10 +391,10 @@ def print_additional_info_recipe(recipe_id):
     print("-------------------------------------------------------------\n")
     print("Recipe Name:\t\t\t", recipe_info[0], "\n")
     print("Cook Time (Minutes):\t", recipe_info[1], "\n")
-    print("Difficulty:\t\t\t\t", recipe_info[2],"\n")
-    print("Serving Size: \t\t\t", recipe_info[3],"\n")
-    print("Steps:\t\t\t\t\t", recipe_info[4],"\n")
-    print("Rating:\t\t\t\t\t", recipe_info[5],"\n")
+    print("Difficulty:\t\t\t\t", recipe_info[2], "\n")
+    print("Serving Size: \t\t\t", recipe_info[3], "\n")
+    print("Steps:\t\t\t\t\t", recipe_info[4], "\n")
+    print("Rating:\t\t\t\t\t", recipe_info[5], "\n")
     print("Description:\t\t\t", recipe_info[6])
 
     # print("%-10s % 19s\n" % ("Name:", recipe_info[0]))
@@ -421,6 +416,7 @@ def print_additional_info_recipe(recipe_id):
     #     print(current_header)
     #     print(current_value)
     print_ingredient_by_recipe(recipe_id)
+
 
 # recipe_id = 26
 # ingredients = [['Chicken Breast', 10]]
