@@ -245,6 +245,7 @@ def search_recipe_by_category(category, search_mode):
                 "GROUP BY name, recipe_id, rating, creation_date, description ORDER BY MAX(creation_date) DESC ", (category,))
 
             result = cur.fetchall()
+            print(result)
             most_recent_recipe.print_most_recent_recipe(result)
         except:
             print("Can not retrieve recipe")

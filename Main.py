@@ -490,7 +490,7 @@ def search_recipe_mode(search_type, search_val):
             if search_type == "Ingredient":
                 # result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
                 # Recipe.print_my_recipe(result)
-                Recipe.search_recipe_by_name(search_val, search_recipe_mode_input2)
+                Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode_input2)
                 get_more_info()
                 break
 
@@ -504,7 +504,7 @@ def search_recipe_mode(search_type, search_val):
             else:
                 # result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
                 # Recipe.print_my_recipe(result)
-                Recipe.search_recipe_by_name(search_val, search_recipe_mode_input2)
+                Recipe.search_recipe_by_category(search_val, search_recipe_mode_input2)
                 get_more_info()
                 break
 
