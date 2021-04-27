@@ -1,4 +1,5 @@
 import psycopg2
+from datetime import datetime
 
 conn = psycopg2.connect(
     host="reddwarf.cs.rit.edu",
@@ -120,6 +121,42 @@ def most_popular_ingredients():
     l = list(ingredient_dict.values())
     for key in ingredient_dict:
         print(key, ingredient_dict[key])
+
+
+def most_popular_ingredients_by_year():
+    print("----------------------------------------")
+    print("|     Most Popular Ingredients      |")
+    print("-----------------------------------------\n")
+    print(" %-92s %-18s %-2s" % ("Ingredient Name", "Ingredient ID", "Quantity"))
+    print("---------------------------------------------------------------------------------------------------"
+          "-------------------------")
+
+    # creation_date = ["1999", "2000", "2001"]
+    cur.execute("SELECT creation_date FROM public.recipe WHERE creation_date BETWEEN 1999 AND 2000")
+    recipes = cur.fetchall()
+
+    ingredient_dict = {}
+
+    for r in recipes:
+        # cur.execute("SELECT name FROM public.ingredient_to_recipe WHERE recipe_id = %s", r)
+        # ingredients = cur.fetchall()
+        print(r)
+        '''
+        for i in ingredients:
+            num = 0
+            # print(i[num])
+            if i[num] in ingredient_dict.keys():
+                ingredient_dict[i[num]] += 1
+            else:
+                ingredient_dict[i[num]] = 1
+            num += 1
+        '''
+
+    '''
+    l = list(ingredient_dict.values())
+    for key in ingredient_dict:
+        print(key, ingredient_dict[key])
+    '''
 
 
 def match_name_to_id():

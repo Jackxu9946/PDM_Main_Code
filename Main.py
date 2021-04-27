@@ -682,7 +682,7 @@ def show_50_most_recommended_recipe():
 
 # DISPLAY MOST POPULAR INGREDIENTS
 def show_most_popular_ingredients():
-    most_recent_recipe.most_popular_ingredients()
+    most_recent_recipe.most_popular_ingredients_by_year()
     press_to_continue()
 
 
