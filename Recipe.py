@@ -89,6 +89,8 @@ def delete_recipe(user_id, recipe_id):
     try:
         cur.execute("DELETE FROM public.recipe WHERE recipe_id= %s and created_by = %s", (recipe_id, user_id))
         cur.execute("DELETE FROM public.ingredient_to_recipe WHERE recipe_id = %s", (recipe_id,))
+        cur.execute("DELETE FROM public.recipe_to_category WHERE recipe_id = %s", (recipe_id,))
+        print("Recipe successfully deleted.")
         conn.commit()
     except:
         print("Can not delete entry in database")
@@ -112,7 +114,7 @@ def search_recipe_by_name(name, search_mode):
         try:
             cur.execute(
                 "SELECT name, recipe_id, rating, description FROM public.recipe "
-                "WHERE name like '%%{name}%%' ORDER BY rating ".format(name=name))
+                "WHERE name like '%%{name}%%' ORDER BY rating DESC".format(name=name))
             results = cur.fetchall()
             return results
         except:
@@ -134,9 +136,8 @@ def search_recipe_by_ingredient(ingredient, search_mode):
     # Get the ingredient ID
     # Assuming there is only one ingredient ID per name
     cur.execute("SELECT (id) FROM public.ingredients where name = %s", (ingredient,))
-    print(ingredient)
     ingredient_result = cur.fetchone()
-    print(ingredient_result)
+
     if ingredient_result is None:
         print("This ingredient does not exist in the database. Please check the name and try again")
         return
@@ -151,13 +152,11 @@ def search_recipe_by_ingredient(ingredient, search_mode):
         return
     # Now we have all the recipe_id we just need to choose the right value from the database
     result = None
-    # print(recipe_id_list)
     id_list = []
     for recipe in recipe_id_list:
         id_list.append(int(recipe[0]))
-        # print(id_list)
     recipe_id_list = tuple(id_list)
-    if search_mode == "Recent":
+    if search_mode == "recent":
         try:
             cur.execute(
                 "SELECT name,recipe_id, rating, description from public.recipe where recipe_id in %s order by creation_date",
@@ -166,10 +165,10 @@ def search_recipe_by_ingredient(ingredient, search_mode):
             result = cur.fetchall()
         except:
             print("Can not retrieve recipe")
-    elif search_mode == "Rating":
+    elif search_mode == "rating":
         try:
             cur.execute(
-                "SELECT name,recipe_id, rating, description from public.recipe where recipe_id in %s order by rating",
+                "SELECT name,recipe_id, rating, description from public.recipe where recipe_id in %s order by rating DESC",
                 (recipe_id_list,)
             )
             result = cur.fetchall()
@@ -206,6 +205,7 @@ def search_recipe_by_category(category, search_mode):
     for n in temp:
         tuple_category_id.append(n[0])
     tuple_category_id = tuple(tuple_category_id)
+    print(tuple_category_id)
     # Now we have a tuple of category id
     # Use it to find recipe_id
     cur.execute(
@@ -239,6 +239,7 @@ def search_recipe_by_category(category, search_mode):
                 (recipe_id_list,)
             )
             result = cur.fetchall()
+            print("result", result)
         except:
             print("Can not retrieve recipe")
     else:
@@ -271,8 +272,6 @@ def find_my_recipes(user_id):
         return results
     except:
         print("Can not retrieve recipe")
-
-
 
 
 def print_my_recipe(results):
@@ -337,9 +336,6 @@ def print_my_recipe(results):
     #
 
 
-
-
-
 #
 
 def print_ingredient_by_recipe(recipe_id):
@@ -401,8 +397,8 @@ def print_additional_info_recipe(recipe_id):
     print("-------------------------------------------------------------\n")
     print("Recipe Name:\t\t\t", recipe_info[0], "\n")
     print("Cook Time (Minutes):\t", recipe_info[1], "\n")
-    print("Difficulty:\t\t\t\t", recipe_info[2],"\n")
-    print("Serving Size: \t\t\t", recipe_info[3],"\n")
+    print("Difficulty:\t\t\t\t", recipe_info[2], "\n")
+    print("Serving Size: \t\t\t", recipe_info[3], "\n")
     for i in step_str:
         if count == 0 or i == ']':
             count += 1
@@ -413,7 +409,7 @@ def print_additional_info_recipe(recipe_id):
 
         else:
             print("      \t\t\t\t\t", i)
-    print("\nRating:\t\t\t\t\t", recipe_info[5],"\n")
+    print("Rating:\t\t\t\t\t", recipe_info[5], "\n")
     print("Description:\t\t\t", recipe_info[6])
 
     # header_list = ["Name:", "Cook Time:", "Difficulty:", "Serving Size:", "Steps:", "Rating:", "Description:"]
@@ -444,6 +440,7 @@ def recipe_to_ingredient(recipe_id, ingredients):
         cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
                     "(%s,%s,%s)", (recipe_id, ingredient_id, i[1]))
         conn.commit()
+
 
 # create_recipe(name, cook_time, description, "Hard", 5, 7706, creation_date, steps)
 # result = find_my_recipes(7706)
@@ -478,3 +475,5 @@ def recipe_to_ingredient(recipe_id, ingredients):
 # edit_recipe(None, None, None, None, None, "These steps are arbitrary", 1)
 # Testing delete_recipe
 # delete_recipe(1,1)
+
+# print_my_recipe(search_recipe_by_category("dinner", "rating"))
