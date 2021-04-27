@@ -76,6 +76,39 @@ def top_50_recommended_recipe():
         num += 1
 
 
+def most_popular_ingredients():
+    print("----------------------------------------")
+    print("|     Most Popular Ingredients      |")
+    print("-----------------------------------------\n")
+    print(" %-92s %-18s %-2s" % ("Ingredient Name", "Ingredient ID", "Quantity"))
+    print("---------------------------------------------------------------------------------------------------"
+          "-------------------------")
+    '''
+    cur.execute("SELECT recipe_id FROM public.recipe "
+                "GROUP BY recipe_id, rating ORDER BY MAX(rating) DESC LIMIT 50 ")
+    '''
+    cur.execute("SELECT recipe_id FROM public.recipe GROUP BY recipe_id")
+    recipes = cur.fetchall()
+
+    ingredient_dict = {}
+
+    for r in recipes:
+        cur.execute("SELECT name FROM public.ingredient_to_recipe WHERE recipe_id = %s", r)
+        ingredients = cur.fetchall()
+        for i in ingredients:
+            num = 0
+            # print(i[num])
+            if i[num] in ingredient_dict.keys():
+                ingredient_dict[i[num]] += 1
+            else:
+                ingredient_dict[i[num]] = 1
+            num += 1
+
+    l = list(ingredient_dict.values())
+    for key in ingredient_dict:
+        print(key, ingredient_dict[key])
+
+
 def match_name_to_id():
     cur.execute("SELECT name from public.pantry")
     result = cur.fetchall()
@@ -182,5 +215,3 @@ def test():
     n = cur.fetchall()
     print("\ningredients needed for recipe 41")
     print(n)
-
-
