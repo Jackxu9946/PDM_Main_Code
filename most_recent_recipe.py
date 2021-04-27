@@ -15,23 +15,36 @@ def most_recent_recipe():
     Get the 50 most recent recipes made order by creation date.
     """
 
-    cur.execute("SELECT name, recipe_id, creation_date FROM public.recipe "
-                "GROUP BY name, recipe_id, creation_date ORDER BY MAX(creation_date) DESC LIMIT 50 ")
+    cur.execute("SELECT name, recipe_id, rating, creation_date, description FROM public.recipe "
+                "GROUP BY name, recipe_id, rating, creation_date, description ORDER BY MAX(creation_date) DESC LIMIT 50 ")
 
-    result = cur.fetchall()
+    results = cur.fetchall()
 
-    list1 = []
-    num = 1
     print("--------------------------------")
     print("|     50 Most Recent Recipes     |")
     print("---------------------------------\n")
-    print(" %-92s %-18s %19s" % ("Recipe Name", "Recipe ID", "Date Created"))
-    print("----------------------------------------------------------------------"
-          "---------------------------------------------------------------------------\n")
-    for i in result:
-        print(" %-3s %-90s %-20s %-50s" % (str(num) + ".", i[0], i[1], i[2]))
-        list1.append(i)
-        num += 1
+    print("     %-64s %-15s %-22s %-28s %-5s" % ("Recipe Name", "Recipe ID", "Average Rating", "Creation Date", "Description"))
+    print("------------------------------------------------------------------------------------------"
+          "----------------------------------------------------------"
+          "----------------------------------------------------------------------------------------\n")
+
+    if results is not None and len(results) > 0:
+        num = 1
+
+        for result in results:
+            r = result[4].split("\n")
+
+            count = 0
+            for i in r:
+                if count == 0:
+                    print("%-4s %-65s %-20s %-14s %-30s %-5s" % (
+                    str(num) + ".", result[0], result[1], result[2], result[3], i))
+                    count += 1
+                else:
+                    print("%-4s %-65s %-20s %-14s %-30s %-5s" % ("", "", "", "", "", i))
+            num += 1
+    else:
+        print("No results found")
 
 
 def update_rating():
@@ -126,6 +139,41 @@ def match_name_to_id():
 
     conn.commit()
     print("success")
+
+
+def print_most_recent_recipe(results):
+    """
+    Get the 50 most recent recipes made order by creation date.
+    @result fetchall result of recipes' informations
+    """
+
+    print("\n------------------------")
+    print("|    Result Recipe     |")
+    print("------------------------\n")
+    print("     %-64s %-15s %-22s %-28s %-5s" % ("Recipe Name", "Recipe ID", "Average Rating", "Creation Date", "Description"))
+    print("------------------------------------------------------------------------------------------"
+          "----------------------------------------------------------"
+          "----------------------------------------------------------------------------------------\n")
+
+    if results is not None and len(results) > 0:
+        num = 1
+
+        for result in results:
+            r = result[4].split("\n")
+
+            count = 0
+            for i in r:
+                if count == 0:
+                    print("%-4s %-65s %-20s %-14s %-30s %-5s" % (str(num) + ".", result[0], result[1], result[2], result[3], i))
+                    count += 1
+                else:
+                    print("%-4s %-65s %-20s %-14s %-30s %-5s" % ("", "", "", "", "", i))
+            num += 1
+    else:
+        print("No results found")
+
+
+# print_most_recent_recipe("apple")
 
 
 def add_name_to_ingredient_to_recipe():

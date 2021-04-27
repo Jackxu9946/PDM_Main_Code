@@ -467,58 +467,63 @@ def search_recipe():
 def search_recipe_mode(search_type, search_val):
     while True:
         search_recipe_mode_input = input("Result sorted by(Rating, Recent, Default): ")
-        if search_recipe_mode_input == "Rating":
+        search_recipe_mode_input2 = search_recipe_mode_input.lower()
+
+        if search_recipe_mode_input2 == "rating":
             if search_type == "Ingredient":
-                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
+                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
             elif search_type == "Name":
-                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
+                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
 
             else:
-                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
+                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
 
-        elif search_recipe_mode_input == "Recent":
+        elif search_recipe_mode_input2 == "recent":
             if search_type == "Ingredient":
-                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
+                # result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
+                # Recipe.print_my_recipe(result)
+                Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode_input2)
+                get_more_info()
+                break
+
+            elif search_type == "Name":
+                # result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
+                # Recipe.print_my_recipe(result)
+                Recipe.search_recipe_by_name(search_val, search_recipe_mode_input2)
+                get_more_info()
+                break
+
+            else:
+                # result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
+                # Recipe.print_my_recipe(result)
+                Recipe.search_recipe_by_category(search_val, search_recipe_mode_input2)
+                get_more_info()
+                break
+
+        elif search_recipe_mode_input2 == "default":
+            if search_type == "Ingredient":
+                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
 
             elif search_type == "Name":
-                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
+                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
 
             else:
-                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
-                Recipe.print_my_recipe(result)
-                get_more_info()
-                break
-
-        elif search_recipe_mode_input == "Default":
-            if search_type == "Ingredient":
-                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
-                Recipe.print_my_recipe(result)
-                get_more_info()
-                break
-
-            elif search_type == "Name":
-                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
-                Recipe.print_my_recipe(result)
-                get_more_info()
-                break
-
-            else:
-                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
+                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
