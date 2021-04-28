@@ -42,10 +42,21 @@ def recommending_recipes(user_id):
     num = 1
     if recipe_info is not None and len(recipe_info) > 0:
         for info in recipe_info:
-            print("%-1s %-65s %-20s %-14s %-5s" % (str(num) + ".", info[0], info[1], info[2], info[3]))
+            r = info[3].split("\n")
+
+            count = 0
+            for i in r:
+                if count == 0:
+                    print("%-1s %-65s %-20s %-14s %-5s" % (str(num) + ".", info[0], info[1], info[2], i))
+                    count += 1
+                else:
+                    print(" %-1s %-65s %-20s %-14s %-5s" % ("", "", "", "", i))
             num += 1
     else:
         print(" No recommended recipes yet!")
+
+
+# recommending_recipes(215898)
 
 
 # def main():

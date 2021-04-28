@@ -4,8 +4,9 @@ import Recipe
 from datetime import datetime
 import mark_recipe
 import category
-import most_recent_recipe_made
+import most_recent_recipe
 import recommended_recipes
+import recipe_based_on_pantry
 
 # GLOBAL ATTRIBUTES
 global_username = ""
@@ -51,40 +52,44 @@ def main():
     while True:
         recipe_value = 0
         print("\nPlease select ONLY the number to start an action!\n"
-              "1. Create Recipe\n"
-              "2. Edit Recipe\n"
-              "3. Delete Recipe\n"
-              "4. View my recipes\n"
-              "5. Search for a recipe\n"
-              "6. Cook a recipe\n"
-              "7. Add to pantry\n"
-              "8. Update pantry\n"
-              "9. Add category\n"
-              "10. Add recipe to a category\n"
-              "11. Display my personal categories\n"
-              "12. Show my current pantry\n"
-              "13. Show Top 50 Most Recommended Recipes\n"
-              "14. Show 50 Most Recent Recipes\n"
-              "15. Show Recommended Recipes Made by Other Users Who Make the Same Recipes\n"
-              "16. Quit\n")
+              "1.  Create Recipe\n"
+              "2.  Edit Recipe\n"
+              "3.  Delete Recipe\n"
+              "4.  View my recipes\n"
+              "5.  Show recipes you have made\n"
+              "6.  Search for a recipe\n"
+              "7.  Cook a recipe\n"
+              "8.  Add to pantry\n"
+              "9.  Update pantry\n"
+              "10. Add category\n"
+              "11. Add recipe to a category\n"
+              "12. Display my personal categories\n"
+              "13. Show my current pantry\n"
+              "14. Show Top 50 Most Recommended Recipes\n"
+              "15. Show 50 Most Recent Recipes\n"
+              "16. Show Recommended Recipes Made by Other Users Who Make the Same Recipes\n"
+              "17. Show Possible Recipe to Make Based on Ingredients in the Pantry\n"
+              "18. Quit\n")
 
         recipe_switcher = {
             1: create_recipe,
             2: edit_recipe,
             3: delete_recipe,
             4: print_my_recipes,
-            5: search_recipe,
-            6: cook_recipe,
-            7: add_pantry,
-            8: update_pantry,
-            9: add_category,
-            10: add_recipe_to_category,
-            11: display_my_category,
-            12: show_pantry,
-            13: show_50_most_recommended_recipe,
-            14: show_50_most_recent_recipe,
-            15: show_recommended_to_you,
-            16: 16
+            5: show_recipe_made_by_you,
+            6: search_recipe,
+            7: cook_recipe,
+            8: add_pantry,
+            9: update_pantry,
+            10: add_category,
+            11: add_recipe_to_category,
+            12: display_my_category,
+            13: show_pantry,
+            14: show_50_most_recommended_recipe,
+            15: show_50_most_recent_recipe,
+            16: show_recommended_to_you,
+            17: show_recipe_based_on_pantry,
+            18: 18
         }
 
         try:
@@ -92,7 +97,7 @@ def main():
         except ValueError:
             print("Invalid input. Try again.")
 
-        if recipe_value == 16:
+        if recipe_value == 18:
             print("Session finished.")
             break
         else:
@@ -161,40 +166,43 @@ def create_recipe():
     # COOK TIME
     while True:
         cook_time = input("Enter the cook time(minutes): ")
-        if name == "":
-            print("Invalid name. Try again.")
+        if cook_time == "" or not cook_time.isnumeric() or int(cook_time) < 1:
+            print("Invalid cook_time. Try again.")
         else:
             break
 
     # DESCRIPTION
     while True:
         description = input("Enter the recipes description: ")
-        if name == "":
-            print("Invalid name. Try again.")
+        if description == "":
+            print("Invalid description. Try again.")
         else:
             break
 
     # DIFFICULTY
     while True:
-        difficulty = input("Enter the recipes difficulty: ")
-        if name == "":
-            print("Invalid name. Try again.")
+        dic = {'1': 'Easy', '2': 'Easy-Medium', '3': 'Medium', '4': 'Medium-Hard', '5': 'Hard'}
+        difficulty = input("1. Easy \n2. Easy-Medium\n3. Medium \n4. Medium-Hard \n5. Hard\n"
+                           "Enter a number corresponding to the recipe difficulty: ")
+        if difficulty == "" or not difficulty.isnumeric() or int(difficulty) not in range(1, 6):
+            print("Invalid difficulty. Try again.")
         else:
+            difficulty = dic[difficulty]
             break
 
     # SERVING SIZE
     while True:
         servings = input("Enter the number of servings: ")
-        if name == "":
-            print("Invalid name. Try again.")
+        if servings == "" or not servings.isnumeric() or int(servings) < 1:
+            print("Invalid servings. Try again.")
         else:
             break
 
     # STEPS
     while True:
         steps = input("Enter recipes steps: ")
-        if name == "":
-            print("Invalid name. Try again.")
+        if steps == "":
+            print("Invalid steps. Try again.")
         else:
             break
 
@@ -202,17 +210,22 @@ def create_recipe():
     while True:
         # Get ingredient name
         temp_list = []
-        new_ingredient = input("Enter a new ingredient: ")
-        if new_ingredient == "":
-            pass
-        new_ingredient.lower()
+        while True:
+            new_ingredient = input("Enter a new ingredient: ")
+            if new_ingredient == "":
+                print("Invalid ingredient Name. Try again.")
+            else:
+                new_ingredient.lower()
+                break
 
         # Get ingredient quantity
-        try:
-            new_quantity = int(input("Enter the ingredient quantity for the recipe: "))
-        except ValueError:
-            print("Invalid quantity. Try again.")
-            pass
+        while True:
+            new_quantity = input("Enter the ingredient quantity for the recipe: ")
+            if new_quantity == "" or not new_quantity.isnumeric() or int(new_quantity) < 1:
+                print("Invalid quantity. Try again.")
+            else:
+                new_quantity = int(new_quantity)
+                break
 
         temp_list.append(new_ingredient.lower())
         temp_list.append(new_quantity)
@@ -223,7 +236,7 @@ def create_recipe():
             break
 
     # print(ingredient)
-    creation_date = datetime.today().strftime('%Y-%m-%d')
+    creation_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     Recipe.create_recipe(name, cook_time, description, difficulty,
                          servings, int(user_id), creation_date, steps, ingredient)
     press_to_continue()
@@ -294,9 +307,10 @@ def edit_recipe():
                 print("'Empty' value is not allowed. Try again.")
 
     elif change_recipe_val == 2:
+        # if cook_time == "" or not cook_time.isnumeric() or int(cook_time) < 1:
         while leave_loop(leave) is False:
             cook_time = input("\nCook Time: ")
-            if cook_time != "":
+            if cook_time != "" and cook_time.isnumeric() and int(cook_time) > 0:
                 try:
                     leave = Recipe.edit_recipe(None, cook_time, None, None, None, None, recipe_id)
                     if leave != -1:
@@ -305,7 +319,7 @@ def edit_recipe():
                 except ValueError:
                     print("Invalid input. \n")
             else:
-                print("'Empty' value is not allowed. Try again.")
+                print("Value is not allowed. Try again.")
 
     elif change_recipe_val == 3:
         while leave_loop(leave) is False:
@@ -322,10 +336,13 @@ def edit_recipe():
                 print("'Empty' value is not allowed. Try again.")
 
     elif change_recipe_val == 4:
+        dic = {'1': 'Easy', '2': 'Easy-Medium', '3': 'Medium', '4': 'Medium-Hard', '5': 'Hard'}
         while leave_loop(leave) is False:
-            difficulty = input("\nDifficulty: ")
-            if difficulty != "":
+            difficulty = input("1. Easy \n2. Easy-Medium\n3. Medium \n4. Medium-Hard \n5. Hard\n"
+                               "Enter a number corresponding to the recipe difficulty: ")
+            if difficulty != "" and difficulty.isnumeric() and int(difficulty) in range(1,6):
                 try:
+                    difficulty = dic[difficulty]
                     leave = Recipe.edit_recipe(None, None, None, difficulty, None, None, recipe_id)
                     if leave != -1:
                         print("Invalid input. \n")
@@ -333,12 +350,15 @@ def edit_recipe():
                 except ValueError:
                     print("Invalid input. \n")
             else:
-                print("'Empty' value is not allowed. Try again.")
+                print("Value is not allowed. Try again.")
 
     elif change_recipe_val == 5:
+        # servings = input("Enter the number of servings: ")
+        # if servings == "" or not servings.isnumeric() or int(servings) < 1:
+
         while leave_loop(leave) is False:
             serving = input("\nServing Size: ")
-            if serving != "":
+            if serving != "" and serving.isnumeric() and int(serving) > 0:
                 try:
                     leave = Recipe.edit_recipe(None, None, None, None, serving, None, recipe_id)
                     if leave != -1:
@@ -347,7 +367,7 @@ def edit_recipe():
                 except ValueError:
                     print("Invalid input. \n")
             else:
-                print("'Empty' value is not allowed. Try again.")
+                print("Value is not allowed. Try again.")
 
     elif change_recipe_val == 6:
         while leave_loop(leave) is False:
@@ -455,58 +475,63 @@ def search_recipe():
 def search_recipe_mode(search_type, search_val):
     while True:
         search_recipe_mode_input = input("Result sorted by(Rating, Recent, Default): ")
-        if search_recipe_mode_input == "Rating":
+        search_recipe_mode_input2 = search_recipe_mode_input.lower()
+
+        if search_recipe_mode_input2 == "rating":
             if search_type == "Ingredient":
-                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
+                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
             elif search_type == "Name":
-                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
+                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
 
             else:
-                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
+                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
 
-        elif search_recipe_mode_input == "Recent":
+        elif search_recipe_mode_input2 == "recent":
             if search_type == "Ingredient":
-                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
+                # result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
+                # Recipe.print_my_recipe(result)
+                Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode_input2)
+                get_more_info()
+                break
+
+            elif search_type == "Name":
+                # result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
+                # Recipe.print_my_recipe(result)
+                Recipe.search_recipe_by_name(search_val, search_recipe_mode_input2)
+                get_more_info()
+                break
+
+            else:
+                # result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
+                # Recipe.print_my_recipe(result)
+                Recipe.search_recipe_by_category(search_val, search_recipe_mode_input2)
+                get_more_info()
+                break
+
+        elif search_recipe_mode_input2 == "default":
+            if search_type == "Ingredient":
+                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
 
             elif search_type == "Name":
-                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
+                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
 
             else:
-                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
-                Recipe.print_my_recipe(result)
-                get_more_info()
-                break
-
-        elif search_recipe_mode_input == "Default":
-            if search_type == "Ingredient":
-                result = Recipe.search_recipe_by_ingredient(search_val, search_recipe_mode)
-                Recipe.print_my_recipe(result)
-                get_more_info()
-                break
-
-            elif search_type == "Name":
-                result = Recipe.search_recipe_by_name(search_val, search_recipe_mode)
-                Recipe.print_my_recipe(result)
-                get_more_info()
-                break
-
-            else:
-                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode)
+                result = Recipe.search_recipe_by_category(search_val, search_recipe_mode_input2)
                 Recipe.print_my_recipe(result)
                 get_more_info()
                 break
@@ -535,8 +560,29 @@ def add_category():
 # DISPLAY CATEGORY
 def display_my_category():
     category.display_category(int(user_id))
+
+    while True:
+        response1 = input("\nDo you want to open the category? (Yes/No) ")
+
+        if response1.lower() == 'yes':
+            response2 = input("Enter category ID: ")
+            response3 = input("Enter category name: ")
+
+            if not category.open_category(response2, response3, user_id):
+                pass
+            else:
+                break
+        elif response1.lower() == 'no':
+            break
+        else:
+            print("Invalid inputs!")
+
     press_to_continue()
 
+
+def show_recipe_made_by_you():
+    Recipe.show_past_made_recipe(user_id)
+    press_to_continue()
 
 # ADD RECIPE TO CATEGORY
 def add_recipe_to_category():
@@ -585,8 +631,7 @@ def cook_recipe():
 def add_pantry():
     # INGREDIENT NAME
     while True:
-        ingredient_name = input("\nEnter ingredients name: ")
-        ingredient_name.lower()
+        ingredient_name = input("\nEnter ingredient name: ")
         if ingredient_name == "":
             print("Invalid name. Try again.")
         else:
@@ -599,7 +644,7 @@ def add_pantry():
             break
         except ValueError:
             print("Invalid input. Try again.")
-
+    ingredient_name.lower()
     mark_recipe.add_ingredient_to_pantry(user_id, ingredient_name, ingredient_quantity)
     press_to_continue()
     return 2.5
@@ -637,19 +682,31 @@ def show_pantry():
 
 # DISPLAY 50 MOST RECENT RECIPES
 def show_50_most_recent_recipe():
-    most_recent_recipe_made.most_recent_recipe()
+    most_recent_recipe.most_recent_recipe()
     press_to_continue()
 
 
 # DISPLAY 50 MOST RECOMMENDED RECIPES
 def show_50_most_recommended_recipe():
-    most_recent_recipe_made.top_50_recommended_recipe()
+    most_recent_recipe.top_50_recommended_recipe()
     press_to_continue()
+
+
+# DISPLAY MOST POPULAR INGREDIENTS
+# def show_most_popular_ingredients():
+    # most_recent_recipe.most_popular_ingredients_by_year()
+    # press_to_continue()
 
 
 # DISPLAY RECOMMENDED RECIPES MADE BY OTHER USERS WHO MAKE THE SAME RECIPES
 def show_recommended_to_you():
     recommended_recipes.recommending_recipes(user_id)
+    press_to_continue()
+
+
+# DISPLAY RECIPE BASED ON INGREDIENTS IN THE PANTRY
+def show_recipe_based_on_pantry():
+    recipe_based_on_pantry.find_recipe_based_on_pantry(user_id)
     press_to_continue()
 
 
