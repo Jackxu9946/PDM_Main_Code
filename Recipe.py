@@ -40,12 +40,6 @@ def create_recipe(name, cook_time, description, difficulty, servings, created_by
         print("Can not create new recipe")
 
 
-# create_recipe(name,cook_time,description, "Hard", 5, 7706, creation_date,steps, None)
-
-
-# create_recipe(name, cook_time, description, "Hard", 5, user_id, creation_date, steps)
-
-
 def edit_recipe(name, cook_time, description, difficulty, servings, steps, recipe_id):
     try:
         if name is not None:
@@ -67,6 +61,7 @@ def edit_recipe(name, cook_time, description, difficulty, servings, steps, recip
             cur.execute("UPDATE public.recipe SET steps = %s WHERE recipe_id = %s", (steps, recipe_id))
 
         conn.commit()
+        print("\nRecipe has been updated successfully")
         return -1
     except:
         print("Unable to save recipe")
@@ -89,7 +84,7 @@ def delete_recipe(user_id, recipe_id):
         cur.execute("DELETE FROM public.recipe WHERE recipe_id= %s and created_by = %s", (recipe_id, user_id))
         cur.execute("DELETE FROM public.ingredient_to_recipe WHERE recipe_id = %s", (recipe_id,))
         cur.execute("DELETE FROM public.recipe_to_category WHERE recipe_id = %s", (recipe_id,))
-        print("Recipe successfully deleted.")
+        print("\nRecipe has been deleted successfully.")
         conn.commit()
     except:
         print("Can not delete entry in database")
@@ -104,7 +99,8 @@ def search_recipe_by_name(name, search_mode):
         try:
             cur.execute("SELECT name, recipe_id, rating, creation_date, description FROM public.recipe "
                         "WHERE name like '%%{name}%%' "
-                        "GROUP BY name, recipe_id, rating, creation_date, description ORDER BY MAX(creation_date) DESC".format(name=name))
+                        "GROUP BY name, recipe_id, rating, creation_date, description ORDER BY MAX(creation_date) DESC".format(
+                name=name))
 
             results = cur.fetchall()
             most_recent_recipe.print_most_recent_recipe(results)
@@ -147,33 +143,13 @@ def search_recipe_by_ingredient(ingredient, search_mode):
         return
     ingredient_id = ingredient_result[0]
 
-    # Find all the recipe_id that contains this ingredient ID
-    # cur.execute("SELECT recipe_id from public.ingredient_to_recipe where ingredient = %s", (ingredient_id,))
-    # # CHECK THIS VALUE MAKE SURE IT IS A TUPLE BEFORE DOING ANYTHING ELSE
-    # recipe_id_list = cur.fetchall()
-    # num1=0
-    # for i in recipe_id_list:
-    #     num1+=1;
-    # print(num1)
-    # print(recipe_id_list)
-
-    # if (len(recipe_id_list) == 0):
-    #     # print("No recipe found with this ingredient")
-    #     return
-    # # Now we have all the recipe_id we just need to choose the right value from the database
-    # result = None
-    # print(recipe_id_list)
-    # id_list = []
-    # for recipe in recipe_id_list:
-    #     id_list.append(int(recipe[0]))
-    #     # print(id_list)
-    # recipe_id_list = tuple(id_list)
-
     if search_mode == "recent":
         try:
-            cur.execute("SELECT name, recipe_id, rating, creation_date, description from public.recipe where recipe_id IN "
-                        "(SELECT recipe_id from public.ingredient_to_recipe where ingredient = %s) "
-                        "GROUP BY name, recipe_id, rating, creation_date, description ORDER BY MAX(creation_date) DESC", (ingredient_id,))
+            cur.execute(
+                "SELECT name, recipe_id, rating, creation_date, description from public.recipe where recipe_id IN "
+                "(SELECT recipe_id from public.ingredient_to_recipe where ingredient = %s) "
+                "GROUP BY name, recipe_id, rating, creation_date, description ORDER BY MAX(creation_date) DESC",
+                (ingredient_id,))
 
             result = cur.fetchall()
             most_recent_recipe.print_most_recent_recipe(result)
@@ -192,60 +168,25 @@ def search_recipe_by_ingredient(ingredient, search_mode):
         try:
             cur.execute(
                 "SELECT name,recipe_id, rating, description from public.recipe where recipe_id IN "
-                "(SELECT recipe_id from public.ingredient_to_recipe where ingredient = %s) order by name", (ingredient_id,))
+                "(SELECT recipe_id from public.ingredient_to_recipe where ingredient = %s) order by name",
+                (ingredient_id,))
             result = cur.fetchall()
             return result
         except:
             print("Can not retrieve recipe")
-    # if result is not None:
-    #     return result
-    # else:
-    #     print("Can not retrieve recipe")
 
-
-# print(search_recipe_by_ingredient("Chicken Breast", "Rating"))
 
 def search_recipe_by_category(category, search_mode):
-    # Get all the category id with category name = category
-    # cur.execute(
-    #     "SELECT (id) from public.category where name = %s", (category,)
-    # )
-    # conn.commit()
-    # temp = tuple(cur.fetchall())
-    # if (len(temp) == 0):
-    #     print("No category with this name")
-    #     return
-    # tuple_category_id = []
-    # for n in temp:
-    #     tuple_category_id.append(n[0])
-    # tuple_category_id = tuple(tuple_category_id)
-    # # Now we have a tuple of category id
-    # # Use it to find recipe_id
-    # cur.execute(
-    #     "SELECT recipe_id from public.recipe_to_category where category_id in %s", (tuple_category_id,)
-    # )
-    #
-    # recipe_id_list = tuple(cur.fetchall())
-    # if (len(recipe_id_list) == 0):
-    #     print("No recipe belongs to this category")
-    #     return
-    # recipe_tuple = []
-    # for id in recipe_id_list:
-    #     recipe_tuple.append(id[0])
-    # recipe_id_list = tuple(recipe_tuple)
-    # result = None
-    # print(recipe_id_list)
-
     if search_mode == "recent":
         try:
             cur.execute(
                 "SELECT name, recipe_id, rating, creation_date, description from public.recipe where recipe_id IN "
                 "(SELECT recipe_id from public.recipe_to_category WHERE category_id IN "
                 "(SELECT id from public.category WHERE name = %s)) "
-                "GROUP BY name, recipe_id, rating, creation_date, description ORDER BY MAX(creation_date) DESC ", (category,))
+                "GROUP BY name, recipe_id, rating, creation_date, description ORDER BY MAX(creation_date) DESC ",
+                (category,))
 
             result = cur.fetchall()
-            print(result)
             most_recent_recipe.print_most_recent_recipe(result)
         except:
             print("Can not retrieve recipe")
@@ -272,10 +213,6 @@ def search_recipe_by_category(category, search_mode):
             return result
         except:
             print("Can not retrieve recipe")
-    # if result is not None:
-    #     return result
-    # else:
-    #     print("Can not retrieve recipe")
 
 
 # CATEGORY TEST SET UP
@@ -284,7 +221,6 @@ def search_recipe_by_category(category, search_mode):
 # Recipe_id = 5289, created by user1
 # Recipe_id = 8559, created by user2
 
-# print(search_recipe_by_category("Chinese", ""))
 
 def find_my_recipes(user_id):
     try:
@@ -304,15 +240,6 @@ def print_my_recipe(results):
           "----------------------------------------------------------"
           "----------------------------------------------------------------------------------------\n")
     if results is not None and len(results) > 0:
-        # print("???")
-        # recipe_name_header = "Name                               |"
-        # recipe_ID_header = "ID      |"
-        # recipe_rating_header = "Rating     |"
-        # recipe_description = "Description"
-        # recipe_header = recipe_name_header + recipe_ID_header + recipe_rating_header + recipe_description
-        # print(recipe_header)
-        # print("\n")
-        # print(results)
         num = 1
 
         for result in results:
@@ -329,33 +256,6 @@ def print_my_recipe(results):
 
     else:
         print("No results found")
-
-        # cur_recipe = result[0].split(",")
-        # print(cur_recipe)
-        # print("\t\t\t", cur_recipe[3])
-    #         result_string = ""
-    #         cur_recipe = result[0].split(",")
-    #         cur_recipe_name = cur_recipe[0]
-    #         cur_recipe_name = cur_recipe_name[1:]
-    #         cur_recipe_name = cur_recipe_name.replace('"', '')
-    #         cur_recipe_ID = str(cur_recipe[1])
-    #         cur_recipe_rating = cur_recipe[2]
-    #         cur_recipe_description = cur_recipe[3]
-    #         cur_recipe_description = cur_recipe_description[:-1]
-    #         # Format the result string
-    #         if len(cur_recipe_name) < len(recipe_name_header):
-    #             cur_recipe_name += (" " * (len(recipe_name_header) - len(cur_recipe_name)))
-    #             result_string += cur_recipe_name
-    #         if len(cur_recipe_ID) < len(recipe_ID_header):
-    #             cur_recipe_ID += (" " * (len(recipe_ID_header) - len(cur_recipe_ID)))
-    #             result_string += cur_recipe_ID
-    #         if (len(cur_recipe_rating) < len(recipe_rating_header)):
-    #             cur_recipe_rating += (" " * (len(recipe_rating_header) - len(cur_recipe_rating)))
-    #             result_string += cur_recipe_rating
-    #         result_string += cur_recipe_description
-    #         print(result_string)
-    #
-
 
 
 def print_ingredient_by_recipe(recipe_id):
@@ -375,23 +275,6 @@ def print_ingredient_by_recipe(recipe_id):
         cur.execute("select name from public.ingredients where id = %s", (in_id,))
         in_name = cur.fetchone()[0]
         print("%-37s %-16s" % (in_name, quantity))
-    #     row = row[0]
-    #     row = row[1:-1]
-    #     row = row.split(",")
-    #     ingredient_id = int(row[0])
-    #     ingredient_quantity = str(row[1])
-    #     # Get the ingredient name
-    #     cur.execute("select name from public.ingredients where id = %s", (ingredient_id,))
-    #     ingredient_name = cur.fetchone()
-    #     if ingredient_name != None and len(ingredient_name) > 0:
-    #         # Print the name and
-    #         ingredient_name = ingredient_name[0]
-    #         # Format the string and print it
-    #         if len(ingredient_name) < ingredient_name_length:
-    #             ingredient_name += (" " * (ingredient_name_length - len(ingredient_name)))
-    #         ingredient_name += " |"
-    #         ingredient_name += ingredient_quantity
-    #         print(ingredient_name)
 
 
 def print_additional_info_recipe(recipe_id):
@@ -404,7 +287,7 @@ def print_additional_info_recipe(recipe_id):
     if recipe_info == None or len(recipe_info) == 0:
         print("Can not display more information for this recipe")
         return
-    # recipe_info = recipe_info[0]
+
     # Get each piece of information
     s = ""
     steps = recipe_info[4].split("',")
@@ -432,16 +315,6 @@ def print_additional_info_recipe(recipe_id):
     print("\nRating:\t\t\t\t\t", recipe_info[5], "\n")
     print("Description:\t\t\t", recipe_info[6])
 
-    # header_list = ["Name:", "Cook Time:", "Difficulty:", "Serving Size:", "Steps:", "Rating:", "Description:"]
-    # recipe_info = recipe_info[1:-1]
-    # recipe_info = recipe_info.split(",")
-    # for i in range(len(header_list)):
-    #     current_header = header_list[i]
-    #     current_value = recipe_info[i]
-    #     if current_value == None or len(current_value) == 0:
-    #         continue
-    #     print(current_header)
-    #     print(current_value)
     print_ingredient_by_recipe(recipe_id)
 
 
@@ -460,6 +333,29 @@ def recipe_to_ingredient(recipe_id, ingredients):
         cur.execute("INSERT INTO public.ingredient_to_recipe(recipe_id,ingredient, ingredient_quantity) VALUES"
                     "(%s,%s,%s)", (recipe_id, ingredient_id, i[1]))
         conn.commit()
+
+
+def show_past_made_recipe(user_id):
+    cur.execute("SELECT recipe_id, rating, rating_date, review_text from public.rating WHERE user_id = %s"
+                "ORDER BY rating_date DESC", (user_id,))
+    results = cur.fetchall()
+
+    print("--------------------------------")
+    print("|     Recipes Made by You     |")
+    print("---------------------------------\n")
+    print("     %-58s %-20s %-18s %-28s %-5s" % (
+        "Recipe Name", "Recipe ID", " Rating", "Rating Date", "Review Text"))
+    print("------------------------------------------------------------------------------------------"
+          "----------------------------------------------------------"
+          "----------------------------------------------------------------------------------------\n")
+    num = 1
+    for r in results:
+        cur.execute("SELECT name from public.recipe WHERE recipe_id = %s", (r[0],))
+        name = cur.fetchall()
+        if name is not None and len(name) != 0:
+            name = name[0][0]
+            print("%-2s %-62s %-20s %-14s %-30s %-5s" % (str(num) + ".", name, r[0], r[1], r[2], r[3]))
+            num += 1
 
 
 # create_recipe(name, cook_time, description, "Hard", 5, 7706, creation_date, steps)

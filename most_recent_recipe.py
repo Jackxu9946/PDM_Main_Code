@@ -34,12 +34,11 @@ def most_recent_recipe():
 
         for result in results:
             r = result[4].split("\n")
-
             count = 0
             for i in r:
                 if count == 0:
-                    print("%-4s %-65s %-20s %-14s %-30s %-5s" % (
-                    str(num) + ".", result[0], result[1], result[2], result[3], i))
+                    print("%-4s %-65s %-20s %-14s %-30s %-5s" %
+                          (str(num) + ".", result[0], result[1], result[2], result[3], i))
                     count += 1
                 else:
                     print("%-4s %-65s %-20s %-14s %-30s %-5s" % ("", "", "", "", "", i))
@@ -78,15 +77,25 @@ def top_50_recommended_recipe():
     print("----------------------------------------")
     print("|     Top 50 Most Recommended Recipes     |")
     print("-----------------------------------------\n")
-    print(" %-92s %-18s %-2s" % ("Recipe Name", "Recipe ID", "Rating"))
+    print(" %-92s %-18s %-17s %2s" % ("Recipe Name", "Recipe ID", "Rating", "Description"))
     print("---------------------------------------------------------------------------------------------------"
-          "-------------------------")
-    cur.execute("SELECT name, recipe_id,rating FROM public.recipe "
-                "GROUP BY name, recipe_id,rating ORDER BY MAX(rating) DESC LIMIT 50 ")
-    result = cur.fetchall()
+          "----------------------------------------------------------------------------------------"
+          "--------------------")
+    cur.execute("SELECT name, recipe_id,rating,description FROM public.recipe "
+                "GROUP BY name, recipe_id,rating, description ORDER BY MAX(rating) DESC LIMIT 50 ")
+    results = cur.fetchall()
     num = 1
-    for i in result:
-        print("%-3s %-90s %-20s %-2s" % (str(num) + ".", i[0], i[1], i[2]))
+
+    for result in results:
+        r = result[3].split("\n")
+        count = 0
+        for j in r:
+            if count == 0:
+                print("%-3s %-90s %-20s %-13s %-10s" % (str(num) + ".", result[0], result[1], result[2], j))
+                count += 1
+
+            else:
+                print("%-3s %-90s %-20s %-13s %-10s" % ("" + "", "", "", "",j))
         num += 1
 
 
@@ -111,7 +120,6 @@ def most_popular_ingredients():
         ingredients = cur.fetchall()
         for i in ingredients:
             num = 0
-            # print(i[num])
             if i[num] in ingredient_dict.keys():
                 ingredient_dict[i[num]] += 1
             else:
@@ -140,11 +148,8 @@ def most_popular_ingredients_by_year():
     for r in recipes:
         cur.execute("SELECT name FROM public.ingredient_to_recipe WHERE recipe_id = %s", r)
         ingredients = cur.fetchall()
-        # print(r)
-        # print(ingredients)
         for i in ingredients:
             num = 0
-            # print(i[num])
             if i[num] in ingredient_dict.keys():
                 ingredient_dict[i[num]] += 1
             else:
@@ -207,9 +212,6 @@ def print_most_recent_recipe(results):
         print("No results found")
 
 
-# print_most_recent_recipe("apple")
-
-
 def add_name_to_ingredient_to_recipe():
     cur.execute("SELECT ingredient from public.ingredient_to_recipe ")
     result = cur.fetchall()
@@ -226,74 +228,3 @@ def add_name_to_ingredient_to_recipe():
             # print("name ", name[0])
             cur.execute("UPDATE public.ingredient_to_recipe SET name = %s WHERE ingredient = %s", (name[0], id))
             conn.commit()
-
-
-def test():
-    cur.execute("SELECT ingredient_id, current_quantity FROM public.pantry WHERE user_id = 7706")
-    r = cur.fetchall()
-    pantry_dic = {}
-    for i in r:
-        pantry_dic[i[0]] = i[1]
-
-    print("ingredients in pantry:", r, "\n")
-    # t1.ingredient, t2.current_quantity, t1.ingredient_quantity
-    cur.execute("SELECT DISTINCT t1.recipe_id "
-                "FROM public.ingredient_to_recipe AS t1 "
-                "INNER JOIN public.pantry AS t2 "
-                "ON t1.ingredient = t2.ingredient_id "
-                "AND t2.user_id = 7706 WHERE t2.current_quantity >= t1.ingredient_quantity")
-
-    possible_recipes = cur.fetchall()
-    print("possible recipes", possible_recipes)
-
-    l = []
-    for i in possible_recipes:
-        flag = True
-        recipe_id = i[0]
-        cur.execute("SELECT ingredient, ingredient_quantity from public.ingredient_to_recipe WHERE recipe_id = %s",
-                    (recipe_id,))
-        all_ingredient = cur.fetchall()
-        recipe_dic = {}
-        for j in all_ingredient:
-            recipe_dic[j[0]] = j[1]
-        for k in recipe_dic.keys():
-            if k not in pantry_dic.keys():
-                flag = False
-                break
-            else:
-                if pantry_dic[k] >= recipe_dic[k]:
-                    continue
-        if flag:
-            l.append(i)
-
-    print("l", l)
-
-    cur.execute("SELECT ingredient, ingredient_quantity from public.ingredient_to_recipe WHERE recipe_id = 26")
-    s = cur.fetchall()
-    print("\ningredients needed for recipe 26")
-    print(s)
-
-    cur.execute("SELECT ingredient, ingredient_quantity from public.ingredient_to_recipe WHERE recipe_id = 35")
-    k = cur.fetchall()
-    print("\ningredients needed for recipe 35")
-    print(k)
-
-    cur.execute("SELECT ingredient, ingredient_quantity from public.ingredient_to_recipe WHERE recipe_id = 37")
-    j = cur.fetchall()
-    print("\ningredients needed for recipe 37")
-    print(j)
-
-    cur.execute("SELECT ingredient, ingredient_quantity from public.ingredient_to_recipe WHERE recipe_id = 39")
-    m = cur.fetchall()
-    print("\ningredients needed for recipe 39")
-    print(m)
-
-    cur.execute("SELECT ingredient, ingredient_quantity from public.ingredient_to_recipe WHERE recipe_id = 41")
-    m = cur.fetchall()
-    print("\ningredients needed for recipe 41")
-    print(m)
-
-    cur.execute("SELECT ingredient, ingredient_quantity from public.ingredient_to_recipe WHERE recipe_id = 37313")
-    n = cur.fetchall()
-    print("\ningredients needed for recipe 41")
-    print(n)

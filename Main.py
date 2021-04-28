@@ -56,38 +56,40 @@ def main():
               "2.  Edit Recipe\n"
               "3.  Delete Recipe\n"
               "4.  View my recipes\n"
-              "5.  Search for a recipe\n"
-              "6.  Cook a recipe\n"
-              "7.  Add to pantry\n"
-              "8.  Update pantry\n"
-              "9.  Add category\n"
-              "10. Add recipe to a category\n"
-              "11. Display my personal categories\n"
-              "12. Show my current pantry\n"
-              "13. Show Top 50 Most Recommended Recipes\n"
-              "14. Show 50 Most Recent Recipes\n"
-              "15. Show Recommended Recipes Made by Other Users Who Make the Same Recipes\n"
-              "16. Show Possible Recipe to Make Based on Ingredients in the Pantry\n"
-              "17. Quit\n")
+              "5.  Show recipes you have made\n"
+              "6.  Search for a recipe\n"
+              "7.  Cook a recipe\n"
+              "8.  Add to pantry\n"
+              "9.  Update pantry\n"
+              "10. Add category\n"
+              "11. Add recipe to a category\n"
+              "12. Display my personal categories\n"
+              "13. Show my current pantry\n"
+              "14. Show Top 50 Most Recommended Recipes\n"
+              "15. Show 50 Most Recent Recipes\n"
+              "16. Show Recommended Recipes Made by Other Users Who Make the Same Recipes\n"
+              "17. Show Possible Recipe to Make Based on Ingredients in the Pantry\n"
+              "18. Quit\n")
 
         recipe_switcher = {
             1: create_recipe,
             2: edit_recipe,
             3: delete_recipe,
             4: print_my_recipes,
-            5: search_recipe,
-            6: cook_recipe,
-            7: add_pantry,
-            8: update_pantry,
-            9: add_category,
-            10: add_recipe_to_category,
-            11: display_my_category,
-            12: show_pantry,
-            13: show_50_most_recommended_recipe,
-            14: show_50_most_recent_recipe,
-            15: show_recommended_to_you,
-            16: show_recipe_based_on_pantry,
-            17: 17
+            5: show_recipe_made_by_you,
+            6: search_recipe,
+            7: cook_recipe,
+            8: add_pantry,
+            9: update_pantry,
+            10: add_category,
+            11: add_recipe_to_category,
+            12: display_my_category,
+            13: show_pantry,
+            14: show_50_most_recommended_recipe,
+            15: show_50_most_recent_recipe,
+            16: show_recommended_to_you,
+            17: show_recipe_based_on_pantry,
+            18: 18
         }
 
         try:
@@ -95,7 +97,7 @@ def main():
         except ValueError:
             print("Invalid input. Try again.")
 
-        if recipe_value == 17:
+        if recipe_value == 18:
             print("Session finished.")
             break
         else:
@@ -305,9 +307,10 @@ def edit_recipe():
                 print("'Empty' value is not allowed. Try again.")
 
     elif change_recipe_val == 2:
+        # if cook_time == "" or not cook_time.isnumeric() or int(cook_time) < 1:
         while leave_loop(leave) is False:
             cook_time = input("\nCook Time: ")
-            if cook_time != "":
+            if cook_time != "" and cook_time.isnumeric() and int(cook_time) > 0:
                 try:
                     leave = Recipe.edit_recipe(None, cook_time, None, None, None, None, recipe_id)
                     if leave != -1:
@@ -316,7 +319,7 @@ def edit_recipe():
                 except ValueError:
                     print("Invalid input. \n")
             else:
-                print("'Empty' value is not allowed. Try again.")
+                print("Value is not allowed. Try again.")
 
     elif change_recipe_val == 3:
         while leave_loop(leave) is False:
@@ -333,10 +336,13 @@ def edit_recipe():
                 print("'Empty' value is not allowed. Try again.")
 
     elif change_recipe_val == 4:
+        dic = {'1': 'Easy', '2': 'Easy-Medium', '3': 'Medium', '4': 'Medium-Hard', '5': 'Hard'}
         while leave_loop(leave) is False:
-            difficulty = input("\nDifficulty: ")
-            if difficulty != "":
+            difficulty = input("1. Easy \n2. Easy-Medium\n3. Medium \n4. Medium-Hard \n5. Hard\n"
+                               "Enter a number corresponding to the recipe difficulty: ")
+            if difficulty != "" and difficulty.isnumeric() and int(difficulty) in range(1,6):
                 try:
+                    difficulty = dic[difficulty]
                     leave = Recipe.edit_recipe(None, None, None, difficulty, None, None, recipe_id)
                     if leave != -1:
                         print("Invalid input. \n")
@@ -344,12 +350,15 @@ def edit_recipe():
                 except ValueError:
                     print("Invalid input. \n")
             else:
-                print("'Empty' value is not allowed. Try again.")
+                print("Value is not allowed. Try again.")
 
     elif change_recipe_val == 5:
+        # servings = input("Enter the number of servings: ")
+        # if servings == "" or not servings.isnumeric() or int(servings) < 1:
+
         while leave_loop(leave) is False:
             serving = input("\nServing Size: ")
-            if serving != "":
+            if serving != "" and serving.isnumeric() and int(serving) > 0:
                 try:
                     leave = Recipe.edit_recipe(None, None, None, None, serving, None, recipe_id)
                     if leave != -1:
@@ -358,7 +367,7 @@ def edit_recipe():
                 except ValueError:
                     print("Invalid input. \n")
             else:
-                print("'Empty' value is not allowed. Try again.")
+                print("Value is not allowed. Try again.")
 
     elif change_recipe_val == 6:
         while leave_loop(leave) is False:
@@ -570,6 +579,10 @@ def display_my_category():
 
     press_to_continue()
 
+
+def show_recipe_made_by_you():
+    Recipe.show_past_made_recipe(user_id)
+    press_to_continue()
 
 # ADD RECIPE TO CATEGORY
 def add_recipe_to_category():

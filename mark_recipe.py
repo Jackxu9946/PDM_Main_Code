@@ -68,16 +68,12 @@ def mark_recipe(user_id, recipe_id, scale):
             cur.execute("SELECT current_quantity FROM public.pantry WHERE user_id = %s "
                         "AND ingredient_id = %s ", (user_id, i[0]))
             quantity_have = cur.fetchone()
-            # print("quantity_have", quantity_have)
-            # print(quantity_have)
             if quantity_have is None or len(quantity_have) == 0:
                 # print("Not enough ingredients to make this recipe")
                 print("Not enough quantity to make recipe.")
                 return False
             quantity_have = int(quantity_have[0])
-            # print("quantity_have", quantity_have)
             quantity_remained = quantity_have - scaled_quantity
-            # print("quantity_remained", quantity_remained)
             # have enough quantity for this ingredient.
             if quantity_remained >= 0:
                 # update the current quantity of this ingredient after some quantity is used to make the recipe
@@ -92,9 +88,6 @@ def mark_recipe(user_id, recipe_id, scale):
     # Rate recipe after successfully making it
     rate_recipe(user_id, recipe_id)
     return True
-
-
-# mark_recipe(7706,30,1)
 
 
 # Tested
@@ -114,8 +107,6 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
         conn.commit()
     # Get the ingredient id
     cur.execute("Select (id) from public.ingredients where name = %s", (ingredient_name,))
-    # return_val = cur.fetchone()
-    # print(return_val)
     ingredient_id = int(cur.fetchone()[0])
 
     # Use the ingredient_id to insert into pantry_bought table
@@ -148,10 +139,6 @@ def add_ingredient_to_pantry(user_id, ingredient_name, quantity):
     conn.commit()
 
 
-# Testing add_ingredient_to_pantry
-# add_ingredient_to_pantry(7715,"lemon juice",5)
-
-
 def update_pantry(user_id, ingredient_name, quantity):
     # Get the ingredient_id given ingredient_name
     cur.execute("select (id) from public.ingredients where name = %s", (ingredient_name,))
@@ -180,7 +167,9 @@ def update_pantry(user_id, ingredient_name, quantity):
 
 
 def show_pantry(user_id):
-    cur.execute("select (ingredient_id, current_quantity) from public.pantry where user_id = %s", (user_id,))
+    cur.execute("select (ingredient_id, current_quantity) from public.pantry where user_id = %s AND current_quantity "
+                "> 0 ORDER BY current_quantity ASC"
+                , (user_id,))
     results = cur.fetchall()
 
     if (results == None or len(results) == 0):
@@ -191,13 +180,8 @@ def show_pantry(user_id):
 
 
 
+
 def print_pantry(list_of_pantry_items):
-    # pantry_header = ""
-    # pantry_ingredient_quantity = "Quantity |"
-    # pantry_ingredient_name = "Ingredient"
-    # pantry_header += pantry_ingredient_quantity
-    # pantry_header += pantry_ingredient_name
-    # print(pantry_header)
     print("--------------------------------")
     print("|           My Pantry          |")
     print("--------------------------------\n")
@@ -213,16 +197,6 @@ def print_pantry(list_of_pantry_items):
 
         print("%-4s %-40s %-20s" % (str(num) + ".",ingredient_name,str(result[1])))
         num += 1
-        # result_string = ""
-        # quantity = str(result[1])
-        # if (len(quantity) < len(pantry_ingredient_quantity)):
-        #     quantity += (" " * (len(pantry_ingredient_quantity) - len(quantity)))
-        # result_string += quantity
-        # result_string += ingredient_name
-        # print(result_string)
-
-
-# show_pantry(7706)
 
 
 # Only for testing
@@ -232,10 +206,3 @@ def add_item(user_id, ingredient_id):
                 "VALUES(%s, %s, %s)", (user_id, ingredient_id, current_quantity))
     conn.commit()
 
-# def main():
-#    print(2, )
-
-
-# main()
-# expiration_date = (datetime.today() + timedelta(days=7)).strftime('%Y-%m-%d')
-# print(expiration_date)
