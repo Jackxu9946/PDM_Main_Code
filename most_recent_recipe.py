@@ -131,17 +131,17 @@ def most_popular_ingredients_by_year():
     print("---------------------------------------------------------------------------------------------------"
           "-------------------------")
 
-    # creation_date = ["1999", "2000", "2001"]
-    cur.execute("SELECT creation_date FROM public.recipe WHERE creation_date BETWEEN 1999 AND 2000")
+    cur.execute("SELECT recipe_id FROM public.rating "
+                "WHERE rating_date >= '2019-01-01 00:00:00' AND rating_date < '2020-01-01 00:00:00'")
     recipes = cur.fetchall()
 
     ingredient_dict = {}
 
     for r in recipes:
-        # cur.execute("SELECT name FROM public.ingredient_to_recipe WHERE recipe_id = %s", r)
-        # ingredients = cur.fetchall()
-        print(r)
-        '''
+        cur.execute("SELECT name FROM public.ingredient_to_recipe WHERE recipe_id = %s", r)
+        ingredients = cur.fetchall()
+        # print(r)
+        # print(ingredients)
         for i in ingredients:
             num = 0
             # print(i[num])
@@ -150,13 +150,10 @@ def most_popular_ingredients_by_year():
             else:
                 ingredient_dict[i[num]] = 1
             num += 1
-        '''
 
-    '''
-    l = list(ingredient_dict.values())
     for key in ingredient_dict:
         print(key, ingredient_dict[key])
-    '''
+
 
 
 def match_name_to_id():

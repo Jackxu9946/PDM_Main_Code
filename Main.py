@@ -87,8 +87,7 @@ def main():
             14: show_50_most_recent_recipe,
             15: show_recommended_to_you,
             16: show_recipe_based_on_pantry,
-            17: show_most_popular_ingredients,
-            18: 18
+            17: 17
         }
 
         try:
@@ -96,7 +95,7 @@ def main():
         except ValueError:
             print("Invalid input. Try again.")
 
-        if recipe_value == 18:
+        if recipe_value == 17:
             print("Session finished.")
             break
         else:
@@ -681,9 +680,9 @@ def show_50_most_recommended_recipe():
 
 
 # DISPLAY MOST POPULAR INGREDIENTS
-def show_most_popular_ingredients():
-    most_recent_recipe.most_popular_ingredients_by_year()
-    press_to_continue()
+# def show_most_popular_ingredients():
+    # most_recent_recipe.most_popular_ingredients_by_year()
+    # press_to_continue()
 
 
 # DISPLAY RECOMMENDED RECIPES MADE BY OTHER USERS WHO MAKE THE SAME RECIPES
